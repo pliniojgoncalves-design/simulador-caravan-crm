@@ -1,635 +1,451 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,
-initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Caravan PRO v51 - CRM & Procedimentos</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<style>
-@import url('https://fonts.googleapis.com/css2?
-family=Inter:wght@400;700;900&display=swap');
-body {
-font-family: 'Inter', sans-serif;
-background-color: #020617;
-color: white;
-margin: 0;
-overflow: hidden;
-user-select: none;
-touch-action: manipulation;
-.checklist-scroll::-webkit-scrollbar { width: 4px; }
-.checklist-scroll::-webkit-scrollbar-thumb { background:
-#1e293b; border-radius: 10px; }
-/* Estilo para alvos pulsantes (Etapa 1) */
-.hotspot-target {
-animation: pulse-yellow 2s infinite;
-border-radius: 50%;
-border: 4px solid #fbbf24;
-background: rgba(251, 191, 36, 0.2);
-pointer-events: none;
-@keyframes pulse-yellow {
-0% {box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.7);
-transform: translate(-50%, -50%) scale(1);}
-70% {box-shadow: 0 00 20px rgba(251, 191, 36, 0);
-transform: translate(-50%, -50%) scale(1.1);}
-100% {box-shadow: 0000 rgba(251, 191, 36, 0);
-transform: translate(-50%, -50%) scale(1);}
-50%;
-/* Efeito de flash ao clicar */
-.click-ripple {
-position: absolute; width: 40px; height: 40px;
-background: rgba(255,255,255,0.4); border-radius:
-transform: translate(-50%, -50%) scale(0);
-animation: ripple-out 0.4s ease-out;
-pointer-events: none; z-index: 100;
-@keyframes ripple-out {to { transform: translate(-50%,
--50%) scale(2); opacity: 0; }}
-.station-panel { transition: all 0.5s ease; flex-shrink: 0;}
-.station-inactive {opacity: 0.1; filter: grayscale(1)
-blur(4px); pointer-events: none; }
-.station-active { opacity: 1; filter: none; pointer-events: all;
-.pilot-active-glow {filter: drop-shadow(0 0 25px rgba(59,
-130, 246, 0.6));}
-#hand-anim { transition: all 0.4s cubic-bezier(0.175,
-0.885, 0.32, 1.275); pointer-events: none; z-index: 95; }
-.briefing-overlay, .dev-overlay {
-background: rgba(2, 6, 23, 0.98);
-z-index: 2000;
-backdrop-filter: blur(10px);
-.choice-btn {
-text-align: left; padding: 1.1 rem; border-radius: 1rem;
-border: 1px solid #334155;
-background: rgba(30, 41, 59, 0.6); transition: all 0.2s;
-font-size: 0.75rem; font-weight: 700;
-width: 100%; margin-bottom: 0.5rem;
-.choice-btn:hover {border-color: #3b82f6; background:
-rgba(59, 130, 246, 0.1);}
-.learning-badge {
-background: #1e293b; border: 1px solid #3b82f6;
-color: #60a5fa;
-padding: 4px 12px; border-radius: 99px; font-size: 9px;
-font-weight: 900;
-text-transform: uppercase; letter-spacing: 1px;
-@media (max-width: 1024px) {
-.game-main-container {flex-direction: column;
-overflow-y: auto; }
-.station-panel { width: 100% !important; border: none!
-important;}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Caravan PRO v52 - CRM & Procedimentos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #020617;
+            color: white;
+            margin: 0;
+            overflow: hidden;
+            user-select: none;
+            touch-action: manipulation;
+        }
+
+        .checklist-scroll::-webkit-scrollbar { width: 4px; }
+        .checklist-scroll::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
+
+        .hotspot-target { 
+            animation: pulse-yellow 2s infinite; 
+            border-radius: 50%; 
+            border: 4px solid #fbbf24; 
+            background: rgba(251, 191, 36, 0.2); 
+            pointer-events: none; 
+        }
+        @keyframes pulse-yellow {
+            0% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.7); transform: translate(-50%, -50%) scale(1); }
+            70% { box-shadow: 0 0 0 20px rgba(251, 191, 36, 0); transform: translate(-50%, -50%) scale(1.1); }
+            100% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0); transform: translate(-50%, -50%) scale(1); }
+        }
+
+        .click-ripple {
+            position: absolute; width: 40px; height: 40px;
+            background: rgba(255,255,255,0.4); border-radius: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            animation: ripple-out 0.4s ease-out;
+            pointer-events: none; z-index: 100;
+        }
+        @keyframes ripple-out { to { transform: translate(-50%, -50%) scale(2); opacity: 0; } }
+
+        .station-panel { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); flex-shrink: 0; }
+        .station-inactive { opacity: 0.1; filter: grayscale(1) blur(4px); pointer-events: none; }
+        .station-active { opacity: 1; filter: none; pointer-events: all; }
+
+        #hand-anim { transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); pointer-events: none; z-index: 95; }
+
+        .choice-btn {
+            text-align: left; padding: 1.1rem; border-radius: 1rem; border: 1px solid #334155;
+            background: rgba(30, 41, 59, 0.6); transition: all 0.2s; font-size: 0.75rem; font-weight: 700;
+            width: 100%; margin-bottom: 0.5rem;
+        }
+        .choice-btn:hover { border-color: #3b82f6; background: rgba(59, 130, 246, 0.1); }
+
+        .dev-overlay {
+            background: rgba(2, 6, 23, 0.98);
+            z-index: 2000;
+            backdrop-filter: blur(15px);
+        }
+
+        .learning-badge {
+            background: #1e293b; border: 1px solid #3b82f6; color: #60a5fa;
+            padding: 4px 12px; border-radius: 99px; font-size: 9px; font-weight: 900;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        @media (max-width: 1024px) {
+            .game-main-container { flex-direction: column; overflow-y: auto; }
+            .station-panel { width: 100% !important; border: none !important; }
+        }
+    </style>
 </head>
 <body>
-<div id="app" class="flex flex-col h-screen overflowhidden"></div>
-<script>
-//-- CONFIGURAÇÃO DE PROCEDIMENTOS NORMIAISconst NORMAL_STAGES =
-id: "inspection",
-title: "Cockpit Inspection",
-img: "normal-cockpit",
-items: [
-{ id: "c1", label: "CONTROL LOCK", status:
-"REMOVE", coords: { x: 36.1, y: 62.4}},
-{id: "c2", label: "YOKE", status: "FULL
-AFTERWARD", coords: {x: 34.3, y: 63.1 }}
-{id: "c3", label: "ALL SWITCHES (P1)", status: "OFF
-(PITOT/STALL)", coords: {x: 28.5, y: 31.3}},
-{id: "c4", label: "ALL SWITCHES (P2)", status: "OFF
-(OUTROS)", coords: {x: 10.4, y: 73.8}},
-{id: "c5", label: "CIRCUIT BREAKERS (P1)", status:
-"IN", coords: {x: 29.9, y: 44.6 }},
-{id: "c6", label: "CIRCUIT BREAKERS (P2)", status:
-"IN", coords: {x: 18.5, y: 75.8 }}
-{id: "c7", label: "ALT STATIC AIR", status: "OFF",
-coords: {x: 25.9, y: 51.4}},
-{id: "c8", label: "INERTIAL SEPARATOR", status:
-"NORMAL", coords: { x: 48.6, y: 45.6}},
-{ id: "c9", label: "TRIMS (ELEVATOR)", status:
-"SET", coords: {x: 48.4, y: 60.2}},
-{id: "c10", label: "TRIMS (AILERON)", status: "SET",
-coords: {x: 54.2, y: 72.8}},
-{id: "c11", label: "TRIMS (RUDDER)", status: "SET",
-coords: {x: 56.0, y: 76.7}},
-{id: "c12", label: "FUEL SHUTOFF", status: "PUSH
-IN", coords: {x: 59.7, y: 71.5 }}
-{id: "c13", label: "CABIN HEAT FIREWALL", status:
-"PUSH IN", coords: {x: 58.3, y: 85.2}},
-{id: "c14", label: "EMERGENCY PWR LEVER",
-status: "NORMAL", coords: { x: 51.6, y: 64.4}},
-{id: "c15", label: "PROP. CONTROL LEVER", status:
-"FULL FORWARD", coords: {x: 56.0, y: 61.5}},
-{id: "c16", label: "AIR CONDITIONING", status:
-"OFF", coords: {x: 51.9, y: 50.4}},
-{id: "c17", label: "BLEED AIR HEAT", status: "OFF",
-coords: {x: 61.1, y: 50.8}},
-{id: "c18", label: "FUEL TANK SELECTORS", status:
-"1 ON", coords: {x: 83.8, y: 87.1}},
-{ id: "c19", label: "VENTILATION (P1)", status:
-"OFF", coords: {x: 90.7, y: 80.6 }}
-{id: "c20", label: "VENTILATION (P2)", status:
-"OFF", coords: {x: 80.3, y: 80.6 }},
-{id: "c21", label: "STBY FLAP MOTOR", status:
-"GUARDED NORM", coords: { x: 85.9, y: 71.5}}
-// -- CONFIGURAÇÃO DE PROCEDIMENTOS
-ABNORMAIS ---
-const ABNORMAL_SCENARIO = {
-title: "Generator Failure",
-phases: [
-{ id: 1, role: 'PM', img: 'imagem1-generatorfailure',
-type: 'choice', prompt: 'Você identificou a CAS Message no
-PFD?', choices: ['Sim, identifiquei.", 'Não tenho certeza.],
-correct: 0},
-{ id: 2, role: 'PM', img: 'imagem1-generatorfailure',
-type: 'choice', prompt: 'PM: Verbalize a pane observada.,
-choices: ['CAS MSG de GENERATOR OFF e Standby Power
-On', 'Verifiquei algo estranho aqui...], correct: 0, obs: 'CAS
-Message exige análise sistêmica posterior.'},
-{id: 3, role: 'PF', img: 'imagem1-generatorfailure',
-type: 'choice', prompt: 'PF: Confirme o callout do PM:,
-choices: ['Check, confirmo a CAS MSG', 'Ok.], correct: 0},
-{id: 4, role: 'PM', img: 'imagem1-generatorfailure',
-type: 'hotspot', prompt: 'PM: Clique no botão CAUTION.,
-target: {x: 26, y: 91.9 }}
-{id: 6, role: 'PM', img: 'imagem1-generatorfailure',
-type: 'hotspot', prompt: 'PM: Clique na softkey SYSTEM.,
-target: {x: 43, y: 90.3}},
-{id: 7, role: 'PM', img: 'imagem2-generatorfailure',
-type: 'multi-choice', prompt: 'PM: Selecione os 4 parâmetros
-elétricos:', options: ['GEN AMPS: 00', 'ALT AMPS: 23', 'BAT
-AMPS: 00', 'BUS VOLTS: 27.0'], correct: [0, 1, 2, 3] },
-{id: 10, role: 'PM', img: 'imagem3-generatorfailure',
-type: 'choice', prompt: 'PM: Verifique os Circuit Breakers.,
-choices: ['CB GEN FIELD saltado.', 'Tudo em ordem.], correct:
-0}
-{id: 12, role: 'PM', img: 'imagem4-generatorfailure',
-type: 'timer', prompt: 'Aguardando resfriamento (3 min)
-Recomenda-se aguardar antes de resetar., duration: 180 },
-{id: 28, role: 'PF', img: 'imagem1-generatorfailure',
-type: 'choice', prompt: 'Anúncio Final: Informe aos
-passageiros:', choices: ['Senhores clientes, devido a
-problemas técnicos..., 'Voltando agora.], correct: 0 }
-let state ={
-view: 'home',
-category: null,
-learningStage: 1,
-currentStep: 0,
-abnormalldx: 0,
-manuallmages: {,
-imgErrors: 0,
-showBriefing: false,
-showDev: false,
-lastCalibClick: {x: 0, y: 0},
-multi: ,
-timerVal: 180,
-isTimerActive: false,
-timerlnterval: null
-// --- SVG PILOTOS (VISTA TRASEIRA) --
-function getPilotSVG(role, isActive = true) {
-const stripes = role === 'PM' ? 4:3;
-const opacity = isActive ? '1': '0.15';
-return
-<svg width="150" height="110" viewBox="0 0 150
-120" style="opacity: ${opacity}; transition: all 0.7s;">
-<defs><linearGradient id="shirtGrad" x1="0%"
-y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stopcolor:#ffffff" /><stop offset="100%" style="stopcolor:#cbd5e1" /></linearGradient></defs>
-<path d="M15 120 L135 120 L120 40 L30 40 Z"
-fill="url(#shirtGrad)" stroke="#94a3b8" stroke-width="0.5"/>
-<rect x="62" y="35" width="26" height="10"
-fill="#e0ac69"/>
-<ellipse cx="75" cy="22" rx="18" ry="22"
-fill="#1c1917"/>
-<path d="M55 25 Q75 5 95 25" fill="none"
-stroke="#111" stroke-width="6" stroke-linecap="round"/>
-<rect x="50" y="25" width="10" height="18" rx="2"
-fill="#000"/>
-<rect x="90" y="25" width="10" height="18" rx="2"
-fill="#000"/>
-<rect x="22" y="42" width="30" height="12"
-fill="#111" rx="1" transform="rotate(-12 22 42)"/>
-<rect x="98" y="42" width="30" height="12"
-fill="#111" rx="1" transform="rotate(12 98 42)"/>
-${Array.from({length: stripes}).map((_, i) =>
-<rect x="25" y="${44 + (i*1.8)}" width="24"
-height="1.1" fill="#fbbf24" transform="rotate(-12 25 44)"/>
-<rect x="101" y="${44 + (i*1.8)}" width="24"
-height="1.1" fill="#fbbf24" transform="rotate(12 101 44)"/>
-).join(")}
-</svg>;
-// -- SISTEMA DE RENDERIZAÇÃO —
-function render() {
-const app = document.getElementByld('app');
-app.innerHTML = "";
-if (state.view === 'home') renderHome(app)
-else if (state.view === 'selection') renderSelection(app);
-else if (state.view === 'normal_sim)
-renderNormalSimulator(app);
-else if (state.view === 'abnormal_sim')
-renderAbnormalSimulator(app);
-if (state.showBriefing) renderBriefing(app);
-if (state.showDev) renderDevMenu(app);
-function renderHome(app) {
-app.innerHTML =
-<div class="flex-1 flex flex-col items-center justify-
-center p-8 bg-[#020617] text-center">
-<div class="mb-16">
-<div class="bg-blue-600 px-10 py-4 rounded-3xl
-shadow-2xl mb-6 inline-block">
-<h1 class="text-white font-black text-5xl italic
-blue-400">CARAVAN PRO</h1>
-tracking-tighter uppercase leading-none underline decoration-
-</div>
-<p class="text-slate-500 font-bold uppercase
-tracking-[0.5em] text-[10px]">Simulador de CRM e
-Procedimentos</p>
-</div>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-8
-max-w-4xl w-full px-4">
-<button onclick="state.category='Normal';
-state.view='selection'; render();" class="group bg-slate-900
-border-2 border-emerald-600/30 p-12 rounded-[50px]
-hover:border-emerald-500 transition-all shadow-2xl">
-<div class="w-20 h-20 bg-emerald-600/20
-rounded-full flex items-center justify-center mx-auto
-mb-6"><span class="text-emerald-400 text-3xl font-black
-italic">N</span></div>
-<h2 class="text-xl font-black uppercase italic
-text-white">Normal Procedures</h2>
-</button>
-<button onclick="state.category='Abnormal';
-state.view='selection'; render();" class="group bg-slate-900
-border-2 border-red-600/30 p-12 rounded-[50px] hover:borderred-500 transition-all shadow-2xl"
-<div class="w-24 h-24 bg-red-600/20 rounded-
-full flex items-center justify-center mx-auto mb-6"><span
-class="text-red-400 text-3xl font-black italic">A</span></div>
-<h2 class="text-xl font-black uppercase italic
-text-white">Abnormal Procedures</h2>
-</button>
-</div>
-</div>;
-function renderSelection(app) {
-const flows = state.category === 'Abnormal?
-[ABNORMAL_SCENARIO] : NORMAL_STAGES;
-app.innerHTML =
-<div class="flex-1 flex flex-col items-center justifycenter p-10 bg-[#020617]">
-<button onclick="state.view = 'home'; render();"
-class="absolute top-10 left-10 text-slate-500 hover:text-white
-font-black uppercase text-[10px] italic transition-colors">-
-Voltar</button>
-<h2 class="text-3xl font-black uppercase italic
-text-white mb-10 tracking-tighter">${state.category}
-Procedures</h2>
-<div class="flex flex-col gap-4 w-full max-w-lg">
-${flows.map((f, i) => `<button
-onclick="startSpecificFlow(${i})" class="w-full bgslate-900/40 hover:bg-slate-800 border border-slate-800 р-6
-rounded-3xl text-left flex justify-between group transition-all">
-<span class="text-lg font-bold uppercase
-italic text-slate-200 group-hover:text-white">${f.title}</span>
-<span class="text-blue-500">►</span>
-</button>).join(")}
-</div>
-</div>;
-function renderNormalSimulator(app) {
-const stage =
-NORMAL_STAGES[state.activeNormalldx];
-const isExam = state.learningStage === 3;
-const imgKey = stage.img;
-const displaylmg = state.manuallmages[imgKey] ||$
-{imgKey}.jpg`;
-app.innerHTML =
-<header class="bg-slate-900 p-3 flex justify-between
-items-center border-b border-white/5 z-50 shrink-0">
-<button onclick="state.view = 'home'; render();"
-class="bg-slate-800 p-2 rounded-lg text-[10px] font-black
-px-4 uppercase italic">Sair</button>
-<div class="flex items-center gap-3">
-<span class="learning-badge">Etapa $
-{state.learningStage}</span>
-<span class="text-[9px] font-bold text-slate-400
-uppercase italic">${stage.title}</span>
-</div>
-<button onclick="state.showDev = true; render();"
-class="bg-slate-800 p-2 rounded-lg text-[10px] textslate-400"> Dev</button>
-</header>
-<div class="flex flex-1 overflow-hidden relative">
-${!isExam? <aside class="w-64 bg-[#0f172a]
-border-r border-slate-800 flex flex-col shrink-0 z-40">
-<div class="p-3 bg-slate-900/40 text-center textblue-400 font-black uppercase text-[8px]">SOP Checklist</
-div>
-<div class="flex-1 overflow-y-auto p-2 spасе-у-1
-checklist-scroll">
-$(stage.items.map((item, i) => `<div
-class="p-2 rounded-lg border ${i < state.currentStep ? 'bgemerald-500/10 border-emerald-500/30 text-emerald-400
-opacity-60' : i === state.currentStep? 'bg-blue-600 borderblue-400 shadow-lg': 'bg-slate-800/20 border-slate-800
-opacity-20'} transition-all"><div class="text-[8px] font-black
-uppercase no-wrap-text">${item.label}</div></div>').join(")}
-</div>
-</aside>:"}
-<main class="flex-1 flex flex-col bg-black overflowhidden relative">
-<div class="flex-1 flex items-center justifycenter p-2">
-<div id="imageWrapper"
-onclick="handlelmgClick(event)">
-<img src="${displaylmg}" class="block maxw-full max-h-[78vh] rounded-xl shadow-2xl border borderwhite/5" onerror="onlmgFail('${imgKey}')">
-${state.learningStage === 1 &&
-stage.items[state.currentStep]?.coords ? <div
-class="absolute hotspot-target" style="left: $
-{stage.items[state.currentStep].coords.x}%; top: $
-{stage.items[state.currentStep].coords.y}%; width: 50px;
-height: 50px; transform: translate(-50%, -50%);"></div> :"}
-${state.imgErrors[imgKey]?`<div
-class="absolute inset-0 bg-black/80 flex flex-col items-center
-justify-center p-6 text-center"><p class="text-xs
-mb-4">lmagem '${imgKey}.jpg'ausente.</p><button
-onclick="openDevUpload()" class="bg-blue-600 p-3 roundedxl text-[10px] font-black uppercase italic"> Upload
-Manual</button></div> : "}
-<div id="hand-anim" class="absolute
-opacity-0 pointer-events-none transition-all duration-300
-z-50"><div class="w-10 h-32 bg-[#0a1122] rounded-t-xl
-shadow-2xl"></div><div class="w-8 h-10 bg-[#e0ac69]
-rounded-b-xl border border-[#c68642] shadow-inner"></div></
-div>
-</div>
-</div>
-${renderFooter('green', stage.items)}
-</main>
-</div>;
-function renderAbnormalSimulator(app) {
-const phase =
-ABNORMAL_SCENARIO.phases[state.abnormalldx];
-const displaylmg = state.manuallmages[phase.img] ||
-${phase.img}.jpg;
-const isPMActive = phase.role === 'PM';
-const isPFActive = phase.role === 'PF';
-app.innerHTML =
-<header class="bg-slate-900 p-3 flex justify-between
-items-center border-b border-white/5 shrink-0 shadow-lg
-z-50">
-<button onclick="state.view = 'home'; render();"
-class="bg-slate-800 p-2 rounded-lg text-[10px] font-black
-px-5 uppercase italic">Menu</button>
-<span class="px-3 py-1.5 rounded-lg text-[9px]
-font-black border border-red-500/30 text-red-400 uppercase
-italic">Fase $(state.abnormalldx + 1}: $
-{ABNORMAL_SCENARIO.title}</span>
-<button onclick="state.showDev = true; render();"
-class="bg-slate-800 p-2 rounded-lg text-[10px] textslate-400"> Dev</button>
-</header>
-<div class="flex flex-1 overflow-hidden relative">
-<aside class="w-80 station-panel ${isPMActive?
-'station-active': 'station-inactive} bg-[#0f172a] border-r
-border-slate-800 flex flex-col p-6 overflow-y-auto z-40">
-<h3 class="text-[10px] font-black textamber-500 uppercase italic text-center mb-6 underline
-decoration-amber-500/30 underline-offset-4">Comandante +
-PM</h3>
-<div class="flex-1">${isPMActive ?
-renderPhaseControls(phase): "}</div>
-</aside>
-<main class="flex-1 flex flex-col bg-black overflow-
-hidden relative">
-<div class="flex-1 flex items-center justifycenter p-2 relative">
-<div id="imageWrapper"
-onclick="handlelmgClick(event)">
-<img src="${displaylmg}" class="block max
-w-full max-h-[65vh] rounded-xl shadow-2xl"
-onerror="onlmgFail('${phase.img}')">
-${phase.type === 'hotspot'? <div
-class="absolute hotspot-target" style="left: ${phase.target.x}
-%; top: ${phase.target.y}%; width: 12%; height: 12%;
-transform: translate(-50%, -50%);"></div> : "}
-${state.imgErrors[phase.img]?<div
-class="absolute inset-0 bg-black/80 flex flex-col items-center
-justify-center p-6 text-center"><button
-onclick="openDevUpload()" class="bg-blue-600 p-3 roundedxl text-[10px] font-black uppercase">
-</button></div>` ; "}
-</div>
-</div>
-Upload ${phase.img}
-${renderFooter('red', null, phase)}
-</main>
-<aside class="station-panel w-80 bg-[#0f172a]
-border-l border-slate-800 flex flex-col p-6 overflow-y-auto
-z-40 ${!isPFActive? 'station-inactive': 'station-active'}">
-<h3 class="text-[10px] font-black text-blue-500
-uppercase italic text-center mb-6 underline decorationblue-500/30 underline-offset-4">Copiloto + PF</h3>
-<div class="flex-1">${isPFActive ?
-renderPhaseControls(phase) : "}</div>
-</aside>
-</div>;
-//--- DEV MENU & CALIBRATION
-function renderDevMenu(app) {
-const overlay = document.createElement('div');
-overlay.className = "dev-overlay fixed inset-0 flex
-items-center justify-center p-10";
-overlay.innerHTML =
-<div class="bg-slate-900 border border-blue-600/50
-p-10 rounded-[50px] max-w-3xl w-full flex flex-col shadow-2xl
-relative">
-<button onclick="state.showDev = false; render();"
-class="absolute top-6 right-6 text-slate-500 hover:text-white
-font-black uppercase text-xs">Fechar</button>
-<h2 class="text-xl font-black uppercase italic textblue-400 mb-6">Programador: Dashboard</h2>
-<div class="grid grid-cols-2 gap-8 mb-8">
-<div class="bg-black/40 p-6 rounded-3xl border
-border-white/5">
-<p class="text-[8px] font-black uppercase
-text-slate-500 mb-4 italic">1. Posição Capturada</p>
-<p class="text-xs font-mono text-blue-300
-tracking-tighter">X: ${state.lastCalibClick.x}%</p>
-<p class="text-xs font-mono text-blue-300
-tracking-tighter">Y: ${state.lastCalibClick.y}%</p>
-</div>
-<div class="bg-black/40 p-6 rounded-3xl border
-border-white/5">
-<p class="text-[8px] font-black uppercase
-text-slate-500 mb-4 italic">2. Upload Manual</p>
-<input type="file" id="manualUp"
-onchange="loadImg(event)" class="hidden">
-<button
-onclick="document.getElementByld('manualUp').click()"
-class="w-full bg-blue-600 py-3 rounded-xl font-black
-uppercase text-[10px]">Subir Imagem</button>
-</div>
-</div>
-<p class="text-[8px] font-black uppercase textslate-500 mb-2 italic">3. Código de Configuração</p>
-<textarea class="bg-black p-4 rounded-xl fontmono text-[10px] text-green-500 flex-1 outline-none border
-border-white/10" readonly>
-target: {x: ${state.lastCalibClick.x}, y: $
-{state.lastCalibClick.y} }</textarea>
-<button
-onclick="navigator.clipboard.writeText('target: {x: $
-{state.lastCalibClick.x}, y: ${state.lastCalibClick.y}}');
-alert('Copiado!');" class="mt-4 bg-emerald-600 ру-4
-rounded-2xl font-black uppercase text-[10px]">Copiar para
-Projeto</button>
-</div>;
-app.appendChild(overlay);
-// --- PHASE CONTROL RENDERER --
-function renderPhaseControls(p){
-let html = `<p class="text-xs font-bold text-white italic
-mb-8 border-l-4 border-blue-500 pl-3 leading-relaxed">$
-{p.prompt}</p>;
-if (p.type === 'timer') {
-html += `<div class="p-6 bg-slate-950 rounded-3xl
-text-center shadow-inner">
-<div class="text-4xl font-mono text-blue-400 fontblack mb-6">${Math.floor(state.timerVal/60)}:$
-{(state.timerVal%60).toString().padStart(2, '0')}</div>
-<button onclick="startTimer()" class="bg-blue-600
-w-full py-3 rounded-xl font-black uppercase text-[10px] mb-3
-shadow-lg">Iniciar Cronômetro</button>
-<button onclick="nextAbPhase()" class="w-full bgslate-800 border border-slate-700 py-3 rounded-xl font-black
-uppercase text-[9px] text-slate-400 hover:text-white
-transition-all italic">
-</div>;
-Pular Cronômetro</button>
-} else if (p.choices) {
-html += p.choices.map((c, i) => `<button
-onclick="selAbChoice(${i})" class="choice-btn group italic
-transition-all"><span class="text-blue-500 mr-2 opacity-0
-group-hover:opacity-100 transition-opacity"></span> ${c}</
-button>).join(");
-} else if (p.type === 'multi-choice'){
-html += p.options.map((opt, i) => `<div
-onclick="toggleMulti(${i})" class="multi-choice-item $
-{state.multi.includes(i)? 'multi-choice-selected' : "}">${opt}</
-div>).join(") + `<button onclick="submitMulti()" class="w-full
-bg-green-600 py-3 rounded-xl font-black text-[10px]
-uppercase mt-4">Validar Dados</button>;
-return html;
-// --- FOOTER RENDERER i
-function renderFooter(color, items, phase = null) {
-const isPMActive = phase? phase.role === 'PM' : true;
-const isPFActive = phase ? phase.role === 'PF' : true;
-return
-<footer class="h-32 bg-[#080d1a] border-t borderwhite/5 flex justify-between items-end px-20 shrink-0
-relative">
-<div class="flex flex-col items-center mb-[-5px]">
-<span class="text-[7px] font-bold text-slate-500
-uppercase mb-1">Comandante + PM</span>
-${getPilotSVG('PM', isPMActive)}
-</div>
-<div class="mb-10 bg-black/40 px-6 py-2 roundedfull border border-slate-800 flex flex-col items-center gap-1
-shadow-inner">
-<span class="text-[7px] text-blue-400 font-black
-tracking-widest uppercase italic">Flight SOP Sync</span>
-<div class="flex gap-1.5">
-${items? items.map((_, i) => `<div
-class="w-1.5 h-1.5 rounded-full ${i <= state.currentStep? `bg-
-${color}-500 shadow-[0_0_8px_rgba(255,255,255,0.4)]: 'bg-
-slate-800'} transition-all"></div>`).join(") : '<div class="h-1
-w-16 bg-red-900/30 rounded-full overflow-hidden"><div
-class="h-full bg-red-600 w-1/3 animate-pulse"></div></div>'}
-</div>
-</div>
-<div class="flex flex-col items-center mb-[-5px]">
-<span class="text-[7px] font-bold text-blue-400
-uppercase mb-1">Copiloto + PF</span>
-$(getPilotSVG('PF', isPFActive)}
-</div>
-</footer>:
-function renderBriefing(app) {
-const overlay = document.createElement('div');
-overlay.className = "briefing-overlay fixed inset-0 flex
-items-center justify-center p-6";
-overlay.innerHTML =
-<div class="max-w-xl w-full bg-slate-900 border
-border-blue-500/30 rounded-[40px] shadow-2xl p-10 textcenter animate-in zoom-in duration-300">
-<h2 class="text-3xl font-black italic uppercase
-text-white mb-6 tracking-tighter">Briefing de Instrução</h2>
-<div class="space-y-4 text-slate-400 text-sm
-leading-relaxed mb-10 text-left">
-<div class="bg-black/40 p-4 rounded-2xl border
-border-white/5"><b>Etapa 1:</b> Siga os alvos amarelos
-pulsantes.</div>
-<div class="bg-black/40 p-4 rounded-2xl border
-border-white/5"><b>Etapa 2:</b> Utilize a lista lateral, mas
-os alvos sumiram.</div>
-<div class="bg-black/40 p-4 rounded-2xl border
-border-white/5"><b>Etapa 3:</b> Ecrã limpo. Realize o fluxo
-de memória.</div>
-</div>
-<button onclick="state.showBriefing = false;
-render();" class="w-full bg-blue-600 hover:bg-blue-500 ру-5
-rounded-3xl font-black uppercase text-xs shadow-xl
-active:scale-95 transition-all">Decolar Treinamento</button>
-</div>;
-app.appendChild(overlay);
-// -- HANDLERS i
-window.startSpecificFlow = (i) =>{
-if(state.category === 'Normal') {state.view =
-'normal_sim'; state.learningStage = 1; state.currentStep= 0;
-state.activeNormalldx = i; state.showBriefing = truе; }
-= 0;}
-else { state.view = 'abnormal_sim'; state.abnormalldx
-render();
-window.onlmgFail = (key) => { if(!
-state.manuallmages[key] && !state.imgErrors[key]) {
-state.imgErrors[key] = true; render();}};
-window.openDevUpload = () => {
-document.getElementByld('manualUp').click(); };
-window.loadlmg = (e) => {
-const f = e.target.files[0];
-if(!f) return;
-const r = new FileReader();
-r.onload = (ev) => {
-const key = state.view === 'normal_sim'?
-NORMAL_STAGES[state.activeNormalldx].img:
-ABNORMAL_SCENARIO.phases[state.abnormalldx].img;
-state.manuallmages[key] = ev.target.result;
-state.imgErrors[key] = false;
-render();
-r.readAsDataURL(f);
-window.handlelmgClick = (e) =>{
-const rect = e.currentTarget.getBoundingClientRect();
-const x = parseFloat((((e.clientX - rect.left) /
-rect.width) * 100).toFixed(1));
-const y = parseFloat((((e.clientY - rect.top)/
-rect.height) * 100).toFixed(1));
-// Ripple effect
-const ripple = document.createElement('div');
-ripple.className = 'click-ripple'; ripple.style.left = x + 1%';
-ripple.style.top = y + %;
-e.currentTarget.appendChild(ripple); setTimeout(() =>
-ripple.remove(), 400);
-if(state.showDev) {state.lastCalibClick = { x,y};
-render(); return; }
-if(state.view === 'normal_sim') {
-const target =
-NORMAL_STAGES[state.activeNormalldx].items[state.current
-Step].coords;
-if(Math.sqrt(Math.pow(x-target.x, 2) + Math.pow(ytarget.y, 2)) < 7) {
-const h = document.getElementByld('hand-anim');
-h.style.left = x + '%'; h.style.top = y + '%'; h.style.opacity = '1';
-setTimeout(() => {h.style.opacity = '0';
-advanceNormal(); }, 300);
-} else {
-const p =
-ABNORMAL_SCENARIO.phases[state.abnormalldx];
-if(p.type === 'hotspot' && Math.sqrt(Math.pow(xp.target.x, 2) + Math.pow(y-p.target.y, 2)) <7){
-nextAbPhase();}
-function advanceNormal() {
-const stage =
-NORMAL_STAGES[state.activeNormalldx];
-if(state.currentStep < stage.items.length - 1){
-state.currentStep++; render();}
-else {
-if(state.learningStage < 3) { state.learningStage++;
-state.currentStep = 0; render();}
-else {alert("Treinamento Finalizado!"); state.view =
-'home'; render();}
-window.selAbChoice = (i) => { if(i ===
-ABNORMAL_SCENARIO.phases[state.abnormalldx].correct)
-nextAbPhase(); else alert("Incorreto."); };
-window.nextAbPhase = () => { if(state.timerlnterval)
-clearinterval(state.timerlnterval); if(state.abnormalldx <
-ABNORMAL_SCENARIO.phases.length-1) {
-state.abnormalldx++; state.timerVal = 180; render(); } else {
-alert("Cenário Concluído."); state.view = 'home'; render();}};
-window.toggleMulti = (i) => { if(state.multi.includes(i))
-state.multi = state.multi.filter(x=>x!==i); else
-state.multi.push(i); render();};
-window.submitMulti = () => { if(state.multi.length === 4)
-{state.multi = [; nextAbPhase();}};
-window.startTimer = () => { if(state.timerlnterval)
-clearlnterval(state.timerInterval); state.timerlnterval =
-setInterval(() => {state.timerVal-; if(state.timerVal <= 0)
-nextAbPhase(); else render(); }, 1000); };
-render();
-</script>
+    <div id="app" class="flex flex-col h-screen overflow-hidden"></div>
+
+    <script>
+        // --- BASE DE DADOS: PROCEDIMENTOS ---
+        const NORMAL_STAGES = [
+            {
+                id: "inspection",
+                title: "Cockpit Inspection",
+                img: "normal-cockpit",
+                items: [
+                    { id: "c1", label: "CONTROL LOCK", status: "REMOVE", coords: { x: 36.1, y: 62.4 } },
+                    { id: "c2", label: "YOKE", status: "FULL AFTERWARD", coords: { x: 34.3, y: 63.1 } },
+                    { id: "c3", label: "ALL SWITCHES (P1)", status: "OFF (PITOT/STALL)", coords: { x: 28.5, y: 31.3 } },
+                    { id: "c4", label: "ALL SWITCHES (P2)", status: "OFF (OUTROS)", coords: { x: 10.4, y: 73.8 } },
+                    { id: "c5", label: "CIRCUIT BREAKERS (P1)", status: "IN", coords: { x: 29.9, y: 44.6 } },
+                    { id: "c6", label: "CIRCUIT BREAKERS (P2)", status: "IN", coords: { x: 18.5, y: 75.8 } },
+                    { id: "c7", label: "ALT STATIC AIR", status: "OFF", coords: { x: 25.9, y: 51.4 } },
+                    { id: "c8", label: "INERTIAL SEPARATOR", status: "NORMAL", coords: { x: 48.6, y: 45.6 } },
+                    { id: "c9", label: "TRIMS (ELEVATOR)", status: "SET", coords: { x: 48.4, y: 60.2 } },
+                    { id: "c10", label: "TRIMS (AILERON)", status: "SET", coords: { x: 54.2, y: 72.8 } },
+                    { id: "c11", label: "TRIMS (RUDDER)", status: "SET", coords: { x: 56.0, y: 76.7 } },
+                    { id: "c12", label: "FUEL SHUTOFF", status: "PUSH IN", coords: { x: 59.7, y: 71.5 } },
+                    { id: "c13", label: "CABIN HEAT FIREWALL", status: "PUSH IN", coords: { x: 58.3, y: 85.2 } },
+                    { id: "c14", label: "EMERGENCY PWR LEVER", status: "NORMAL", coords: { x: 51.6, y: 64.4 } },
+                    { id: "c15", label: "PROP. CONTROL LEVER", status: "FULL FORWARD", coords: { x: 56.0, y: 61.5 } },
+                    { id: "c16", label: "AIR CONDITIONING", status: "OFF", coords: { x: 51.9, y: 50.4 } },
+                    { id: "c17", label: "BLEED AIR HEAT", status: "OFF", coords: { x: 61.1, y: 50.8 } },
+                    { id: "c18", label: "FUEL TANK SELECTORS", status: "1 ON", coords: { x: 83.8, y: 87.1 } },
+                    { id: "c19", label: "VENTILATION (P1)", status: "OFF", coords: { x: 90.7, y: 80.6 } },
+                    { id: "c20", label: "VENTILATION (P2)", status: "OFF", coords: { x: 80.3, y: 80.6 } },
+                    { id: "c21", label: "STBY FLAP MOTOR", status: "GUARDED NORM", coords: { x: 85.9, y: 71.5 } }
+                ]
+            }
+        ];
+
+        const ABNORMAL_SCENARIO = {
+            title: "Generator Failure",
+            phases: [
+                { id: 1, role: 'PM', img: 'imagem1-generatorfailure', type: 'choice', prompt: 'Você identificou a CAS Message no PFD?', choices: ['Sim, identifiquei.', 'Não tenho certeza.'], correct: 0 },
+                { id: 2, role: 'PM', img: 'imagem1-generatorfailure', type: 'choice', prompt: 'PM: O que deve verbalizar ao detectar as mensagens?', choices: ['CAS MSG de GENERATOR OFF e Standby Power On', 'Verifiquei algo estranho aqui…'], correct: 0, obs: 'CAS Message não significa Pane de imediato.' },
+                { id: 3, role: 'PF', img: 'imagem1-generatorfailure', type: 'choice', prompt: 'PF: Você deve confirmar o que foi verbalizado pelo PM.', choices: ['Check, confirmo a CAS MSG', 'Ok, e agora?'], correct: 0 },
+                { id: 4, role: 'PM', img: 'imagem1-generatorfailure', type: 'hotspot', prompt: 'PM: Clique no botão CAUTION para parar o alerta visual.', target: { x: 26, y: 91.9 } },
+                { id: 5, role: 'PF', img: 'imagem1-generatorfailure', type: 'choice', prompt: 'PF: Solicite verificação do sistema:', choices: ['Check System.', 'Ignore o alerta.'], correct: 0 },
+                { id: 6, role: 'PM', img: 'imagem1-generatorfailure', type: 'hotspot', prompt: 'PM: Clique na softkey SYSTEM para acessar os dados elétricos.', target: { x: 43, y: 90.3 } },
+                { id: 7, role: 'PM', img: 'imagem2-generatorfailure', type: 'multi-choice', prompt: 'PM: Selecione os 4 parâmetros observados:', options: ['GEN AMPS zerado', 'ALT AMPS 23', 'BAT AMPS zerado', 'BUS VOLTS 27', 'GEN VOLTS 40 (falso)'], correct: [0, 1, 2, 3] },
+                { id: 12, role: 'PM', img: 'imagem4-generatorfailure', type: 'timer', prompt: 'Aguardando resfriamento (3 min). Recomenda-se aguardar antes do reset.', duration: 180 },
+                { id: 28, role: 'PF', img: 'imagem1-generatorfailure', type: 'choice', prompt: 'Anúncio Final: Informe aos passageiros:', choices: ['Senhores clientes, devido a problemas técnicos estamos retornando...', 'Pane no sistema.'], correct: 0 }
+            ]
+        };
+
+        let state = {
+            view: 'home',
+            category: null,
+            learningStage: 1, 
+            currentStep: 0,
+            abnormalIdx: 0,
+            manualImages: {}, 
+            imgErrors: {}, 
+            showBriefing: false,
+            showDev: false,
+            lastCalibClick: { x: 0, y: 0 },
+            multi: [],
+            timerVal: 180,
+            isTimerActive: false,
+            timerInterval: null
+        };
+
+        // --- SVGS PILOTOS (COSTAS) ---
+        function getPilotSVG(role, isActive = true) {
+            const stripes = role === 'PM' ? 4 : 3;
+            const opacity = isActive ? '1' : '0.15';
+            return `
+                <svg width="140" height="110" viewBox="0 0 150 120" style="opacity: ${opacity}; transition: all 0.7s;">
+                    <defs><linearGradient id="shirtGrad" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#ffffff" /><stop offset="100%" style="stop-color:#cbd5e1" /></linearGradient></defs>
+                    <path d="M15 120 L135 120 L120 40 L30 40 Z" fill="url(#shirtGrad)" stroke="#94a3b8" stroke-width="0.5"/>
+                    <rect x="62" y="35" width="26" height="10" fill="#e0ac69"/>
+                    <ellipse cx="75" cy="22" rx="18" ry="22" fill="#1c1917"/>
+                    <path d="M55 25 Q75 5 95 25" fill="none" stroke="#111" stroke-width="6" stroke-linecap="round"/>
+                    <rect x="50" y="25" width="10" height="18" rx="2" fill="#000"/>
+                    <rect x="90" y="25" width="10" height="18" rx="2" fill="#000"/>
+                    <rect x="22" y="42" width="30" height="12" fill="#111" rx="1" transform="rotate(-12 22 42)"/>
+                    <rect x="98" y="42" width="30" height="12" fill="#111" rx="1" transform="rotate(12 98 42)"/>
+                    ${Array.from({length: stripes}).map((_, i) => `
+                        <rect x="25" y="${44 + (i*1.8)}" width="24" height="1" fill="#fbbf24" transform="rotate(-12 25 44)"/>
+                        <rect x="101" y="${44 + (i*1.8)}" width="24" height="1" fill="#fbbf24" transform="rotate(12 101 44)"/>
+                    `).join('')}
+                </svg>`;
+        }
+
+        // --- SISTEMA DE RENDERIZAÇÃO ---
+        function render() {
+            const app = document.getElementById('app');
+            app.innerHTML = ""; 
+
+            if (state.view === 'home') renderHome(app);
+            else if (state.view === 'selection') renderSelection(app);
+            else if (state.view === 'normal_sim') renderNormalSimulator(app);
+            else if (state.view === 'abnormal_sim') renderAbnormalSimulator(app);
+
+            if (state.showBriefing) renderBriefing(app);
+            if (state.showDev) renderDevMenu(app);
+        }
+
+        function renderHome(app) {
+            app.innerHTML = `
+                <div class="flex-1 flex flex-col items-center justify-center p-8 bg-[#020617] text-center">
+                    <div class="mb-16">
+                        <div class="bg-blue-600 px-10 py-4 rounded-3xl shadow-2xl mb-6 inline-block">
+                            <h1 class="text-white font-black text-5xl italic tracking-tighter uppercase leading-none underline decoration-blue-400">CARAVAN PRO</h1>
+                        </div>
+                        <p class="text-slate-500 font-bold uppercase tracking-[0.5em] text-[10px]">Treinamento Profissional CRM</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl w-full px-4">
+                        <button onclick="state.category='Normal'; state.view='selection'; render();" class="group bg-slate-900 border-2 border-emerald-600/30 p-12 rounded-[50px] hover:border-emerald-500 transition-all shadow-2xl">
+                            <div class="w-20 h-20 bg-emerald-600/20 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-emerald-600 transition-all shadow-lg"><span class="text-emerald-400 group-hover:text-white text-3xl font-black italic">N</span></div>
+                            <h2 class="text-xl font-black uppercase italic text-white">Normal Procedures</h2>
+                        </button>
+                        <button onclick="state.category='Abnormal'; state.view='selection'; render();" class="group bg-slate-900 border-2 border-red-600/30 p-12 rounded-[50px] hover:border-red-500 transition-all shadow-2xl">
+                            <div class="w-20 h-20 bg-red-600/20 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-red-600 transition-all shadow-lg"><span class="text-red-400 group-hover:text-white text-3xl font-black italic">A</span></div>
+                            <h2 class="text-xl font-black uppercase italic text-white">Abnormal Procedures</h2>
+                        </button>
+                    </div>
+                </div>`;
+        }
+
+        function renderSelection(app) {
+            const flows = state.category === 'Abnormal' ? [ABNORMAL_SCENARIO] : NORMAL_STAGES;
+            app.innerHTML = `
+                <div class="flex-1 flex flex-col items-center justify-center p-10 bg-[#020617]">
+                    <button onclick="state.view = 'home'; render();" class="absolute top-10 left-10 text-slate-500 hover:text-white font-black uppercase text-[10px] italic transition-colors">← Voltar</button>
+                    <h2 class="text-3xl font-black uppercase italic text-white mb-10 tracking-tighter">${state.category} Selection</h2>
+                    <div class="flex flex-col gap-4 w-full max-w-lg">
+                        ${flows.map((f, i) => `<button onclick="startSpecificFlow(${i})" class="w-full bg-slate-900/40 hover:bg-slate-800 border border-slate-800 p-6 rounded-3xl text-left flex justify-between group transition-all">
+                            <span class="text-lg font-bold uppercase italic text-slate-200 group-hover:text-white">${f.title}</span>
+                            <span class="text-blue-500">▶</span>
+                        </button>`).join('')}
+                    </div>
+                </div>`;
+        }
+
+        function renderNormalSimulator(app) {
+            const stage = NORMAL_STAGES[state.activeNormalIdx];
+            const isExam = state.learningStage === 3;
+            const imgKey = stage.img;
+            const displayImg = state.manualImages[imgKey] || `${imgKey}.jpg`;
+
+            app.innerHTML = `
+                <header class="bg-slate-900 p-3 flex justify-between items-center border-b border-white/5 z-50 shrink-0">
+                    <button onclick="state.view = 'home'; render();" class="bg-slate-800 p-2 rounded-lg text-[10px] font-black px-4 uppercase italic">Sair</button>
+                    <div class="flex items-center gap-3">
+                        <span class="learning-badge">Etapa ${state.learningStage}</span>
+                        <span class="text-[9px] font-bold text-slate-400 uppercase italic">${stage.title}</span>
+                    </div>
+                    <button onclick="state.showDev = true; render();" class="bg-slate-800 p-2 rounded-lg text-[10px] text-slate-400 uppercase font-black px-4">⚙️ Dev</button>
+                </header>
+
+                <div class="flex flex-1 overflow-hidden relative">
+                    ${!isExam ? `<aside class="w-64 bg-[#0f172a] border-r border-slate-800 flex flex-col shrink-0 z-40">
+                        <div class="p-3 bg-slate-900/40 text-center text-blue-400 font-black uppercase text-[8px]">SOP Checklist</div>
+                        <div class="flex-1 overflow-y-auto p-2 space-y-1 checklist-scroll">
+                            ${stage.items.map((item, i) => `<div class="p-2 rounded-lg border ${i < state.currentStep ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400 opacity-60' : i === state.currentStep ? 'bg-blue-600 border-blue-400 shadow-lg' : 'bg-slate-800/20 border-slate-800 opacity-20'}"><div class="text-[8px] font-black uppercase no-wrap-text">${item.label}</div></div>`).join('')}
+                        </div>
+                    </aside>` : ''}
+
+                    <main class="flex-1 flex flex-col bg-black overflow-hidden relative">
+                        <div class="flex-1 flex items-center justify-center p-2 relative">
+                            <div id="imageWrapper" onclick="handleImgClick(event)">
+                                <img src="${displayImg}" class="block max-w-full max-h-[78vh] rounded-xl shadow-2xl" onerror="onImgFail('${imgKey}')">
+                                ${state.learningStage === 1 && stage.items[state.currentStep]?.coords ? `<div class="absolute hotspot-target" style="left: ${stage.items[state.currentStep].coords.x}%; top: ${stage.items[state.currentStep].coords.y}%; width: 50px; height: 50px; transform: translate(-50%, -50%);"></div>` : ''}
+                                ${state.imgErrors[imgKey] ? `<div class="absolute inset-0 bg-black/90 flex flex-col items-center justify-center p-6 text-center"><p class="text-xs mb-4 text-red-400 font-bold uppercase">Aviso: Imagem '${imgKey}.jpg' não detectada no GitHub.</p><button onclick="openDevUpload()" class="bg-blue-600 p-4 rounded-2xl text-[10px] font-black uppercase italic shadow-xl">📸 Carregar Imagem Localmente</button></div>` : ''}
+                                <div id="hand-anim" class="absolute opacity-0 pointer-events-none transition-all duration-300 z-50"><div class="w-10 h-32 bg-[#0a1122] rounded-t-xl shadow-2xl"></div><div class="w-8 h-10 bg-[#e0ac69] rounded-b-xl border border-[#c68642] shadow-inner"></div></div>
+                            </div>
+                        </div>
+                        ${renderFooter('green', stage.items)}
+                    </main>
+                </div>`;
+        }
+
+        function renderAbnormalSimulator(app) {
+            const phase = ABNORMAL_SCENARIO.phases[state.abnormalIdx];
+            const displayImg = state.manualImages[phase.img] || `${phase.img}.jpg`;
+            const isPMActive = phase.role === 'PM';
+            const isPFActive = phase.role === 'PF';
+
+            app.innerHTML = `
+                <header class="bg-slate-900 p-3 flex justify-between items-center border-b border-white/5 shrink-0 shadow-lg z-50">
+                    <button onclick="state.view = 'home'; render();" class="bg-slate-800 p-2 rounded-lg text-[10px] font-black px-5 uppercase italic">Menu</button>
+                    <span class="px-3 py-1.5 rounded-lg text-[9px] font-black border border-red-500/30 text-red-400 uppercase italic">CRM GAME • Fase ${state.abnormalIdx + 1}</span>
+                    <button onclick="state.showDev = true; render();" class="bg-slate-800 p-2 rounded-lg text-[10px] text-slate-400 uppercase font-black px-4">⚙️ Dev</button>
+                </header>
+
+                <div class="flex flex-1 overflow-hidden relative">
+                    <aside class="w-80 station-panel ${isPMActive ? 'station-active' : 'station-inactive'} bg-[#0f172a] border-r border-slate-800 flex flex-col p-6 overflow-y-auto z-40">
+                        <h3 class="text-[10px] font-black text-amber-500 uppercase italic text-center mb-6 underline underline-offset-4 decoration-amber-500/30">Comandante + PM</h3>
+                        <div class="flex-1">${isPMActive ? renderPhaseControls(phase) : ''}</div>
+                    </aside>
+
+                    <main class="flex-1 flex flex-col bg-black overflow-hidden relative">
+                        <div class="flex-1 flex items-center justify-center p-2 relative">
+                            <div id="imageWrapper" onclick="handleImgClick(event)">
+                                <img src="${displayImg}" class="block max-w-full max-h-[65vh] rounded-xl shadow-2xl" onerror="onImgFail('${phase.img}')">
+                                ${phase.type === 'hotspot' ? `<div class="absolute hotspot-target" style="left: ${phase.target.x}%; top: ${phase.target.y}%; width: 12%; height: 12%; transform: translate(-50%, -50%);"></div>` : ''}
+                                ${state.imgErrors[phase.img] ? `<div class="absolute inset-0 bg-black/90 flex flex-col items-center justify-center p-6 text-center"><p class="text-xs mb-4 text-red-400 font-bold uppercase">Fase requer: ${phase.img}.jpg</p><button onclick="openDevUpload()" class="bg-blue-600 p-4 rounded-2xl text-[10px] font-black uppercase">📸 Carregar Manual</button></div>` : ''}
+                            </div>
+                        </div>
+                        ${renderFooter('red', null, phase)}
+                    </main>
+
+                    <aside class="station-panel w-80 bg-[#0f172a] border-l border-slate-800 flex flex-col p-6 overflow-y-auto z-40 ${!isPFActive ? 'station-inactive' : 'station-active'}">
+                        <h3 class="text-[10px] font-black text-blue-500 uppercase italic text-center mb-6 underline underline-offset-4 decoration-blue-500/30">Copiloto + PF</h3>
+                        <div class="flex-1">${isPFActive ? renderPhaseControls(phase) : ''}</div>
+                    </aside>
+                </div>`;
+        }
+
+        // --- DEV MENU & CALIBRATION ---
+        function renderDevMenu(app) {
+            const overlay = document.createElement('div');
+            overlay.className = "dev-overlay fixed inset-0 flex items-center justify-center p-10";
+            overlay.innerHTML = `
+                <div class="bg-slate-900 border border-blue-600/50 p-10 rounded-[50px] max-w-3xl w-full flex flex-col shadow-2xl relative animate-in zoom-in duration-300">
+                    <button onclick="state.showDev = false; render();" class="absolute top-6 right-6 text-slate-500 hover:text-white font-black uppercase text-xs">Fechar [X]</button>
+                    <h2 class="text-xl font-black uppercase italic text-blue-400 mb-6">Programador: Dashboard de Calibração</h2>
+                    
+                    <div class="grid grid-cols-2 gap-8 mb-8">
+                        <div class="bg-black/40 p-6 rounded-3xl border border-white/5">
+                            <p class="text-[8px] font-black uppercase text-slate-500 mb-4 italic">1. Posição Capturada (%)</p>
+                            <p class="text-xs font-mono text-blue-300 tracking-tighter">X: ${state.lastCalibClick.x}%</p>
+                            <p class="text-xs font-mono text-blue-300 tracking-tighter">Y: ${state.lastCalibClick.y}%</p>
+                            <p class="text-[7px] text-slate-600 mt-4">DICA: Clique na imagem do cockpit atrás deste menu para capturar.</p>
+                        </div>
+                        <div class="bg-black/40 p-6 rounded-3xl border border-white/5">
+                            <p class="text-[8px] font-black uppercase text-slate-500 mb-4 italic">2. Override de Imagem</p>
+                            <input type="file" id="manualUp" onchange="loadImg(event)" class="hidden">
+                            <button onclick="document.getElementById('manualUp').click()" class="w-full bg-blue-600 hover:bg-blue-500 py-4 rounded-xl font-black uppercase text-[10px] transition-all">Subir Imagem Local</button>
+                        </div>
+                    </div>
+
+                    <p class="text-[8px] font-black uppercase text-slate-500 mb-2 italic">3. Código de Configuração (Copiar para index.html)</p>
+                    <textarea class="bg-black p-4 rounded-xl font-mono text-[10px] text-green-500 flex-1 outline-none border border-white/10" readonly>
+target: { x: ${state.lastCalibClick.x}, y: ${state.lastCalibClick.y} }</textarea>
+                    
+                    <button onclick="navigator.clipboard.writeText('target: { x: ${state.lastCalibClick.x}, y: ${state.lastCalibClick.y} }'); alert('Código de coordenadas copiado!');" class="mt-4 bg-emerald-600 py-5 rounded-2xl font-black uppercase text-[10px] shadow-xl">Copiar Configuração para o Projeto</button>
+                </div>`;
+            app.appendChild(overlay);
+        }
+
+        // --- RENDERIZADORES DE FASE ---
+        function renderPhaseControls(p) {
+            let html = `<p class="text-xs font-bold text-white italic mb-8 border-l-4 border-blue-500 pl-3 leading-relaxed">${p.prompt}</p>`;
+            
+            if (p.type === 'timer') {
+                html += `<div class="p-6 bg-slate-950 rounded-3xl text-center shadow-inner">
+                    <div class="text-4xl font-mono text-blue-400 font-black mb-6">${Math.floor(state.timerVal/60)}:${(state.timerVal%60).toString().padStart(2, '0')}</div>
+                    <button onclick="startTimer()" class="bg-blue-600 w-full py-4 rounded-xl font-black uppercase text-[10px] mb-3 shadow-lg">Iniciar Resfriamento (3m)</button>
+                    <button onclick="nextAbPhase()" class="w-full bg-slate-800 border border-slate-700 py-3 rounded-xl font-black uppercase text-[9px] text-slate-400 hover:text-white transition-all italic">⏩ Pular Cronômetro</button>
+                </div>`;
+            } else if (p.choices) {
+                html += p.choices.map((c, i) => `<button onclick="selAbChoice(${i})" class="choice-btn group italic transition-all"><span class="text-blue-500 mr-2 opacity-0 group-hover:opacity-100 transition-opacity">▶</span> ${c}</button>`).join('');
+            } else if (p.type === 'multi-choice') {
+                html += p.options.map((opt, i) => `<div onclick="toggleMulti(${i})" class="multi-choice-item ${state.multi.includes(i) ? 'multi-choice-selected' : ''}">${opt}</div>`).join('') + `<button onclick="submitMulti()" class="w-full bg-green-600 py-3 rounded-xl font-black text-[10px] uppercase mt-4 shadow-lg">Validar Parâmetros</button>`;
+            }
+            return html;
+        }
+
+        function renderFooter(color, items, phase = null) {
+            const isPMActive = phase ? phase.role === 'PM' : true;
+            const isPFActive = phase ? phase.role === 'PF' : true;
+            return `
+                <footer class="h-32 bg-[#080d1a] border-t border-white/5 flex justify-between items-end px-20 shrink-0 relative shadow-[0_-20px_50px_rgba(0,0,0,0.5)]">
+                    <div class="flex flex-col items-center mb-[-5px]">
+                        <span class="text-[7px] font-bold text-slate-500 uppercase mb-1 italic">PM (Comandante)</span>
+                        ${getPilotSVG('PM', isPMActive)}
+                    </div>
+                    <div class="mb-10 bg-black/40 px-6 py-2 rounded-full border border-slate-800 flex flex-col items-center gap-1 shadow-inner">
+                        <span class="text-[7px] text-blue-400 font-black tracking-widest uppercase italic">Cockpit CRM Status</span>
+                        <div class="flex gap-1.5">
+                            ${items ? items.map((_, i) => `<div class="w-1.5 h-1.5 rounded-full ${i <= state.currentStep ? `bg-${color}-500 shadow-[0_0_8px_rgba(255,255,255,0.4)]` : 'bg-slate-800'} transition-all"></div>`).join('') : '<div class="h-1 w-16 bg-red-900/30 rounded-full overflow-hidden"><div class="h-full bg-red-600 w-1/3 animate-pulse"></div></div>'}
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-center mb-[-5px]">
+                        <span class="text-[7px] font-bold text-blue-400 uppercase mb-1 italic">PF (Copiloto)</span>
+                        ${getPilotSVG('PF', isPFActive)}
+                    </div>
+                </footer>`;
+        }
+
+        function renderBriefing(app) {
+            const overlay = document.createElement('div');
+            overlay.className = "briefing-overlay fixed inset-0 flex items-center justify-center p-6";
+            overlay.innerHTML = `
+                <div class="max-w-xl w-full bg-slate-900 border border-blue-500/30 rounded-[40px] shadow-2xl p-10 text-center animate-in zoom-in duration-300">
+                    <h2 class="text-3xl font-black italic uppercase text-white mb-6 tracking-tighter underline decoration-blue-500 decoration-4">Briefing Inicial</h2>
+                    <div class="space-y-4 text-slate-400 text-sm leading-relaxed mb-10 text-left">
+                        <div class="bg-black/40 p-5 rounded-2xl border border-white/5"><b class="text-blue-400 uppercase">Etapa 1 (Guiado):</b> Siga os alvos amarelos pulsantes no painel.</div>
+                        <div class="bg-black/40 p-5 rounded-2xl border border-white/5"><b class="text-blue-400 uppercase">Etapa 2 (Prática):</b> Use o checklist à esquerda, mas os alvos sumiram.</div>
+                        <div class="bg-black/40 p-5 rounded-2xl border border-white/5"><b class="text-blue-400 uppercase">Etapa 3 (Exame):</b> Ecrã limpo. Realize o fluxo completo de memória.</div>
+                    </div>
+                    <button onclick="state.showBriefing = false; render();" class="w-full bg-blue-600 hover:bg-blue-500 py-5 rounded-3xl font-black uppercase text-xs shadow-xl active:scale-95 transition-all">Aceitar Briefing e Iniciar</button>
+                </div>`;
+            app.appendChild(overlay);
+        }
+
+        // --- LÓGICA DE EXECUÇÃO ---
+        window.startSpecificFlow = (i) => {
+            if(state.category === 'Normal') { state.view = 'normal_sim'; state.learningStage = 1; state.currentStep = 0; state.activeNormalIdx = i; state.showBriefing = true; }
+            else { state.view = 'abnormal_sim'; state.abnormalIdx = 0; }
+            render();
+        };
+
+        window.onImgFail = (key) => { if(!state.manualImages[key] && !state.imgErrors[key]) { state.imgErrors[key] = true; render(); } };
+        window.openDevUpload = () => { document.getElementById('manualUp').click(); };
+
+        window.loadImg = (e) => {
+            const f = e.target.files[0];
+            if(!f) return;
+            const r = new FileReader();
+            r.onload = (ev) => {
+                const key = state.view === 'normal_sim' ? NORMAL_STAGES[state.activeNormalIdx].img : ABNORMAL_SCENARIO.phases[state.abnormalIdx].img;
+                state.manualImages[key] = ev.target.result;
+                state.imgErrors[key] = false;
+                render();
+            };
+            r.readAsDataURL(f);
+        };
+
+        window.handleImgClick = (e) => {
+            const rect = e.currentTarget.getBoundingClientRect();
+            const x = parseFloat((((e.clientX - rect.left) / rect.width) * 100).toFixed(1));
+            const y = parseFloat((((e.clientY - rect.top) / rect.height) * 100).toFixed(1));
+            
+            const ripple = document.createElement('div'); ripple.className = 'click-ripple'; ripple.style.left = x + '%'; ripple.style.top = y + '%';
+            e.currentTarget.appendChild(ripple); setTimeout(() => ripple.remove(), 400);
+
+            if(state.showDev) { state.lastCalibClick = { x, y }; render(); return; }
+
+            if(state.view === 'normal_sim') {
+                const target = NORMAL_STAGES[state.activeNormalIdx].items[state.currentStep].coords;
+                if(Math.sqrt(Math.pow(x-target.x, 2) + Math.pow(y-target.y, 2)) < 7) { advanceNormal(); }
+            } else {
+                const p = ABNORMAL_SCENARIO.phases[state.abnormalIdx];
+                if(p.type === 'hotspot' && Math.sqrt(Math.pow(x-p.target.x, 2) + Math.pow(y-p.target.y, 2)) < 7) {
+                    const h = document.getElementById('hand-anim'); 
+                    if(h) { h.style.left = x + '%'; h.style.top = y + '%'; h.style.opacity = '1'; setTimeout(()=>h.style.opacity='0', 300); }
+                    nextAbPhase(); 
+                }
+            }
+        };
+
+        function advanceNormal() {
+            const stage = NORMAL_STAGES[state.activeNormalIdx];
+            if(state.currentStep < stage.items.length - 1) { state.currentStep++; render(); }
+            else { 
+                if(state.learningStage < 3) { state.learningStage++; state.currentStep = 0; alert(`Fase concluída! Avançando para Etapa ${state.learningStage}.`); render(); }
+                else { alert("Treinamento de Cockpit Inspection finalizado com sucesso!"); state.view = 'home'; render(); }
+            }
+        }
+
+        window.selAbChoice = (i) => { if(i === ABNORMAL_SCENARIO.phases[state.abnormalIdx].correct) nextAbPhase(); else alert("Verbalização incorreta conforme SOP."); };
+        window.nextAbPhase = () => { 
+            if(state.timerInterval) clearInterval(state.timerInterval); 
+            if(state.abnormalIdx < ABNORMAL_SCENARIO.phases.length-1) { state.abnormalIdx++; state.timerVal = 180; render(); } 
+            else { alert("Simulação de Generator Failure Concluída."); state.view = 'home'; render(); } 
+        };
+        window.toggleMulti = (i) => { if(state.multi.includes(i)) state.multi = state.multi.filter(x=>x!==i); else state.multi.push(i); render(); };
+        window.submitMulti = () => { if(state.multi.length === 4) { state.multi = []; nextAbPhase(); } else alert("Parâmetros incompletos."); };
+        window.startTimer = () => { if(state.timerInterval) clearInterval(state.timerInterval); state.timerInterval = setInterval(() => { state.timerVal--; if(state.timerVal <= 0) nextAbPhase(); else render(); }, 1000); };
+
+        window.toggleCalib = () => { state.showDev = !state.showDev; render(); };
+
+        render();
+    </script>
 </body>
 </html>
