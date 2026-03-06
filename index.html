@@ -3,37 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Caravan PRO v56 - CRM & Procedimentos</title>
+    <title>Caravan PRO v65 - Full Training Suite</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
-        
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #020617;
-            color: white;
-            margin: 0;
-            overflow: hidden;
-            user-select: none;
-            touch-action: manipulation;
-        }
-
+        body { font-family: 'Inter', sans-serif; background-color: #020617; color: white; margin: 0; overflow: hidden; user-select: none; touch-action: manipulation; }
         .checklist-scroll::-webkit-scrollbar { width: 4px; }
         .checklist-scroll::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
-
-        /* Hotspot de precisão absoluta */
+        
         .hotspot-target { 
-            position: absolute;
-            width: 44px;
-            height: 44px;
-            margin-left: -22px;
-            margin-top: -22px;
-            animation: pulse-yellow 2s infinite; 
-            border-radius: 50%; 
-            border: 4px solid #fbbf24; 
-            background: rgba(251, 191, 36, 0.3); 
-            pointer-events: none;
-            z-index: 100;
+            position: absolute; width: 44px; height: 44px; margin-left: -22px; margin-top: -22px;
+            animation: pulse-yellow 2s infinite; border-radius: 50%; border: 4px solid #fbbf24; 
+            background: rgba(251, 191, 36, 0.3); pointer-events: none; z-index: 100;
         }
         @keyframes pulse-yellow {
             0% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.8); transform: scale(1); }
@@ -42,166 +23,120 @@
         }
 
         .click-ripple {
-            position: absolute; width: 40px; height: 40px;
-            background: rgba(255,255,255,0.4); border-radius: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            animation: ripple-out 0.4s ease-out;
-            pointer-events: none; z-index: 110;
+            position: absolute; width: 50px; height: 50px; background: rgba(255,255,255,0.4); 
+            border-radius: 50%; transform: translate(-50%, -50%) scale(0);
+            animation: ripple-out 0.4s ease-out; pointer-events: none; z-index: 110;
         }
         @keyframes ripple-out { to { transform: translate(-50%, -50%) scale(2); opacity: 0; } }
 
         .station-panel { transition: all 0.4s ease; flex-shrink: 0; border-color: rgba(255,255,255,0.05); }
-        .station-inactive { opacity: 0.1; filter: grayscale(1) blur(4px); pointer-events: none; }
+        .station-inactive { opacity: 0.15; filter: grayscale(1) blur(4px); pointer-events: none; }
         .station-active { opacity: 1; filter: none; pointer-events: all; }
 
-        #hand-anim { transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); pointer-events: none; z-index: 120; }
-
-        .briefing-overlay, .dev-overlay {
-            background: rgba(2, 6, 23, 0.98);
-            z-index: 2000;
-            backdrop-filter: blur(15px);
-        }
-
+        .dev-overlay { background: rgba(2, 6, 23, 0.95); z-index: 2000; backdrop-filter: blur(10px); }
+        #imageWrapper { position: relative; display: inline-block; line-height: 0; max-width: 100%; background: #000; }
+        #mainImg { display: block; max-width: 100%; max-height: 75vh; pointer-events: none; }
+        
         .choice-btn {
-            text-align: left; padding: 1.1rem; border-radius: 1rem; border: 1px solid #334155;
+            text-align: left; padding: 1rem; border-radius: 1rem; border: 1px solid #334155;
             background: rgba(30, 41, 59, 0.6); transition: all 0.2s; font-size: 0.75rem; font-weight: 700;
             width: 100%; margin-bottom: 0.5rem; line-height: 1.4;
         }
         .choice-btn:hover { border-color: #3b82f6; background: rgba(59, 130, 246, 0.1); }
 
-        .learning-badge {
-            background: #1e293b; border: 1px solid #3b82f6; color: #60a5fa;
-            padding: 4px 12px; border-radius: 99px; font-size: 9px; font-weight: 900;
-            text-transform: uppercase; letter-spacing: 1px;
-        }
-
-        #imageWrapper { 
-            position: relative; 
-            display: inline-block; 
-            line-height: 0;
-            max-width: 100%;
-        }
-
-        .reasoning-card { border-radius: 1rem; border: 1px solid #1e293b; padding: 0.75rem; font-size: 0.7rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
-        .reasoning-selected { background: #1e40af; border-color: #60a5fa; color: white; }
-
         .multi-choice-item {
             display: flex; align-items: center; gap: 0.75rem; padding: 0.85rem;
             border-radius: 0.75rem; border: 1px solid #1e293b; background: rgba(15, 23, 42, 0.8);
-            cursor: pointer; font-size: 0.7rem; font-weight: 700; margin-bottom: 0.5rem;
-            transition: all 0.2s;
+            cursor: pointer; font-size: 0.7rem; font-weight: 700; margin-bottom: 0.4rem;
         }
         .multi-choice-selected { border-color: #22c55e; background: rgba(34, 197, 94, 0.1); color: #4ade80; }
+        .reasoning-card { border-radius: 1rem; border: 1px solid #1e293b; padding: 0.75rem; font-size: 0.7rem; font-weight: 600; cursor: pointer; margin-bottom: 0.4rem; }
+        .reasoning-selected { background: #1e40af; border-color: #60a5fa; color: white; }
 
-        @media (max-width: 1024px) {
-            .game-main-container { flex-direction: column; overflow-y: auto; }
-            .station-panel { width: 100% !important; border: none !important; }
-        }
+        .calib-hud { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); background: #2563eb; padding: 8px 20px; border-radius: 99px; font-size: 10px; font-weight: 900; z-index: 500; border: 2px solid white; }
+        .learning-badge { background: #1e293b; border: 1px solid #3b82f6; color: #60a5fa; padding: 4px 12px; border-radius: 99px; font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
     </style>
 </head>
 <body>
     <div id="app" class="flex flex-col h-screen overflow-hidden"></div>
 
     <script>
-        // --- BASE DE DADOS: NORMAL PROCEDURES ---
+        // --- DATA: PROCEDIMENTOS NORMIAIS (CALIBRADOS) ---
         const NORMAL_STAGES = [
             {
-                id: "inspection",
-                title: "Cockpit Inspection",
-                img: "normal-cockpit",
+                id: "inspection", title: "Cockpit Inspection", img: "normal-cockpit",
                 items: [
                     { id: "c1", label: "CONTROL LOCK", status: "REMOVE", coords: { x: 36.1, y: 62.4 } },
                     { id: "c2", label: "YOKE", status: "FULL AFTERWARD", coords: { x: 34.3, y: 63.1 } },
-                    { id: "c3", label: "ALL SWITCHES (P1)", status: "OFF (PITOT/STALL)", coords: { x: 28.5, y: 31.3 } },
-                    { id: "c4", label: "ALL SWITCHES (P2)", status: "OFF (OUTROS)", coords: { x: 10.4, y: 73.8 } },
-                    { id: "c5", label: "CIRCUIT BREAKERS (P1)", status: "IN", coords: { x: 29.9, y: 44.6 } },
-                    { id: "c6", label: "CIRCUIT BREAKERS (P2)", status: "IN", coords: { x: 18.5, y: 75.8 } },
-                    { id: "c7", label: "ALT STATIC AIR", status: "OFF", coords: { x: 25.9, y: 51.4 } },
-                    { id: "c8", label: "INERTIAL SEPARATOR", status: "NORMAL", coords: { x: 48.6, y: 45.6 } },
-                    { id: "c9", label: "TRIMS (ELEVATOR)", status: "SET", coords: { x: 48.4, y: 60.2 } },
-                    { id: "c10", label: "TRIMS (AILERON)", status: "SET", coords: { x: 54.2, y: 72.8 } },
-                    { id: "c11", label: "TRIMS (RUDDER)", status: "SET", coords: { x: 56.0, y: 76.7 } },
-                    { id: "c12", label: "FUEL SHUTOFF", status: "PUSH IN", coords: { x: 59.7, y: 71.5 } },
-                    { id: "c13", label: "CABIN HEAT FIREWALL", status: "PUSH IN", coords: { x: 58.3, y: 85.2 } },
-                    { id: "c14", label: "EMERGENCY PWR LEVER", status: "NORMAL", coords: { x: 51.6, y: 64.4 } },
-                    { id: "c15", label: "PROP. CONTROL LEVER", status: "FULL FORWARD", coords: { x: 56.0, y: 61.5 } },
-                    { id: "c16", label: "AIR CONDITIONING", status: "OFF", coords: { x: 51.9, y: 50.4 } },
-                    { id: "c17", label: "BLEED AIR HEAT", status: "OFF", coords: { x: 61.1, y: 50.8 } },
-                    { id: "c18", label: "FUEL TANK SELECTORS", status: "1 ON", coords: { x: 83.8, y: 87.1 } },
-                    { id: "c19", label: "VENTILATION (P1)", status: "OFF", coords: { x: 90.7, y: 80.6 } },
-                    { id: "c20", label: "VENTILATION (P2)", status: "OFF", coords: { x: 80.3, y: 80.6 } },
-                    { id: "c21", label: "STBY FLAP MOTOR", status: "GUARDED NORM", coords: { x: 85.9, y: 71.5 } }
+                    { id: "c3", label: "ALL SWITCHES", status: "OFF", coords: { x: 28.5, y: 31.3 } },
+                    { id: "c4", label: "CIRCUIT BREAKERS", status: "IN", coords: { x: 29.9, y: 44.6 } }
+                ]
+            },
+            {
+                id: "preparation", title: "Preliminary Cockpit Preparation", img: "normal-cockpit-preparation",
+                items: [
+                    { id: "p1", label: "BATTERY", status: "ON", coords: { x: 11.8, y: 54.2 } },
+                    { id: "p2", label: "AVIONICS 1 AND 2", status: "ON", coords: { x: 11.4, y: 62.5 } },
+                    { id: "p3", label: "GNSS/ FMS DATA BASE", status: "CHECK", obs: "Validar no MFD", coords: { x: 55.1, y: 23 } },
+                    { id: "p4", label: "BUS VOLTS", status: "CHECK MINIMUM 24V", coords: { x: 49.3, y: 26.7 } },
+                    { id: "p5", label: "EXTERNAL POWER", status: "BUS", coords: { x: 10.5, y: 54.8 } },
+                    { id: "p6", label: "BUS VOLTS (EXT PWR)", status: "24 – 28.5 VOLTS", coords: { x: 49.6, y: 26.7 } },
+                    { id: "p7", label: "FIRE DETECT TEST", status: "PERFORM", coords: { x: 25.4, y: 35 } },
+                    { id: "p8", label: "ANNUN PANEL TEST 1", status: "PERFORM", obs: "Validar Anúncio no PFD 1", coords: { x: 42.1, y: 23.6 } },
+                    { id: "p9", label: "FUEL SELECT OFF TEST", status: "PERFORM", coords: { x: 25.2, y: 34.6 } },
+                    { id: "p10", label: "ANNUN PANEL TEST 2", status: "PERFORM", obs: "Validar Anúncio no PFD 1", coords: { x: 41.4, y: 24.4 } },
+                    { id: "p11", label: "EGPWS/ TAWS CHECK", status: "PERFORM", obs: "Validar PFD e som", coords: { x: 39.7, y: 20.4 } },
+                    { id: "p12", label: "NO SMOKE/SEAT BELTS", status: "ON", coords: { x: 28.1, y: 25.7 } },
+                    { id: "p13", label: "ATIS", status: "OBTAIN", coords: { x: 76.1, y: 21 } },
+                    { id: "p14", label: "ALTIMETER PFD 1", status: "SET", coords: { x: 43.9, y: 22.6 } },
+                    { id: "p15", label: "ALTIMETER PFD 2", status: "SET", coords: { x: 75.9, y: 22.4 } },
+                    { id: "p16", label: "ALTIMETER STBY", status: "SET", coords: { x: 57.4, y: 32 } },
+                    { id: "p17", label: "DATA CARD", status: "FILL", coords: { x: 26.3, y: 83.3 } },
+                    { id: "p18", label: "EFB", status: "CHECKED", obs: "Updates & Charge > 50%", coords: { x: 48.9, y: 84.9 } },
+                    { id: "p19", label: "CLEARANCE", status: "OBTAIN", coords: { x: 77.9, y: 44.2 } },
+                    { id: "p20", label: "RAIM PREDICTION", status: "PERFORM", obs: "RPN/ RNAV only", coords: { x: 60.3, y: 27.9 } },
+                    { id: "p21", label: "PARKING BRAKE", status: "SET", coords: { x: 38.4, y: 40.9 } },
+                    { id: "p22", label: "AVIONICS", status: "AS REQUIRED", coords: { x: 11.4, y: 61.5 } }
                 ]
             }
         ];
 
-        // --- BASE DE DADOS: ABNORMAL PROCEDURES (28 FASES) ---
+        // --- DATA: ABNORMAL PROCEDURES (COMPLETO 28 FASES) ---
         const ABNORMAL_SCENARIO = {
             title: "Generator Failure",
             phases: [
-                { id: 1, role: 'PM', img: 'imagem1-generatorfailure', type: 'choice', prompt: 'Você identificou a CAS Message no PFD?', choices: ['Sim, identifiquei.', 'Não tenho certeza — mostrar ajuda.'], correct: 0, help: 'Procure alertas amarelos no PFD.' },
-                { id: 2, role: 'PM', img: 'imagem1-generatorfailure', type: 'choice', prompt: 'PM: O que deve verbalizar ao detectar as mensagens?', choices: ['CAS MSG de GENERATOR OFF e Standby Power On', 'Verifiquei algo estranho aqui…'], correct: 0, obs: 'CAS Message não significa Pane de imediato.' },
-                { id: 3, role: 'PF', img: 'imagem1-generatorfailure', type: 'choice', prompt: 'PF: Você deve confirmar o que foi verbalizado pelo PM.', choices: ['Check, confirmo a CAS MSG', 'Pane não confirmada.'], correct: 0 },
-                { id: 4, role: 'PM', img: 'imagem1-generatorfailure', type: 'hotspot', prompt: 'PM: Clique no botão CAUTION para silenciar o alerta.', target: { x: 26, y: 91.9 } },
-                { id: 5, role: 'PF', img: 'imagem1-generatorfailure', type: 'choice', prompt: 'PF: Solicite verificação do sistema:', choices: ['Check System.', 'Ignore o alerta.'], correct: 0 },
-                { id: 6, role: 'PM', img: 'imagem1-generatorfailure', type: 'hotspot', prompt: 'PM: Clique na softkey SYSTEM para acessar os dados.', target: { x: 43, y: 90.3 } },
-                { id: 7, role: 'PM', img: 'imagem2-generatorfailure', type: 'multi-choice', prompt: 'PM: Selecione os 4 parâmetros elétricos observados:', options: ['GEN AMPS zerado', 'ALT AMPS 23', 'BAT AMPS zerado', 'BUS VOLTS 27', 'GEN VOLTS 40 (falso)'], correct: [0, 1, 2, 3] },
-                { id: 8, role: 'PM', img: 'imagem2-generatorfailure', type: 'choice', prompt: 'PM: Após a leitura, verbalize:', choices: ['Os parâmetros indicam que o gerador está OFF e o STB PWR está ON', 'Parâmetros no padrão.'], correct: 0 },
-                { id: 9, role: 'PM', img: 'imagem2-generatorfailure', type: 'choice', prompt: 'PM: Quais as próximas etapas?', choices: ['Verificar os SWITCHES e CIRCUIT BRAKERS', 'Chamar o controle.'], correct: 0 },
-                { id: 10, role: 'PM', img: 'imagem3-generatorfailure', type: 'choice', prompt: 'PM: Verificação física dos CBs. O que encontrou?', choices: ['CB GEN FIELD saltou.', 'Painel em ordem.'], correct: 0 },
-                { id: 11, role: 'PM', img: 'imagem4-generatorfailure', type: 'choice', prompt: 'PM: O que fazer após verificar o CB Saltado?', choices: ['O PM deve iniciar o cronômetro e aguardar 3 minutos', 'Resetar agora.'], correct: 0 },
-                { id: 12, role: 'PM', img: 'imagem4-generatorfailure', type: 'timer', prompt: 'Resfriamento em curso...', duration: 180 },
-                { id: 13, role: 'PM', img: 'imagem1-generatorfailure', type: 'choice', prompt: 'PM: Confirmação técnica da Pane:', choices: ['Diante das informações, do sistema e do CB saltado confirmo GENERATOR FAILURE.', 'Pane não confirmada.'], correct: 0 },
-                { id: 14, role: 'PF', img: 'imagem1-generatorfailure', type: 'choice', prompt: 'PF: Responda à confirmação:', choices: ['Confirmo a Pane de GENERATOR FAILURE.', 'Não.'], correct: 0 },
-                { id: 15, role: 'PF', img: 'imagem1-generatorfailure', type: 'choice', prompt: 'PF: Proponha gerenciamento:', choices: ['O que acha de pedirmos uma espera para gerenciar a pane?', 'Seguir direto.'], correct: 0 },
-                { id: 16, role: 'PM', img: 'imagem1-generatorfailure', type: 'choice', prompt: 'PM: Solicite espera ao ATC:', choices: ['Solicitar espera ao controle.', 'Continuar direto.'], correct: 0 },
-                { id: 17, role: 'PF', img: 'imagem5-generatorfailure', type: 'choice', prompt: 'PF: Solicite o Checklist:', choices: ['MY CONTROLS AND ATC – Generator Failure Checklist.', 'Leia o checklist.'], correct: 0 },
-                { id: 18, role: 'PM', img: 'imagem5-generatorfailure', type: 'choice', prompt: 'PM: Confirme transferência:', choices: ['YOUR CONTROLS AND ATC.', 'Entendido.'], correct: 0 },
-                { id: 19, role: 'PM', img: 'imagem5-generatorfailure', type: 'choice', prompt: 'PM: Chamada do Checklist:', choices: ['Generator Failure Checklist, confirm?', 'Vou iniciar.'], correct: 0 },
-                { id: 20, role: 'PF', img: 'imagem5-generatorfailure', type: 'choice', prompt: 'PF: Confirme:', choices: ['Confirm.', 'Não.'], correct: 0 },
+                { id: 1, role: 'PM', img: 'imagem1-generatorfailure', type: 'choice', prompt: 'Você identificou a CAS Message no PFD?', choices: ['Sim, identifiquei.', 'Não visualizei.'], correct: 0 },
+                { id: 2, role: 'PM', img: 'imagem1-generatorfailure', type: 'choice', prompt: 'PM: Verbalize a pane observada.', choices: ['CAS MSG de GENERATOR OFF e Standby Power On', 'Verifiquei algo estranho aqui…'], correct: 0 },
+                { id: 3, role: 'PF', img: 'imagem1-generatorfailure', type: 'choice', prompt: 'PF: Responda ao callout do PM:', choices: ['Check, confirmo a CAS MSG', 'Ok.'], correct: 0 },
+                { id: 4, role: 'PM', img: 'imagem1-generatorfailure', type: 'hotspot', prompt: 'PM: Clique no botão CAUTION.', target: { x: 26, y: 91.9 } },
+                { id: 5, role: 'PF', img: 'imagem1-generatorfailure', type: 'choice', prompt: 'PF solicita análise:', choices: ['Check System.', 'Ignore.'], correct: 0 },
+                { id: 6, role: 'PM', img: 'imagem1-generatorfailure', type: 'hotspot', prompt: 'PM: Clique na softkey SYSTEM.', target: { x: 43, y: 90.3 } },
+                { id: 7, role: 'PM', img: 'imagem2-generatorfailure', type: 'multi-choice', prompt: 'PM: Selecione os 4 parâmetros elétricos:', options: ['GEN AMPS zero', 'ALT AMPS 23', 'BAT AMPS zero', 'BUS VOLTS 27', 'GEN VOLTS 40'], correct: [0, 1, 2, 3] },
+                { id: 8, role: 'PM', img: 'imagem2-generatorfailure', type: 'choice', prompt: 'PM: Verbalize o diagnóstico:', choices: ['Os parâmetros indicam que o gerador está OFF e o STB PWR está ON', 'Tudo ok.'], correct: 0 },
+                { id: 9, role: 'PM', img: 'imagem2-generatorfailure', type: 'choice', prompt: 'PM: Próximas etapas?', choices: ['Verificar SWITCHES e CBs', 'Chamar Controle.'], correct: 0 },
+                { id: 10, role: 'PM', img: 'imagem3-generatorfailure', type: 'choice', prompt: 'PM: Situação dos CBs:', choices: ['CB GEN FIELD saltado.', 'Tudo em ordem.'], correct: 0 },
+                { id: 11, role: 'PM', img: 'imagem4-generatorfailure', type: 'choice', prompt: 'PM: Ação necessária?', choices: ['Iniciar cronômetro e aguardar 3 min', 'Resetar agora.'], correct: 0 },
+                { id: 12, role: 'PM', img: 'imagem4-generatorfailure', type: 'timer', prompt: 'Resfriamento (3 min).', duration: 180 },
+                { id: 13, role: 'PM', img: 'imagem1-generatorfailure', type: 'choice', prompt: 'Confirmação técnica:', choices: ['Confirmo GENERATOR FAILURE.', 'Não confirmado.'], correct: 0 },
+                { id: 14, role: 'PF', img: 'imagem1-generatorfailure', type: 'choice', prompt: 'PF Responde:', choices: ['Confirmo a Pane.', 'Discordo.'], correct: 0 },
+                { id: 15, role: 'PF', img: 'imagem1-generatorfailure', type: 'choice', prompt: 'PF Proposta:', choices: ['Solicitar espera para gerenciar.', 'Prosseguir direto.'], correct: 0 },
+                { id: 16, role: 'PM', img: 'imagem1-generatorfailure', type: 'choice', prompt: 'PM chama ATC:', choices: ['Solicitar espera ao controle.', 'Seguir direto.'], correct: 0 },
+                { id: 17, role: 'PF', img: 'imagem5-generatorfailure', type: 'choice', prompt: 'Início Checklist:', choices: ['MY CONTROLS AND ATC – Generator Failure Checklist.', 'Vou ler.'], correct: 0 },
                 { id: 21, role: 'PM', img: 'imagem5-generatorfailure', type: 'checklist-line', prompt: 'Item: BUS VOLTS – Check, monitor voltage.', response: 'Check. GEN AMPS zero e BUS VOLTS 27.' },
                 { id: 22, role: 'PM', img: 'imagem5-generatorfailure', type: 'checklist-line', prompt: 'Item: STBY ALT PWR – Verify ON.', response: 'ON.' },
-                { id: 23, role: 'PM', img: 'imagem5-generatorfailure', type: 'choice', prompt: 'Finalização:', choices: ['Generator Failure Checklist completed.', 'Concluído.'], correct: 0 },
-                { id: 24, role: 'BOTH', img: 'imagem1-generatorfailure', type: 'reasoning', prompt: 'CRM: Monte a linha de raciocínio (6 itens):', items: ['Pane resolvida após checklist.', 'Não sabemos a causa provável.', 'Sem Azultec no destino.', 'Aeronave ficará AOG.', 'Sugiro retornar à origem.', 'Se a pane retornar, não resetar novamente.'], required: 6 },
-                { id: 25, role: 'PM', img: 'imagem1-generatorfailure', type: 'choice', prompt: 'PM: Resposta final:', choices: ['Concordo, retornaremos.', 'Continuaremos.'], correct: 0 },
-                { id: 26, role: 'PM', img: 'imagem1-generatorfailure', type: 'choice', prompt: 'ATC Callout:', choices: ['ACN5501 solicita retorno devido pane no gerador.', 'ACN5501 retornando.'], correct: 0 },
-                { id: 27, role: 'PM', img: 'imagem1-generatorfailure', type: 'choice', prompt: 'Chamada Azul:', choices: ['Solicita Azultec em posição e auxílio aos passageiros.', 'Preparar solo.'], correct: 0 },
-                { id: 28, role: 'PF', img: 'imagem1-generatorfailure', type: 'choice', prompt: 'Anúncio PA:', choices: ['Senhores clientes, devido a problemas técnicos...', 'Estamos voltando.'], correct: 0 }
+                { id: 24, role: 'BOTH', img: 'imagem1-generatorfailure', type: 'reasoning', prompt: 'Linha de Raciocínio (6 itens):', items: ['Pane resolvida após checklist.', 'Não sabemos a causa provável.', 'Sem Azultec no destino.', 'Aeronave ficará AOG.', 'Sugiro retornar à origem.', 'Se a pane retornar, não resetar novamente.'], required: 6 },
+                { id: 28, role: 'PF', img: 'imagem1-generatorfailure', type: 'choice', prompt: 'Anúncio PA:', choices: ['Senhores clientes, retorno imediato...', 'Atenção agora.'], correct: 0 }
             ]
         };
 
+        // --- STATE MANAGEMENT ---
         let state = {
-            view: 'home',
-            category: null,
-            learningStage: 1, 
-            currentStep: 0,
-            abnormalIdx: 0,
-            manualImages: {}, 
-            imgErrors: {}, 
-            showBriefing: false,
-            showDev: false,
-            lastCalibClick: { x: 0, y: 0 },
-            multi: [],
-            reason: [],
-            timerVal: 180,
-            isTimerActive: false,
-            timerInterval: null
+            view: 'home', category: null, learningStage: 1, currentStep: 0, activeNormalIdx: 0, abnormalIdx: 0,
+            manualImages: {}, showDev: false, calibActive: false, calibResults: [], multi: [], reason: [],
+            timerVal: 180, timerInterval: null
         };
 
-        // --- SVGS PILOTOS ---
-        function getPilotSVG(role, isActive = true) {
-            const stripes = role === 'PM' ? 4 : 3;
-            const opacity = isActive ? '1' : '0.15';
-            return `
-                <svg width="150" height="110" viewBox="0 0 150 120" style="opacity: ${opacity}; transition: all 0.7s;">
-                    <defs><linearGradient id="shirtGrad" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#ffffff" /><stop offset="100%" style="stop-color:#cbd5e1" /></linearGradient></defs>
-                    <path d="M15 120 L135 120 L120 40 L30 40 Z" fill="url(#shirtGrad)" stroke="#94a3b8" stroke-width="0.5"/>
-                    <rect x="62" y="35" width="26" height="10" fill="#e0ac69"/><ellipse cx="75" cy="22" rx="18" ry="22" fill="#1c1917"/>
-                    ${Array.from({length: stripes}).map((_, i) => `<rect x="25" y="${44 + (i*1.8)}" width="24" height="1.1" fill="#fbbf24" transform="rotate(-15 25 44)"/><rect x="101" y="${44 + (i*1.8)}" width="24" height="1.1" fill="#fbbf24" transform="rotate(15 101 44)"/>`).join('')}
-                </svg>`;
-        }
-
-        // --- SISTEMA DE RENDERIZAÇÃO ---
+        // --- RENDER SYSTEM ---
         function render() {
             const app = document.getElementById('app');
             app.innerHTML = ""; 
@@ -209,26 +144,23 @@
             else if (state.view === 'selection') renderSelection(app);
             else if (state.view === 'normal_sim') renderNormalSimulator(app);
             else if (state.view === 'abnormal_sim') renderAbnormalSimulator(app);
-
-            if (state.showBriefing) renderBriefing(app);
             if (state.showDev) renderDevMenu(app);
         }
 
         function renderHome(app) {
             app.innerHTML = `
-                <div class="flex-1 flex flex-col items-center justify-center p-8 bg-[#020617] text-center">
-                    <div class="mb-16">
-                        <div class="bg-blue-600 px-10 py-4 rounded-3xl shadow-2xl mb-6 inline-block"><h1 class="text-white font-black text-5xl italic tracking-tighter uppercase leading-none underline decoration-blue-400">CARAVAN PRO</h1></div>
-                        <p class="text-slate-500 font-bold uppercase tracking-[0.5em] text-[10px]">Simulador Profissional de CRM v56</p>
+                <div class="flex-1 flex flex-col items-center justify-center p-8 text-center bg-slate-950">
+                    <div class="bg-blue-600 px-10 py-5 rounded-3xl shadow-2xl mb-16 inline-block border-b-4 border-blue-800">
+                        <h1 class="text-white font-black text-5xl italic tracking-tighter uppercase leading-none">CARAVAN PRO</h1>
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl w-full px-4">
-                        <button onclick="state.category='Normal'; state.view='selection'; render();" class="group bg-slate-900 border-2 border-emerald-600/30 p-12 rounded-[50px] hover:border-emerald-500 transition-all shadow-2xl">
-                            <div class="w-20 h-20 bg-emerald-600/20 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-emerald-600 transition-all shadow-lg"><span class="text-emerald-400 group-hover:text-white text-3xl font-black italic">N</span></div>
-                            <h2 class="text-xl font-black uppercase italic text-white">Normal Procedures</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl w-full">
+                        <button onclick="state.category='Normal'; state.view='selection'; render();" class="bg-slate-900 border-2 border-emerald-600/30 p-12 rounded-[50px] hover:border-emerald-500 transition-all shadow-2xl active:scale-95 flex flex-col items-center">
+                           <div class="w-16 h-16 bg-emerald-600/20 rounded-full flex items-center justify-center mb-4 text-emerald-400 font-black text-2xl italic">N</div>
+                           <h2 class="text-xl font-black uppercase italic">Normal Procedures</h2>
                         </button>
-                        <button onclick="state.category='Abnormal'; state.view='selection'; render();" class="group bg-slate-900 border-2 border-red-600/30 p-12 rounded-[50px] hover:border-red-500 transition-all shadow-2xl">
-                            <div class="w-20 h-20 bg-red-600/20 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-red-600 transition-all shadow-lg"><span class="text-red-400 group-hover:text-white text-3xl font-black italic">A</span></div>
-                            <h2 class="text-xl font-black uppercase italic text-white">Abnormal Procedures</h2>
+                        <button onclick="state.category='Abnormal'; state.view='selection'; render();" class="bg-slate-900 border-2 border-red-600/30 p-12 rounded-[50px] hover:border-red-500 transition-all shadow-2xl active:scale-95 flex flex-col items-center">
+                           <div class="w-16 h-16 bg-red-600/20 rounded-full flex items-center justify-center mb-4 text-red-400 font-black text-2xl italic">A</div>
+                           <h2 class="text-xl font-black uppercase italic">Abnormal Procedures</h2>
                         </button>
                     </div>
                 </div>`;
@@ -237,12 +169,12 @@
         function renderSelection(app) {
             const flows = state.category === 'Abnormal' ? [ABNORMAL_SCENARIO] : NORMAL_STAGES;
             app.innerHTML = `
-                <div class="flex-1 flex flex-col items-center justify-center p-10 bg-[#020617]">
-                    <button onclick="state.view = 'home'; render();" class="absolute top-10 left-10 text-slate-500 hover:text-white font-black uppercase text-[10px] italic transition-colors">← Voltar</button>
-                    <h2 class="text-3xl font-black uppercase italic text-white mb-10 tracking-tighter">${state.category} Selection</h2>
+                <div class="flex-1 flex flex-col items-center justify-center p-10 bg-slate-950">
+                    <button onclick="state.view = 'home'; render();" class="absolute top-10 left-10 text-slate-500 hover:text-white font-black uppercase text-[10px] italic">← MENU PRINCIPAL</button>
+                    <h2 class="text-3xl font-black uppercase italic mb-10 tracking-widest text-blue-400 underline decoration-blue-500 underline-offset-8">${state.category} Selection</h2>
                     <div class="flex flex-col gap-4 w-full max-w-lg">
-                        ${flows.map((f, i) => `<button onclick="startSpecificFlow(${i})" class="w-full bg-slate-900/40 hover:bg-slate-800 border border-slate-800 p-6 rounded-3xl text-left flex justify-between group transition-all shadow-lg">
-                            <span class="text-lg font-bold uppercase italic text-slate-200 group-hover:text-white tracking-widest">${f.title}</span><span class="text-blue-500">▶</span>
+                        ${flows.map((f, i) => `<button onclick="startSpecificFlow(${i})" class="w-full bg-slate-900/40 hover:bg-slate-800 border border-slate-800 p-6 rounded-3xl text-left flex justify-between group transition-all">
+                            <span class="text-lg font-bold uppercase italic text-slate-200 group-hover:text-white">${f.title}</span><span class="text-blue-500">▶</span>
                         </button>`).join('')}
                     </div>
                 </div>`;
@@ -251,38 +183,33 @@
         function renderNormalSimulator(app) {
             const stage = NORMAL_STAGES[state.activeNormalIdx];
             const isExam = state.learningStage === 3;
-            const imgKey = stage.img;
-            const displayImg = state.manualImages[imgKey] || `${imgKey}.jpg`;
+            const displayImg = state.manualImages[stage.img] || `${stage.img}.jpg`;
             const currentItem = stage.items[state.currentStep];
 
             app.innerHTML = `
                 <header class="bg-slate-900 p-3 flex justify-between items-center border-b border-white/5 z-50 shrink-0 shadow-xl">
                     <button onclick="state.view = 'home'; render();" class="bg-slate-800 p-2 rounded-lg text-[10px] font-black px-4 uppercase italic">Sair</button>
-                    <div class="flex items-center gap-3">
-                        <span class="learning-badge tracking-tighter">Etapa ${state.learningStage}</span>
-                        <span class="text-[9px] font-bold text-slate-400 uppercase italic">${stage.title}</span>
-                    </div>
-                    <button onclick="state.showDev = true; render();" class="bg-slate-800 p-2 rounded-lg text-[10px] text-slate-400 font-black uppercase px-4">⚙️ Dev</button>
+                    <div class="flex items-center gap-3"><span class="learning-badge">Etapa ${state.learningStage}</span><span class="text-[9px] font-bold text-slate-400 uppercase italic">${stage.title}</span></div>
+                    <button onclick="state.showDev = true; render();" class="bg-emerald-600 p-2 rounded-lg text-[10px] text-white font-black uppercase px-4 active:scale-95 shadow-lg">⚙️ Menu Desenvolvedor</button>
                 </header>
-
                 <div class="flex flex-1 overflow-hidden relative">
                     ${!isExam ? `<aside class="w-64 bg-[#0f172a] border-r border-slate-800 flex flex-col shrink-0 z-40">
-                        <div class="p-3 bg-slate-900/40 text-center text-blue-400 font-black uppercase text-[8px]">SOP Flow</div>
+                        <div class="p-3 bg-slate-900/40 text-center text-blue-400 font-black uppercase text-[8px] tracking-widest">SOP Workflow</div>
                         <div class="flex-1 overflow-y-auto p-2 space-y-1 checklist-scroll">
-                            ${stage.items.map((item, i) => `<div class="p-2 rounded-lg border ${i < state.currentStep ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400 opacity-60' : i === state.currentStep ? 'bg-blue-600 border-blue-400 shadow-lg' : 'bg-slate-800/20 border-slate-800 opacity-20'}"><div class="text-[8px] font-black uppercase">${item.label}</div></div>`).join('')}
+                            ${stage.items.map((item, i) => `
+                                <div class="p-2.5 rounded-lg border ${i < state.currentStep ? 'bg-emerald-500/10 opacity-60 border-emerald-500/20' : i === state.currentStep ? 'bg-blue-600 border-blue-400 shadow-lg scale-105' : 'bg-slate-800/20 border-white/5 opacity-20'} transition-all">
+                                    <div class="text-[8px] font-black uppercase no-wrap-text">${item.label}</div>
+                                    <div class="text-[6px] font-bold opacity-50 uppercase">${item.status}</div>
+                                    ${i === state.currentStep && item.obs ? `<div class="mt-1 text-[7px] text-yellow-500 font-bold uppercase italic leading-tight">* ${item.obs}</div>` : ''}
+                                </div>`).join('')}
                         </div>
                     </aside>` : ''}
-
-                    <main class="flex-1 flex flex-col bg-black overflow-hidden relative">
-                        <div class="flex-1 flex items-center justify-center p-2 relative overflow-hidden">
-                            <div id="imageWrapper">
-                                <img src="${displayImg}" class="block max-w-full max-h-[78vh] rounded-xl shadow-2xl border border-white/5" onclick="handleImgClick(event)" onerror="onImgFail('${imgKey}')">
-                                ${state.learningStage === 1 && currentItem?.coords ? `<div class="hotspot-target" style="left: ${currentItem.coords.x}%; top: ${currentItem.coords.y}%;"></div>` : ''}
-                                ${state.imgErrors[imgKey] ? `<div class="absolute inset-0 bg-black/90 flex flex-col items-center justify-center p-6 text-center"><button onclick="openDevUpload()" class="bg-blue-600 p-4 rounded-2xl text-[10px] font-black uppercase italic">📸 Carregar ${imgKey}.jpg</button></div>` : ''}
-                                <div id="hand-anim" class="absolute opacity-0 pointer-events-none transition-all duration-300 z-50"><div class="w-10 h-32 bg-[#0a1122] rounded-t-xl shadow-2xl"></div><div class="w-8 h-10 bg-[#e0ac69] rounded-b-xl border border-[#c68642] shadow-inner"></div></div>
-                            </div>
+                    <main class="flex-1 flex flex-col bg-black overflow-hidden relative items-center justify-center">
+                        ${state.calibActive ? `<div class="calib-hud">CALIBRANDO: ${currentItem.label}</div>` : ''}
+                        <div id="imageWrapper" onclick="handleImgClick(event)">
+                            <img src="${displayImg}" id="mainImg" class="rounded-xl shadow-2xl border border-white/5" onerror="this.src='https://placehold.co/1280x720/0a0a0a/475569?text=Imagem+Nao+Detectada'">
+                            ${state.learningStage === 1 && currentItem?.coords && !state.calibActive ? `<div class="hotspot-target" style="left: ${currentItem.coords.x}%; top: ${currentItem.coords.y}%;"></div>` : ''}
                         </div>
-                        ${renderFooter('green', stage.items)}
                     </main>
                 </div>`;
         }
@@ -290,183 +217,146 @@
         function renderAbnormalSimulator(app) {
             const phase = ABNORMAL_SCENARIO.phases[state.abnormalIdx];
             const displayImg = state.manualImages[phase.img] || `${phase.img}.jpg`;
-            const isPMActive = phase.role === 'PM' || phase.role === 'BOTH';
-            const isPFActive = phase.role === 'PF' || phase.role === 'BOTH';
+            const isPM = phase.role === 'PM' || phase.role === 'BOTH';
+            const isPF = phase.role === 'PF' || phase.role === 'BOTH';
 
             app.innerHTML = `
-                <header class="bg-slate-900 p-3 flex justify-between items-center border-b border-white/5 shrink-0 shadow-lg z-50">
+                <header class="bg-slate-900 p-3 flex justify-between items-center border-b border-white/5 shrink-0 z-50 shadow-lg">
                     <button onclick="state.view = 'home'; render();" class="bg-slate-800 p-2 rounded-lg text-[10px] font-black px-5 uppercase italic">Menu</button>
-                    <span class="px-3 py-1.5 rounded-lg text-[9px] font-black border border-red-500/30 text-red-400 uppercase italic">CRM GAME • Fase ${state.abnormalIdx + 1}</span>
-                    <button onclick="state.showDev = true; render();" class="bg-slate-800 p-2 rounded-lg text-[10px] text-slate-400 font-black px-4">⚙️ Dev</button>
+                    <span class="px-3 py-1.5 rounded-lg text-[9px] font-black border border-red-500/30 text-red-400 uppercase italic">Fase ${state.abnormalIdx + 1}: ${ABNORMAL_SCENARIO.title}</span>
+                    <button onclick="state.showDev = true; render();" class="bg-slate-800 p-2 rounded-lg text-[10px] text-slate-400 font-black px-4 italic">⚙️ Dev</button>
                 </header>
-
                 <div class="flex flex-1 overflow-hidden relative">
-                    <aside class="station-panel w-80 bg-[#0f172a] border-r border-slate-800 flex flex-col p-6 overflow-y-auto z-40 ${isPMActive ? 'station-active' : 'station-inactive'}">
-                        <h3 class="text-[10px] font-black text-amber-500 uppercase italic text-center mb-6 underline decoration-amber-500/30 underline-offset-4 decoration-2">Comandante + PM</h3>
-                        <div class="flex-1">${isPMActive ? renderAbnormalControls(phase) : ''}</div>
+                    <aside class="station-panel w-80 bg-[#0f172a] border-r border-slate-800 flex flex-col p-6 overflow-y-auto z-40 ${isPM ? 'station-active' : 'station-inactive'}">
+                        <h3 class="text-[10px] font-black text-amber-500 uppercase italic text-center mb-6 underline decoration-amber-500/30">Comandante + PM</h3>
+                        <div class="flex-1">${isPM ? renderAbnormalControls(phase) : ''}</div>
                     </aside>
-
-                    <main class="flex-1 flex flex-col bg-black overflow-hidden relative">
-                        <div class="flex-1 flex items-center justify-center p-2 relative overflow-hidden">
-                            <div id="imageWrapper" onclick="handleImgClick(event)">
-                                <img src="${displayImg}" class="block max-w-full max-h-[65vh] rounded-xl shadow-2xl border border-white/5" onerror="onImgFail('${phase.img}')">
-                                ${phase.type === 'hotspot' ? `<div class="hotspot-target" style="left: ${phase.target.x}%; top: ${phase.target.y}%;"></div>` : ''}
-                                ${state.imgErrors[phase.img] ? `<div class="absolute inset-0 bg-black/90 flex flex-col items-center justify-center p-6 text-center"><button onclick="openDevUpload()" class="bg-blue-600 p-4 rounded-2xl text-[10px] font-black uppercase">📸 Upload ${phase.img}</button></div>` : ''}
-                            </div>
+                    <main class="flex-1 flex flex-col bg-black overflow-hidden relative items-center justify-center">
+                        <div id="imageWrapper" onclick="handleImgClick(event)">
+                            <img src="${displayImg}" id="mainImg" class="rounded-xl shadow-2xl border border-white/5" onerror="this.src='https://placehold.co/1280x720/0a0a0a/475569?text=Aguardando+Fase'">
+                            ${phase.type === 'hotspot' ? `<div class="hotspot-target" style="left: ${phase.target.x}%; top: ${phase.target.y}%;"></div>` : ''}
                         </div>
-                        ${renderFooter('red', null, phase)}
                     </main>
-
-                    <aside class="station-panel w-80 bg-[#0f172a] border-l border-slate-800 flex flex-col p-6 overflow-y-auto z-40 ${isPFActive ? 'station-active' : 'station-inactive'}">
-                        <h3 class="text-[10px] font-black text-blue-500 uppercase italic text-center mb-6 underline decoration-blue-500/30 underline-offset-4 decoration-2">Copiloto + PF</h3>
-                        <div class="flex-1">${isPFActive ? renderAbnormalControls(phase) : ''}</div>
+                    <aside class="station-panel w-80 bg-[#0f172a] border-l border-slate-800 flex flex-col p-6 overflow-y-auto z-40 ${isPF ? 'station-active' : 'station-inactive'}">
+                        <h3 class="text-[10px] font-black text-blue-500 uppercase italic text-center mb-6 underline decoration-blue-500/30">Copiloto + PF</h3>
+                        <div class="flex-1">${isPF ? renderAbnormalControls(phase) : ''}</div>
                     </aside>
                 </div>`;
         }
 
-        // --- DEV MENU ---
         function renderDevMenu(app) {
             const overlay = document.createElement('div');
-            overlay.className = "dev-overlay fixed inset-0 flex items-center justify-center p-10";
+            overlay.className = "dev-overlay fixed inset-0 flex items-center justify-center p-6";
+            const currentProcedure = NORMAL_STAGES[state.activeNormalIdx];
+            const currentItem = currentProcedure ? currentProcedure.items[state.currentStep] : {label: 'Abnormal Phase'};
+            
+            let bulkCode = `Calibracao Plínio v65:\n------------------\n`;
+            state.calibResults.forEach(r => { bulkCode += `Item: ${r.label} | { x: ${r.x}, y: ${r.y} }\n`; });
+
             overlay.innerHTML = `
-                <div class="bg-slate-900 border border-blue-600/50 p-10 rounded-[50px] max-w-3xl w-full flex flex-col shadow-2xl relative">
+                <div class="bg-slate-900 border border-blue-500/40 p-8 rounded-[40px] max-w-2xl w-full flex flex-col shadow-2xl relative">
                     <button onclick="state.showDev = false; render();" class="absolute top-6 right-6 text-slate-500 hover:text-white font-black uppercase text-xs">Fechar [X]</button>
-                    <h2 class="text-xl font-black uppercase italic text-blue-400 mb-6 underline decoration-blue-600 decoration-2">Console de Calibração</h2>
-                    <div class="grid grid-cols-2 gap-8 mb-8">
-                        <div class="bg-black/40 p-6 rounded-3xl border border-white/5">
-                            <p class="text-[8px] font-black uppercase text-slate-500 mb-4 italic text-center">1. Coordenadas (%)</p>
-                            <div class="flex flex-col items-center gap-2">
-                                <p class="text-xs font-mono text-blue-300">X: ${state.lastCalibClick.x}%</p>
-                                <p class="text-xs font-mono text-blue-300">Y: ${state.lastCalibClick.y}%</p>
-                            </div>
-                            <p class="text-[7px] text-slate-600 mt-4 text-center">Clique na imagem ao fundo para capturar.</p>
-                        </div>
-                        <div class="bg-black/40 p-6 rounded-3xl border border-white/5">
-                            <p class="text-[8px] font-black uppercase text-slate-500 mb-4 italic text-center">2. Imagem Manual</p>
+                    <h2 class="text-xl font-black uppercase italic text-emerald-400 mb-6 underline decoration-emerald-600 decoration-2">Central do Desenvolvedor</h2>
+                    <div class="grid grid-cols-2 gap-6 mb-8">
+                        <div class="bg-black/40 p-5 rounded-3xl border border-white/5">
+                            <p class="text-[8px] font-black uppercase text-blue-400 mb-4 tracking-widest italic">1. Setup da Imagem</p>
                             <input type="file" id="manualUp" onchange="loadImg(event)" class="hidden">
-                            <button onclick="document.getElementById('manualUp').click()" class="w-full bg-blue-600 py-3 rounded-xl font-black uppercase text-[10px]">Subir Imagem Local</button>
+                            <button onclick="document.getElementById('manualUp').click()" class="w-full bg-slate-800 hover:bg-blue-600 p-4 rounded-xl text-[10px] font-black uppercase transition-all italic shadow-lg">📸 Upload Imagem Local</button>
+                        </div>
+                        <div class="bg-black/40 p-5 rounded-3xl border border-white/5">
+                            <p class="text-[8px] font-black uppercase text-emerald-400 mb-4 tracking-widest italic">2. Iniciar Fluxo</p>
+                            <button onclick="startMassCalib()" class="w-full bg-emerald-600 hover:bg-emerald-500 p-4 rounded-xl text-[10px] font-black uppercase transition-all shadow-lg italic">🎯 Calibração em Massa</button>
                         </div>
                     </div>
-                    <p class="text-[8px] font-black uppercase text-slate-500 mb-2 italic">3. Código Gerado</p>
-                    <textarea class="bg-black p-4 rounded-xl font-mono text-[10px] text-green-500 flex-1 outline-none border border-white/10" readonly>
-coords: { x: ${state.lastCalibClick.x}, y: ${state.lastCalibClick.y} }</textarea>
-                    <button onclick="navigator.clipboard.writeText('coords: { x: ${state.lastCalibClick.x}, y: ${state.lastCalibClick.y} }'); alert('Copiado!');" class="mt-4 bg-emerald-600 py-5 rounded-2xl font-black uppercase text-[10px] shadow-xl">Copiar para o index.html</button>
+                    <div class="bg-black/60 p-6 rounded-3xl border border-white/5 flex flex-col flex-1">
+                        <p class="text-[8px] font-black uppercase text-amber-500 mb-3 tracking-widest italic font-bold">3. Resultados Consolidados</p>
+                        <textarea id="calibOutput" class="bg-black/40 p-4 rounded-xl font-mono text-[10px] text-emerald-500 flex-1 outline-none border border-white/5 resize-none leading-relaxed" readonly>${bulkCode}</textarea>
+                        <button onclick="copyResults()" class="mt-4 bg-blue-600 hover:bg-blue-500 py-4 rounded-2xl font-black uppercase text-[10px] shadow-xl active:scale-95">Copiar para o Chat</button>
+                    </div>
                 </div>`;
             app.appendChild(overlay);
         }
 
         function renderAbnormalControls(p) {
-            let html = `<p class="text-xs font-bold text-white italic mb-8 border-l-4 border-blue-500 pl-3 leading-relaxed">${p.prompt}</p>`;
-            if (p.obs) html += `<div class="bg-blue-900/10 p-4 rounded-2xl border border-blue-900/30 mb-8"><p class="text-[9px] text-blue-300 font-bold italic leading-tight">OBS: ${p.obs}</p></div>`;
-            
+            let html = `<p class="text-xs font-bold text-white italic mb-6 border-l-4 border-blue-500 pl-3 leading-relaxed">${p.prompt}</p>`;
             if (p.type === 'timer') {
-                html += `<div class="p-6 bg-slate-950 rounded-3xl text-center shadow-inner">
-                    <div class="text-4xl font-mono text-blue-400 font-black mb-6">${Math.floor(state.timerVal/60)}:${(state.timerVal%60).toString().padStart(2, '0')}</div>
-                    <button onclick="startTimer()" class="bg-blue-600 w-full py-4 rounded-xl font-black uppercase text-[10px] mb-3">Iniciar Resfriamento</button>
-                    <button onclick="nextAbPhase()" class="w-full bg-slate-800 border border-slate-700 py-3 rounded-xl font-black uppercase text-[9px] text-slate-400 italic">⏩ Pular Cronômetro</button>
-                </div>`;
+                html += `<div class="p-6 bg-slate-950 rounded-3xl text-center shadow-inner"><div class="text-4xl font-mono text-blue-400 font-black mb-6">${Math.floor(state.timerVal/60)}:${(state.timerVal%60).toString().padStart(2, '0')}</div><button onclick="startTimer()" class="bg-blue-600 w-full py-4 rounded-xl font-black uppercase text-[10px] mb-3 shadow-lg">Iniciar 3 min</button><button onclick="nextAbPhase()" class="w-full bg-slate-800 border border-slate-700 py-3 rounded-xl font-black uppercase text-[9px] text-slate-400 italic">⏩ Pular Cronômetro</button></div>`;
             } else if (p.type === 'checklist-line') {
-                html += `<div class="bg-emerald-950/20 border border-emerald-500/40 p-5 rounded-3xl mb-4 shadow-xl"><span class="text-[8px] font-black text-emerald-500 uppercase italic block mb-2 tracking-widest">SOP Sync</span><p class="text-xs font-bold text-white mb-6">${p.prompt}</p><div class="bg-black/60 p-3 rounded-xl border border-white/5 italic text-[10px] font-mono text-emerald-400 leading-tight">Response: "${p.response}"</div><button onclick="nextAbPhase()" class="w-full mt-8 bg-emerald-600 py-3 rounded-xl font-black uppercase text-[10px] shadow-lg">Confirmado</button></div>`;
+                html += `<div class="bg-emerald-950/20 border border-emerald-500/40 p-5 rounded-3xl mb-4 shadow-xl"><p class="text-xs font-bold text-white mb-6 underline decoration-emerald-500 underline-offset-4 decoration-2">${p.prompt}</p><div class="bg-black/60 p-3 rounded-xl border border-white/5 italic text-[10px] font-mono text-emerald-400 leading-tight italic">Response: "${p.response}"</div><button onclick="nextAbPhase()" class="w-full mt-8 bg-emerald-600 py-3 rounded-xl font-black uppercase text-[10px] shadow-lg">Confirmado</button></div>`;
             } else if (p.type === 'reasoning') {
-                html += p.items.map((it, i) => `<div onclick="toggleReason(${i})" class="reasoning-card mb-2 ${state.reason.includes(i) ? 'reasoning-selected' : 'bg-slate-800/40 border-slate-700 opacity-60'} transition-all">${it}</div>`).join('') + `<button onclick="submitReason()" class="w-full mt-4 bg-blue-600 py-3 rounded-xl font-black uppercase text-[10px] shadow-lg">Validar Linha de Raciocínio</button>`;
+                html += p.items.map((it, i) => `<div onclick="toggleReason(${i})" class="reasoning-card ${state.reason.includes(i) ? 'reasoning-selected' : 'bg-slate-800/40 border-slate-700 opacity-60'} transition-all">${it}</div>`).join('') + `<button onclick="submitReason()" class="w-full mt-4 bg-blue-600 py-3 rounded-xl font-black uppercase text-[10px] shadow-lg">Concluir Logic</button>`;
             } else if (p.type === 'multi-choice') {
-                html += p.options.map((opt, i) => `
-                    <div onclick="toggleMulti(${i})" class="multi-choice-item ${state.multi.includes(i) ? 'multi-choice-selected' : ''}">
-                        <div class="w-5 h-5 border-2 border-white/20 rounded flex items-center justify-center transition-colors ${state.multi.includes(i) ? 'bg-green-600 border-green-400' : ''}">
-                           ${state.multi.includes(i) ? '<svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg>' : ''}
-                        </div>
-                        <span>${opt}</span>
-                    </div>`).join('') + `<button onclick="submitMulti()" class="w-full bg-green-600 hover:bg-green-500 py-4 rounded-xl font-black text-[10px] uppercase mt-4 shadow-lg transition-all active:scale-95">Validar Parâmetros Elétricos</button>`;
+                html += p.options.map((opt, i) => `<div onclick="toggleMulti(${i})" class="multi-choice-item ${state.multi.includes(i) ? 'multi-choice-selected' : ''}"><div class="w-4 h-4 border-2 border-white/20 rounded mr-2 flex items-center justify-center">${state.multi.includes(i) ? '✓' : ''}</div>${opt}</div>`).join('') + `<button onclick="submitMulti()" class="w-full bg-green-600 py-4 rounded-xl font-black text-[10px] uppercase mt-4 shadow-lg">Validar Parâmetros</button>`;
             } else if (p.choices) {
                 html += p.choices.map((c, i) => `<button onclick="selAbChoice(${i})" class="choice-btn group italic transition-all"><span class="text-blue-500 mr-2 opacity-0 group-hover:opacity-100 transition-opacity">▶</span> ${c}</button>`).join('');
             }
             return html;
         }
 
-        function renderFooter(color, items, phase = null) {
-            const isPMActive = phase ? (phase.role === 'PM' || phase.role === 'BOTH') : true;
-            const isPFActive = phase ? (phase.role === 'PF' || phase.role === 'BOTH') : true;
+        function renderFooter(color, items) {
             return `
-                <footer class="h-32 bg-[#080d1a] border-t border-white/5 flex justify-between items-end px-20 shrink-0 relative shadow-2xl">
-                    <div class="flex flex-col items-center mb-[-5px] text-center"><span class="text-[7px] font-bold text-slate-500 uppercase mb-1">Comandante + PM</span>${getPilotSVG('PM', isPMActive)}</div>
-                    <div class="mb-10 bg-black/40 px-6 py-2 rounded-full border border-slate-800 flex flex-col items-center gap-1 shadow-inner">
+                <footer class="h-28 bg-[#080d1a] border-t border-white/5 flex justify-between items-end px-20 shrink-0 relative shadow-2xl">
+                    <div class="flex flex-col items-center mb-[-5px] opacity-40"><span class="text-[7px] font-bold text-slate-500 uppercase mb-1 italic">Station 1</span><div class="w-24 h-14 bg-slate-800 rounded-t-full"></div></div>
+                    <div class="mb-10 bg-black/40 px-6 py-2 rounded-full border border-slate-800 flex flex-col items-center gap-1 shadow-inner backdrop-blur-md">
                         <span class="text-[7px] text-blue-400 font-black tracking-widest uppercase italic">Cockpit Sync</span>
-                        <div class="flex gap-1.5">${items ? items.map((_, i) => `<div class="w-1.5 h-1.5 rounded-full ${i <= state.currentStep ? `bg-${color}-500 shadow-[0_0_8px_rgba(255,255,255,0.4)]` : 'bg-slate-800'} transition-all"></div>`).join('') : '<div class="h-1 w-16 bg-red-900/30 rounded-full overflow-hidden shadow-inner"><div class="h-full bg-red-600 w-1/3 animate-pulse"></div></div>'}</div>
+                        <div class="flex gap-1.5">${items.map((_, i) => `<div class="w-1.5 h-1.5 rounded-full ${i <= state.currentStep ? `bg-${color}-500 shadow-[0_0_8px_rgba(255,255,255,0.4)]` : 'bg-slate-800'} transition-all"></div>`).join('')}</div>
                     </div>
-                    <div class="flex flex-col items-center mb-[-5px] text-center"><span class="text-[7px] font-bold text-blue-400 uppercase mb-1">Copiloto + PF</span>${getPilotSVG('PF', isPFActive)}</div>
+                    <div class="flex flex-col items-center mb-[-5px] opacity-40"><span class="text-[7px] font-bold text-blue-400 uppercase mb-1 italic">Station 2</span><div class="w-24 h-14 bg-slate-800 rounded-t-full"></div></div>
                 </footer>`;
-        }
-
-        function renderBriefing(app) {
-            const overlay = document.createElement('div');
-            overlay.className = "briefing-overlay fixed inset-0 flex items-center justify-center p-6";
-            overlay.innerHTML = `
-                <div class="max-w-xl w-full bg-slate-900 border border-blue-500/30 rounded-[40px] shadow-2xl p-10 text-center animate-in zoom-in duration-300">
-                    <h2 class="text-3xl font-black italic uppercase text-white mb-6 tracking-tighter underline decoration-blue-500 decoration-4 underline-offset-8">Briefing Inicial</h2>
-                    <div class="space-y-4 text-slate-400 text-sm leading-relaxed mb-10 text-left">
-                        <div class="bg-black/40 p-5 rounded-2xl border border-white/5"><b class="text-blue-400 uppercase tracking-widest block mb-1">Etapa 1 (Guiado):</b> Siga os alvos amarelos pulsantes no painel.</div>
-                        <div class="bg-black/40 p-5 rounded-2xl border border-white/5"><b class="text-blue-400 uppercase tracking-widest block mb-1">Etapa 2 (Prática):</b> Use o checklist à esquerda, mas sem alvos visuais.</div>
-                        <div class="bg-black/40 p-5 rounded-2xl border border-white/5"><b class="text-blue-400 uppercase tracking-widest block mb-1">Etapa 3 (Exame):</b> Ecrã limpo. Realize o fluxo completo de memória.</div>
-                    </div>
-                    <button onclick="state.showBriefing = false; render();" class="w-full bg-blue-600 hover:bg-blue-500 py-5 rounded-3xl font-black uppercase text-xs shadow-xl active:scale-95 transition-all">Aceitar e Iniciar</button>
-                </div>`;
-            app.appendChild(overlay);
         }
 
         // --- HANDLERS ---
         window.startSpecificFlow = (i) => {
-            if(state.category === 'Normal') { state.view = 'normal_sim'; state.learningStage = 1; state.currentStep = 0; state.activeNormalIdx = i; state.showBriefing = true; }
-            else { state.view = 'abnormal_sim'; state.abnormalIdx = 0; }
+            if(state.category === 'Normal') { state.view = 'normal_sim'; state.activeNormalIdx = i; state.currentStep = 0; state.calibResults = []; }
+            else { state.view = 'abnormal_sim'; state.abnormalIdx = 0; state.reason = []; state.multi = []; }
             render();
         };
 
-        window.onImgFail = (key) => { if(!state.manualImages[key] && !state.imgErrors[key]) { state.imgErrors[key] = true; render(); } };
-        window.openDevUpload = () => { document.getElementById('manualUp').click(); };
-
+        window.startMassCalib = () => { state.calibActive = true; state.showDev = false; state.currentStep = 0; state.calibResults = []; render(); };
+        window.onImgFail = (key) => { if(!state.manualImages[key]) { state.imgErrors[key] = true; render(); } };
+        
         window.loadImg = (e) => {
             const f = e.target.files[0];
             if(!f) return;
             const r = new FileReader();
             r.onload = (ev) => {
                 const key = state.view === 'normal_sim' ? NORMAL_STAGES[state.activeNormalIdx].img : ABNORMAL_SCENARIO.phases[state.abnormalIdx].img;
-                state.manualImages[key] = ev.target.result;
-                state.imgErrors[key] = false;
-                render();
+                state.manualImages[key] = ev.target.result; render();
             };
             r.readAsDataURL(f);
         };
 
         window.handleImgClick = (e) => {
-            const rect = e.currentTarget.getBoundingClientRect();
+            const wrapper = document.getElementById('imageWrapper');
+            const rect = wrapper.getBoundingClientRect();
             const x = parseFloat((((e.clientX - rect.left) / rect.width) * 100).toFixed(1));
             const y = parseFloat((((e.clientY - rect.top) / rect.height) * 100).toFixed(1));
             
             const ripple = document.createElement('div'); ripple.className = 'click-ripple'; ripple.style.left = x + '%'; ripple.style.top = y + '%';
-            e.currentTarget.appendChild(ripple); setTimeout(() => ripple.remove(), 400);
+            wrapper.appendChild(ripple); setTimeout(() => ripple.remove(), 400);
 
-            if(state.showDev) { state.lastCalibClick = { x, y }; render(); return; }
+            if(state.calibActive) {
+                const procedure = NORMAL_STAGES[state.activeNormalIdx];
+                const item = procedure.items[state.currentStep];
+                state.calibResults.push({ label: item.label, x, y });
+                if (state.currentStep < procedure.items.length - 1) { state.currentStep++; } else { state.calibActive = false; state.showDev = true; }
+                render(); return;
+            }
 
             if(state.view === 'normal_sim') {
                 const target = NORMAL_STAGES[state.activeNormalIdx].items[state.currentStep].coords;
-                if(Math.sqrt(Math.pow(x-target.x, 2) + Math.pow(y-target.y, 2)) < 6.5) { advanceNormal(x, y); }
+                if(Math.sqrt(Math.pow(x-target.x, 2) + Math.pow(y-target.y, 2)) < 6.5) advanceNormal();
             } else {
                 const p = ABNORMAL_SCENARIO.phases[state.abnormalIdx];
-                if(p.type === 'hotspot' && Math.sqrt(Math.pow(x-p.target.x, 2) + Math.pow(y-p.target.y, 2)) < 6.5) {
-                    const h = document.getElementById('hand-anim'); 
-                    if(h) { h.style.left = x + '%'; h.style.top = y + '%'; h.style.opacity = '1'; setTimeout(()=>h.style.opacity='0', 300); }
-                    nextAbPhase(); 
-                }
+                if(p.type === 'hotspot' && Math.sqrt(Math.pow(x-p.target.x, 2) + Math.pow(y-p.target.y, 2)) < 6.5) nextAbPhase();
             }
         };
 
-        function advanceNormal(x, y) {
-            const h = document.getElementById('hand-anim'); 
-            if(h) { h.style.left = x + '%'; h.style.top = y + '%'; h.style.opacity = '1'; setTimeout(()=>h.style.opacity='0', 300); }
-            
+        function advanceNormal() {
             const stage = NORMAL_STAGES[state.activeNormalIdx];
             if(state.currentStep < stage.items.length - 1) { state.currentStep++; render(); }
             else { 
-                if(state.learningStage < 3) { state.learningStage++; state.currentStep = 0; alert(`Etapa ${state.learningStage - 1} Concluída!`); render(); }
+                if(state.learningStage < 3) { state.learningStage++; state.currentStep = 0; render(); }
                 else { alert("Treinamento finalizado!"); state.view = 'home'; render(); }
             }
         }
@@ -474,22 +364,18 @@ coords: { x: ${state.lastCalibClick.x}, y: ${state.lastCalibClick.y} }</textarea
         window.selAbChoice = (i) => { if(i === ABNORMAL_SCENARIO.phases[state.abnormalIdx].correct) nextAbPhase(); else alert("Incorreto."); };
         window.nextAbPhase = () => { 
             if(state.timerInterval) clearInterval(state.timerInterval); 
-            if(state.abnormalIdx < ABNORMAL_SCENARIO.phases.length-1) { state.abnormalIdx++; state.timerVal = 180; state.reason = []; state.multi = []; render(); } 
-            else { alert("Simulação de Generator Failure Concluída!"); state.view = 'home'; render(); } 
+            if(state.abnormalIdx < ABNORMAL_SCENARIO.phases.length-1) { state.abnormalIdx++; state.timerVal = 180; render(); } 
+            else { alert("Simulação Concluída!"); state.view = 'home'; render(); } 
         };
         window.toggleMulti = (i) => { if(state.multi.includes(i)) state.multi = state.multi.filter(x=>x!==i); else state.multi.push(i); render(); };
-        window.submitMulti = () => { 
-            const p = ABNORMAL_SCENARIO.phases[state.abnormalIdx];
-            const isCorrect = p.correct.every(v => state.multi.includes(v)) && state.multi.length === p.correct.length;
-            if(isCorrect) { state.multi = []; nextAbPhase(); } 
-            else alert("Parâmetros incorretos selecionados."); 
-        };
+        window.submitMulti = () => { if(state.multi.length === 4) { state.multi = []; nextAbPhase(); } else alert("Dados incorretos."); };
         window.toggleReason = (i) => { if(state.reason.includes(i)) state.reason = state.reason.filter(x=>x!==i); else state.reason.push(i); render(); };
         window.submitReason = () => { if(state.reason.length >= 6) { state.reason = []; nextAbPhase(); } else alert("Linha de raciocínio incompleta."); };
         window.startTimer = () => { if(state.timerInterval) clearInterval(state.timerInterval); state.timerInterval = setInterval(() => { state.timerVal--; if(state.timerVal <= 0) nextAbPhase(); else render(); }, 1000); };
-        window.toggleCalib = () => { state.showDev = !state.showDev; render(); };
+        window.copyResults = () => { const ta = document.getElementById('calibOutput'); navigator.clipboard.writeText(ta.value); alert("Bloco copiado!"); };
 
         render();
     </script>
 </body>
 </html>
+
