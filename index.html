@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Caravan PRO v92 - Enterprise Locked</title>
+    <title>Caravan PRO v93 - Enterprise Verified</title>
     
     <!-- React Core Stack -->
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
@@ -30,9 +30,7 @@
             100% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0); transform: scale(1); }
         }
 
-        #imageWrapper { 
-            position: relative; display: inline-block; line-height: 0; max-width: 100%; background: #000; 
-        }
+        #imageWrapper { position: relative; display: inline-block; line-height: 0; max-width: 100%; background: #000; }
         #mainImg { display: block; max-width: 100%; max-height: 52vh; pointer-events: none; }
 
         .choice-btn {
@@ -65,9 +63,9 @@
         @keyframes slideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
 
         .img-tag-badge {
-            position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,0.7); 
-            padding: 4px 8px; border-radius: 6px; font-family: monospace; font-size: 9px;
-            color: #60a5fa; border: 1px solid rgba(255,255,255,0.1); pointer-events: none; z-index: 150;
+            position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,0.8); 
+            padding: 4px 10px; border-radius: 6px; font-family: monospace; font-size: 10px;
+            color: #fbbf24; border: 1px solid rgba(251, 191, 36, 0.2); pointer-events: none; z-index: 150; font-weight: 900;
         }
 
         .fade-in { animation: fadeIn 0.4s ease-out forwards; }
@@ -80,7 +78,7 @@
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
 
-        // --- DATABASE: PROCEDIMENTOS INTEGRADOS ---
+        // --- DATABASE INTEGRAL ---
         const DATABASE = {
             normal: [
                 {
@@ -115,26 +113,16 @@
                     items: [
                         { id: "p1", label: "BATTERY", status: "ON", coords: { x: 11.8, y: 54.2 } },
                         { id: "p2", label: "AVIONICS 1 AND 2", status: "ON", coords: { x: 11.4, y: 62.5 } },
-                        { id: "p3", label: "GNSS/ FMS DATA BASE", status: "CHECK", obs: "MFD", coords: { x: 55.1, y: 23 } },
-                        { id: "p4", label: "BUS VOLTS", status: "CHECK MINIMUM 24V", coords: { x: 49.3, y: 26.7 } },
+                        { id: "p3", label: "GNSS/ FMS DATA BASE", status: "CHECK", coords: { x: 55.1, y: 23 } },
+                        { id: "p4", label: "BUS VOLTS", status: "MIN 24V", coords: { x: 49.3, y: 26.7 } },
                         { id: "p5", label: "EXTERNAL POWER", status: "BUS", coords: { x: 10.5, y: 54.8 } },
-                        { id: "p6", label: "BUS VOLTS (EXT PWR)", status: "24 – 28.5 VOLTS", coords: { x: 49.6, y: 26.7 } },
                         { id: "p7", label: "FIRE DETECT TEST", status: "PERFORM", coords: { x: 25.4, y: 35 } },
-                        { id: "p8", label: "ANNUN PANEL TEST 1", status: "PERFORM", obs: "PFD 1", coords: { x: 42.1, y: 23.6 } },
-                        { id: "p9", label: "FUEL SELECT OFF TEST", status: "PERFORM", coords: { x: 25.2, y: 34.6 } },
-                        { id: "p10", label: "ANNUN PANEL TEST 2", status: "PERFORM", obs: "PFD 1", coords: { x: 41.4, y: 24.4 } },
-                        { id: "p11", label: "EGPWS/ TAWS CHECK", status: "PERFORM", coords: { x: 39.7, y: 20.4 } },
-                        { id: "p12", label: "NO SMOKE/SEAT BELTS", status: "ON", coords: { x: 28.1, y: 25.7 } },
                         { id: "p13", label: "ATIS", status: "OBTAIN", coords: { x: 76.1, y: 21 } },
                         { id: "p19", label: "CLEARANCE", status: "OBTAIN", coords: { x: 77.9, y: 44.2 } },
                         { id: "p14", label: "ALTIMETER PFD 1", status: "SET", coords: { x: 43.9, y: 22.6 } },
                         { id: "p15", label: "ALTIMETER PFD 2", status: "SET", coords: { x: 75.9, y: 22.4 } },
                         { id: "p16", label: "ALTIMETER STBY", status: "SET", coords: { x: 57.4, y: 32 } },
-                        { id: "p17", label: "DATA CARD", status: "FILL", coords: { x: 26.3, y: 83.3 } },
-                        { id: "p18", label: "EFB", status: "CHECKED", coords: { x: 48.9, y: 84.9 } },
-                        { id: "p20", label: "RAIM PREDICTION", status: "PERFORM", coords: { x: 60.3, y: 27.9 } },
-                        { id: "p21", label: "PARKING BRAKE", status: "SET", coords: { x: 38.4, y: 40.9 } },
-                        { id: "p22", label: "AVIONICS", status: "AS REQUIRED", coords: { x: 11.4, y: 61.5 } }
+                        { id: "p21", label: "PARKING BRAKE", status: "SET", coords: { x: 38.4, y: 40.9 } }
                     ]
                 },
                 {
@@ -170,7 +158,7 @@
                         { id: "f14", label: "BEACON/ NAV LIGHT", status: "ON", coords: { x: 30.3, y: 42.6 } },
                         { id: "f15", label: "FUEL BOOST", status: "NORM THEN ON", coords: { x: 18, y: 66.9 } },
                         { id: "f16", label: "AVIONICS", status: "1 ON", coords: { x: 17, y: 89.4 } },
-                        { id: "f17", label: "PROP AEREA", status: "CLEAR", obs: "Área Livre", coords: { x: 25.2, y: 17.3 } },
+                        { id: "f17", label: "PROP AEREA", status: "CLEAR", coords: { x: 25.2, y: 17.3 } },
                         { 
                             id: "f18", label: "FINAL CALLOUT", type: "question",
                             prompt: "Qual deve ser a solicitação do comandante após finalizar este flow?",
@@ -180,48 +168,46 @@
                     ]
                 }
             ],
-            // --- ABNORMAL (V79 ISOLATED) ---
+            // --- ABNORMAL INTEGRAL (28 PHASES) ---
             abnormal: {
                 title: "Generator Failure",
                 phases: [
-                    { id: 1, role: 'PM', img: 'imagem1-generatorfailure', type: 'choice', prompt: 'Você identificou a CAS Message no PFD?', choices: ['Sim, identifiquei.', 'Não visualizei.'], correct: 0 },
-                    { id: 2, role: 'PM', img: 'imagem1-generatorfailure', type: 'choice', prompt: 'PM: Verbalize a pane observada.', choices: ['CAS MSG de GENERATOR OFF e Standby Power On', 'Verifiquei algo anormal.'], correct: 0 },
-                    { id: 3, role: 'PF', img: 'imagem1-generatorfailure', type: 'choice', prompt: 'PF: Confirme o callout do PM:', choices: ['Check, confirmo a CAS MSG', 'Ok.'], correct: 0 },
-                    { id: 4, role: 'PM', img: 'imagem1-generatorfailure', type: 'hotspot', prompt: 'PM: Clique no botão CAUTION para silenciar o alerta.', target: { x: 26, y: 91.9 } },
-                    { id: 5, role: 'PF', img: 'imagem1-generatorfailure', type: 'choice', prompt: 'PF solicita análise de sistema:', choices: ['Check System.', 'Ignorar.'], correct: 0 },
-                    { id: 6, role: 'PM', img: 'imagem1-generatorfailure', type: 'hotspot', prompt: 'PM: Clique na softkey SYSTEM no MFD.', target: { x: 43, y: 90.3 } },
-                    { id: 7, role: 'PM', img: 'imagem2-generatorfailure', type: 'multi-choice', prompt: 'PM: Selecione os 4 parâmetros elétricos que indicam a pane:', options: ['GEN AMPS zero', 'ALT AMPS 23', 'BAT AMPS zero', 'BUS VOLTS 27', 'GEN VOLTS 40 (Falso)'], correct: [0, 1, 2, 3] },
-                    { id: 8, role: 'PM', img: 'imagem2-generatorfailure', type: 'choice', prompt: 'PM: Verbalize o diagnóstico:', choices: ['Os parâmetros indicam que o gerador está OFF e o STB PWR está ON', 'Sistema OK.'], correct: 0 },
-                    { id: 9, role: 'PM', img: 'imagem2-generatorfailure', type: 'choice', prompt: 'PM: Qual a próxima etapa?', choices: ['Verificar os SWITCHES e CIRCUIT BRAKERS', 'Notificar ATC.'], correct: 0 },
-                    { id: 10, role: 'PM', img: 'imagem3-generatorfailure', type: 'choice', prompt: 'PM: Verifique os disjuntores:', choices: ['CB GEN FIELD saltado.', 'Tudo em ordem.'], correct: 0 },
-                    { id: 11, role: 'PM', img: 'imagem4-generatorfailure', type: 'choice', prompt: 'PM: Ação necessária para reset?', choices: ['O PM deve iniciar o cronômetro e aguardar 3 minutos', 'Resetar agora.'], correct: 0 },
-                    { id: 12, role: 'PM', img: 'imagem4-generatorfailure', type: 'timer', prompt: 'Resfriamento (3 min) em curso...', duration: 180 },
-                    { id: 13, role: 'PM', img: 'imagem1-generatorfailure', type: 'choice', prompt: 'PM: Confirmação técnica final:', choices: ['Diante das informações e do CB saltado, confirmo GENERATOR FAILURE.', 'Pane inconclusiva.'], correct: 0 },
-                    { id: 14, role: 'PF', img: 'imagem1-generatorfailure', type: 'choice', prompt: 'PF Responde:', choices: ['Confirmo a Pane de GENERATOR FAILURE.', 'Aguardar.'], correct: 0 },
-                    { id: 15, role: 'PF', img: 'imagem1-generatorfailure', type: 'choice', prompt: 'PF Propõe Gerenciamento:', choices: ['O que acha de pedirmos uma espera para gerenciar a pane?', 'Seguir direto.'], correct: 0 },
-                    { id: 16, role: 'PM', img: 'imagem1-generatorfailure', type: 'choice', prompt: 'PM chama ATC:', choices: ['Solicitar espera ao controle.', 'Declarar Mayday.'], correct: 0 },
-                    { id: 17, role: 'PF', img: 'imagem5-generatorfailure', type: 'choice', prompt: 'PF Transfere controles:', choices: ['MY CONTROLS AND ATC – Generator Failure Checklist.', 'Vou ler o QRH.'], correct: 0 },
-                    { id: 18, role: 'PM', img: 'imagem5-generatorfailure', type: 'choice', prompt: 'PM Aceita controles:', choices: ['YOUR CONTROLS AND ATC.', 'Copiado.'], correct: 0 },
-                    { id: 19, role: 'PM', img: 'imagem5-generatorfailure', type: 'choice', prompt: 'PM Inicia Checklist:', choices: ['Generator Failure Checklist, confirm?', 'Iniciado.'], correct: 0 },
-                    { id: 20, role: 'PF', img: 'imagem5-generatorfailure', type: 'choice', prompt: 'PF Confirma:', choices: ['Confirm.', 'Aguarde.'], correct: 0 },
-                    { id: 21, role: 'PM', img: 'imagem5-generatorfailure', type: 'checklist-line', prompt: 'Item: BUS VOLTS – Check, monitor voltage.', response: 'Check. GEN AMPS zero e BUS VOLTS 27.' },
-                    { id: 22, role: 'PM', img: 'imagem5-generatorfailure', type: 'checklist-line', prompt: 'Item: STBY ALT PWR – Verify ON.', response: 'ON.' },
-                    { id: 23, role: 'PM', img: 'imagem5-generatorfailure', type: 'choice', prompt: 'PM Finaliza Checklist:', choices: ['Generator Failure Checklist completed.', 'Concluído.'], correct: 0 },
-                    { id: 24, role: 'BOTH', img: 'imagem1-generatorfailure', type: 'reasoning', prompt: 'CRM: Monte a linha de raciocínio operacional (6 itens):', items: ['Pane resolvida após checklist.', 'Não sabemos a causa provável.', 'Sem Azultec no destino.', 'Aeronave ficará AOG.', 'Sugiro retornar à origem.', 'Se a pane retornar, não resetar novamente.'], required: 6 },
-                    { id: 25, role: 'PM', img: 'imagem1-generatorfailure', type: 'choice', prompt: 'PM Responde Decision Making:', choices: ['Concordo, retornaremos à origem.', 'Vamos seguir.'], correct: 0 },
-                    { id: 26, role: 'PM', img: 'imagem1-generatorfailure', type: 'choice', prompt: 'ATC Callout:', choices: ['ACN5501 solicita retorno devido pane no gerador.', 'ACN5501 prossegue.'], correct: 0 },
-                    { id: 27, role: 'PM', img: 'imagem1-generatorfailure', type: 'choice', prompt: 'Chamada Empresa:', choices: ['Solicita Azultec em posição e apoio aos passageiros.', 'Preparar solo.'], correct: 0 },
-                    { id: 28, role: 'PF', img: 'imagem1-generatorfailure', type: 'choice', prompt: 'PF Faz PA aos clientes:', choices: ['Senhores clientes, retornaremos devido a problemas técnicos...', 'Estamos voltando.'], correct: 0 }
+                    { id: 1, role: 'PM', img: 'imagem1-generatorfailure', type: 'choice', prompt: 'Você identificou a CAS Message no PFD?', choices: ['Sim, identifiquei.', 'Não visualizei (Ajuda)'], correct: 0, help: 'Procure a área de alertas na parte superior do PFD.' },
+                    { id: 2, role: 'PM', img: 'imagem1-generatorfailure', type: 'choice', prompt: 'PM: O que você deve verbalizar ao detectar as mensagens?', choices: ['GENERATOR OFF e Standby Power On', 'Verifiquei algo estranho aqui…', 'Pane desconhecida.'], correct: 0 },
+                    { id: 3, role: 'PF', img: 'imagem1-generatorfailure', type: 'choice', prompt: 'PF: Responda ao callout do PM:', choices: ['Check.', 'Ok, e agora?', 'Pane não confirmada.'], correct: 0 },
+                    { id: 4, role: 'PM', img: 'imagem1-generatorfailure', type: 'hotspot', prompt: 'PM: Clique no botão CAUTION para parar o alerta visual.', target: { x: 26, y: 91.9 } },
+                    { id: 5, role: 'PF', img: 'imagem1-generatorfailure', type: 'choice', prompt: 'PF solicita análise:', choices: ['Check System.', 'Vamos desligar tudo.', 'Ignore o alerta.'], correct: 0 },
+                    { id: 6, role: 'PM', img: 'imagem1-generatorfailure', type: 'hotspot', prompt: 'PM: Clique na softkey SYSTEM para acessar os dados.', target: { x: 43, y: 90.3 } },
+                    { id: 7, role: 'PM', img: 'imagem2-generatorfailure', type: 'multi-choice', prompt: 'PM: Selecione os 4 parâmetros observados:', options: ['GEN AMPS zerado', 'ALT AMPS 23', 'BAT AMPS zerado', 'BUS VOLTS 27', 'GEN VOLTS 40 (falso)'], correct: [0, 1, 2, 3] },
+                    { id: 8, role: 'PM', img: 'imagem2-generatorfailure', type: 'choice', prompt: 'PM: O que você diz ao PF?', choices: ['Verifique switches e CBs.', 'Siga ignorando os dados.', 'Pane resolvida.'], correct: 0 },
+                    { id: 9, role: 'PF', img: 'imagem3-generatorfailure', type: 'choice', prompt: 'PF: Após verificar os CBs, o que você encontrou?', choices: ['Tudo normal.', 'CB GEN FIELD saltou.', 'Painel sem energia.'], correct: 1 },
+                    { id: 10, role: 'PM', img: 'imagem4-generatorfailure', type: 'choice', prompt: 'PM: Iniciar cronômetro para reset (3 min)?', choices: ['Simular 3 minutos', 'Pular para próxima fase'], correct: 1 },
+                    { id: 11, role: 'PM', img: 'imagem1-generatorfailure', type: 'choice', prompt: 'PM: Como você confirma a pane?', choices: ['Diante das informações, confirmo GENERATOR FAILURE.', 'Não há pane.', 'Falso alarme.'], correct: 0 },
+                    { id: 12, role: 'PF', img: 'imagem1-generatorfailure', type: 'choice', prompt: 'PF Responde:', choices: ['CONFIRMED. GENERATOR FAILURE.', 'Discordo.', 'Vamos esperar.'], correct: 0 },
+                    { id: 13, role: 'PF', img: 'imagem1-generatorfailure', type: 'choice', prompt: 'PF Sugestão:', choices: ['O que acha de pedirmos uma espera?', 'Seguir normal.', 'Descer imediato.'], correct: 0 },
+                    { id: 14, role: 'PM', img: 'imagem1-generatorfailure', type: 'choice', prompt: 'PM: O que fazer agora?', choices: ['Solicitar espera ao controle.', 'Ignorar.', 'Checklist direto.'], correct: 0 },
+                    { id: 15, role: 'PF', img: 'imagem5-generatorfailure', type: 'choice', prompt: 'PF Verbalização:', choices: ['MY CONTROLS AND ATC – Generator Failure Checklist.', 'Não precisa checklist.', 'PM decide.'], correct: 0 },
+                    { id: 16, role: 'PM', img: 'imagem5-generatorfailure', type: 'choice', prompt: 'PM Resposta:', choices: ['YOUR CONTROLS AND ATC.', 'Fico com controles.', 'Cancelado.'], correct: 0 },
+                    { id: 17, role: 'PM', img: 'imagem5-generatorfailure', type: 'choice', prompt: 'PM Inicia Checklist:', choices: ['Generator Failure Checklist, confirm?', 'Abrindo sem confirmar.', 'Vou improvisar.'], correct: 0 },
+                    { id: 18, role: 'PF', img: 'imagem5-generatorfailure', type: 'choice', prompt: 'PF Confirma:', choices: ['Confirm.', 'Não confirmo.', 'Depois.'], correct: 0 },
+                    { id: 19, role: 'PM', img: 'imagem5-generatorfailure', type: 'checklist-line', prompt: 'PM: BUS VOLTS – Check, monitor voltage.', response: 'Check. GEN AMPS zero e BUS VOLTS 27.' },
+                    { id: 20, role: 'PM', img: 'imagem5-generatorfailure', type: 'checklist-line', prompt: 'PM: STBY ALT PWR – Verify ON.', response: 'ON.' },
+                    { id: 21, role: 'PM', img: 'imagem5-generatorfailure', type: 'choice', prompt: 'PM Declara:', choices: ['Generator Failure Checklist completed.', 'Finalizado.'], correct: 0 },
+                    { id: 22, role: 'BOTH', img: 'imagem1-generatorfailure', type: 'reasoning', prompt: 'CRM: Monte a linha de raciocínio (6 itens):', items: ['Pane resolvida após checklist.', 'Não sabemos a causa provável.', 'Sem Azultec no destino.', 'Aeronave ficará AOG.', 'Sugiro retornar à origem.', 'Se a pane retornar, não resetar novamente.'], required: 6 },
+                    { id: 23, role: 'PM', img: 'imagem1-generatorfailure', type: 'choice', prompt: 'PM Resposta Final:', choices: ['Concordo, retornaremos.', 'Continuaremos.', 'Vou decidir.'], correct: 0 },
+                    { id: 24, role: 'PM', img: 'imagem1-generatorfailure', type: 'choice', prompt: 'PM → Controle:', choices: ['ACN5501 solicita retorno devido pane no gerador.', 'Retorno sem motivo.'], correct: 0 },
+                    { id: 25, role: 'PM', img: 'imagem1-generatorfailure', type: 'choice', prompt: 'PM → Azul:', choices: ['Solicita Azultec em posição e auxílio aos passageiros.', 'Preparar solo.'], correct: 0 },
+                    { id: 28, role: 'PF', img: 'imagem1-generatorfailure', type: 'choice', prompt: 'PF Faz PA:', choices: ['Senhores clientes, devido a problemas técnicos retornaremos...', 'Tem pane.', 'Apenas aviso.'], correct: 0 }
                 ]
             }
         };
 
-        // --- SVGS ---
+        // --- UI COMPONENTS ---
         const SVGIcons = {
             Play: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>,
             Alert: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>,
             ChevronLeft: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="15 18 9 12 15 6"></polyline></svg>,
-            Settings: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1-2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>,
+            Settings: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1-2 2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>,
             Check: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4"><polyline points="20 6 9 17 4 12"></polyline></svg>,
             ArrowRight: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
         };
@@ -253,7 +239,6 @@
             const [calibResults, setCalibResults] = useState([]);
             const [multi, setMulti] = useState([]);
             const [reason, setReason] = useState([]);
-            const [timer, setTimer] = useState(180);
 
             const wrapperRef = useRef(null);
 
@@ -303,18 +288,18 @@
                 const isPFActive = effectiveRole === 'PF' || effectiveRole === 'BOTH';
                 return (
                     <footer className="h-40 w-full bg-[#080d1a] border-t border-white/5 flex justify-between items-end px-16 shrink-0 relative shadow-2xl z-50">
-                        <div className="flex flex-col items-center mb-[-5px]"><span className="text-[7px] text-slate-500 uppercase mb-1 font-black italic text-left w-full ml-8">Comandante + PM</span><PilotSVG role="PM" active={isPMActive} /></div>
+                        <div className="flex flex-col items-center mb-[-5px]"><span className="text-[7px] text-slate-500 uppercase mb-1 font-black italic">Comandante + PM</span><PilotSVG role="PM" active={isPMActive} /></div>
                         <div className="mb-12 flex flex-col items-center">
                             <div className="bg-black/60 px-8 py-3 rounded-full border border-blue-500/20 backdrop-blur-xl flex flex-col items-center shadow-xl">
                                 <span className="text-[7px] text-blue-400 font-black tracking-widest uppercase mb-1 italic">Cockpit Sync Status</span>
                                 <div className="flex gap-1.5 flex-wrap justify-center max-w-[280px]">
                                     {items.map((_, i) => (
-                                        <div key={i} className={`w-1.5 h-1.5 rounded-full ${i <= currentIndex ? (color === 'red' ? 'bg-red-500 shadow-[0_0_8px_#ef4444]' : 'bg-emerald-500 shadow-[0_0_8px_cyan]') : 'bg-slate-800'} transition-all duration-300`} />
+                                        <div key={i} className={`w-1.5 h-1.5 rounded-full ${i <= currentIndex ? (color === 'red' ? 'bg-red-500' : 'bg-emerald-500') : 'bg-slate-800'} transition-all duration-300`} />
                                     ))}
                                 </div>
                             </div>
                         </div>
-                        <div className="flex flex-col items-center mb-[-5px]"><span className="text-[7px] text-blue-500 uppercase mb-1 font-black italic text-right w-full mr-8">Copiloto + PF</span><PilotSVG role="PF" active={isPFActive} /></div>
+                        <div className="flex flex-col items-center mb-[-5px]"><span className="text-[7px] text-blue-500 uppercase mb-1 font-black italic">Copiloto + PF</span><PilotSVG role="PF" active={isPFActive} /></div>
                     </footer>
                 );
             };
@@ -324,7 +309,7 @@
                     {view === 'home' && (
                         <div className="flex-1 flex flex-col items-center justify-center p-10 text-center bg-slate-950">
                             <div className="bg-blue-600 px-12 py-6 rounded-[2rem] shadow-2xl mb-16 border-b-8 border-blue-900"><h1 className="text-white font-black text-6xl italic uppercase tracking-tighter">CARAVAN PRO</h1></div>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-10 w-full max-w-5xl px-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-10 w-full max-w-5xl px-4 px-4">
                                 <button onClick={() => setView('selection')} className="bg-slate-900 border-2 border-emerald-500/20 p-12 rounded-[50px] hover:border-emerald-500 transition-all flex flex-col items-center group shadow-2xl active:scale-95">
                                     <div className="w-16 h-16 bg-emerald-500/20 rounded-full flex items-center justify-center mb-4 group-hover:bg-emerald-500 text-emerald-400 group-hover:text-white transition-all"><SVGIcons.Play /></div>
                                     <h2 className="text-xl font-black uppercase italic tracking-widest text-white">Normal Procedures</h2>
@@ -339,7 +324,7 @@
 
                     {view === 'selection' && (
                         <div className="flex-1 flex flex-col items-center justify-center p-10 bg-slate-950">
-                            <button onClick={() => setView('home')} className="absolute top-10 left-10 flex items-center gap-2 text-slate-500 font-black text-xs hover:text-white uppercase transition-all"><SVGIcons.ChevronLeft /> Voltar</button>
+                            <button onClick={() => setView('home')} className="absolute top-10 left-10 flex items-center gap-2 text-slate-500 font-black text-xs hover:text-white uppercase"><SVGIcons.ChevronLeft /> Voltar</button>
                             <h2 className="text-3xl font-black uppercase italic mb-12 text-blue-500 underline underline-offset-8">Select Procedure</h2>
                             <div className="flex flex-col gap-4 w-full max-w-lg">
                                 {DATABASE.normal.map(p => (
@@ -354,14 +339,14 @@
                             <header className="h-16 bg-slate-900 border-b border-white/5 flex items-center justify-between px-6 shrink-0 z-50 shadow-xl">
                                 <div className="flex items-center gap-4">
                                     <button onClick={() => setView('home')} className="p-2 bg-slate-800 rounded-lg hover:bg-red-600 transition-colors"><SVGIcons.ChevronLeft /></button>
-                                    <span className="bg-blue-600 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest italic leading-none">Stage {stage}</span>
+                                    <span className="bg-blue-600 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest italic">Stage {stage}</span>
                                     <span className="text-[10px] font-black uppercase text-slate-400 italic tracking-widest leading-none truncate max-w-[200px]">{activeProc.title}</span>
                                 </div>
                                 <button onClick={() => setShowDev(true)} className="flex items-center gap-2 bg-emerald-600 px-4 py-2 rounded-xl text-[10px] font-black uppercase shadow-lg active:scale-95 transition-all"><SVGIcons.Settings /> Dev Console</button>
                             </header>
 
                             <div className="flex-1 flex overflow-hidden relative bg-[#020617]">
-                                {/* SIDEBAR FLUXO NORMAL */}
+                                {/* SIDEBAR NORMAL */}
                                 {view === 'normal_sim' && stage < 3 && (
                                     <aside className="w-72 bg-[#0f172a] border-r border-slate-800 flex flex-col shrink-0 fade-in">
                                         <div className="p-4 bg-slate-900/40 text-center text-blue-400 font-black text-[8px] uppercase tracking-widest border-b border-white/5">Checklist SOP</div>
@@ -376,14 +361,14 @@
                                     </aside>
                                 )}
 
-                                {/* SIDEBAR FLUXO ABNORMAL (PM) */}
+                                {/* SIDEBAR ABNORMAL (PM/PF) */}
                                 {view === 'abnormal_sim' && (
                                     <aside className={`w-80 bg-[#0f172a] border-r border-slate-800 p-6 overflow-y-auto transition-all duration-500 ${(activeProc.phases[step].role === 'PF' && activeProc.phases[step].type !== 'reasoning') ? 'opacity-10 blur-sm pointer-events-none' : 'opacity-100'}`}>
-                                        <h3 className="text-[10px] font-black text-amber-500 uppercase italic mb-6 border-l-2 border-amber-500 pl-3">COMANDANTE + PM</h3>
+                                        <h3 className="text-[10px] font-black text-amber-500 uppercase italic mb-6 border-l-2 border-amber-500 pl-3 leading-none">PIC / PM SIDEBAR</h3>
                                         <p className="text-xs font-bold leading-relaxed mb-8 border-l-4 border-blue-500 pl-4 text-slate-100">{activeProc.phases[step].prompt}</p>
                                         
                                         {activeProc.phases[step].type === 'choice' && activeProc.phases[step].choices?.map((c, i) => (
-                                            <button key={i} onClick={() => i === activeProc.phases[step].correct ? advanceStep() : alert("Erro SOP: Decisão incorreta.")} className="choice-btn w-full mb-2">{c}</button>
+                                            <button key={i} onClick={() => i === activeProc.phases[step].correct ? advanceStep() : alert("Erro SOP.")} className="choice-btn w-full mb-2">{c}</button>
                                         ))}
 
                                         {activeProc.phases[step].type === 'multi-choice' && activeProc.phases[step].options.map((opt, i) => (
@@ -402,6 +387,7 @@
                                             </div>
                                         )}
                                         {activeProc.phases[step].type === 'timer' && <div className="text-center p-6 bg-black/40 rounded-3xl border border-blue-500/20 shadow-inner"><div className="text-4xl font-black text-blue-500 mb-4 font-mono tracking-tighter">03:00</div><button onClick={() => advanceStep()} className="text-[10px] font-black uppercase text-slate-500 italic hover:text-white transition-colors">⏩ Pular Resfriamento</button></div>}
+                                        {activeProc.phases[step].type === 'checklist-line' && <div className="bg-emerald-900/20 border border-emerald-500/30 p-5 rounded-3xl shadow-2xl"><p className="text-[10px] text-emerald-400 font-black mb-4 uppercase tracking-widest">QRH Seq</p><p className="text-xs font-bold text-white mb-2">{activeProc.phases[step].prompt}</p><div className="bg-black/60 p-3 rounded-xl italic text-[10px] font-mono text-emerald-300 mb-6">"{activeProc.phases[step].response}"</div><button onClick={() => advanceStep()} className="w-full bg-emerald-600 py-3 rounded-xl font-black text-[10px]">CHECK</button></div>}
                                     </aside>
                                 )}
 
@@ -411,20 +397,28 @@
                                         <div className="absolute inset-0 z-[200] flex items-center justify-center p-8 bg-slate-950/90 backdrop-blur-3xl text-left">
                                             <div className="bg-[#0f172a] p-10 rounded-[3rem] border border-blue-500/30 shadow-[0_0_100px_rgba(37,99,235,0.15)] max-w-2xl w-full text-center fade-in">
                                                 <div className="w-16 h-16 bg-blue-600/20 rounded-2xl flex items-center justify-center mx-auto mb-6 text-blue-400"><SVGIcons.Alert /></div>
-                                                <h3 className="text-xl font-black uppercase italic mb-8 leading-tight tracking-tight px-4">
-                                                    {activeProc.items[step].prompt}
-                                                </h3>
+                                                <h3 className="text-xl font-black uppercase italic mb-8 leading-tight tracking-tight px-4">{activeProc.items[step].prompt}</h3>
                                                 <div className="space-y-3 text-left">
                                                     {activeProc.items[step].choices.map((choice, idx) => (
                                                         <button 
                                                             key={idx} 
-                                                            onClick={() => idx === activeProc.items[step].correct ? advanceStep() : alert("Incorreto! Verifique o manual SOP.")}
+                                                            onClick={() => idx === activeProc.items[step].correct ? advanceStep() : alert("Incorreto!")}
                                                             className="w-full py-5 px-8 rounded-2xl bg-slate-900 border border-white/5 hover:border-blue-500 hover:bg-blue-900/30 transition-all font-black uppercase italic text-[11px] tracking-widest flex justify-between items-center group shadow-xl active:scale-95"
                                                         >
                                                             {choice} <SVGIcons.ArrowRight />
                                                         </button>
                                                     ))}
                                                 </div>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {/* HELP OVERLAY FASE 1 ABNORMAL */}
+                                    {view === 'abnormal_sim' && step === 0 && activeProc.phases[step].showHelp && (
+                                        <div className="absolute inset-0 z-[200] flex items-center justify-center p-8 bg-slate-950/90 backdrop-blur-xl">
+                                            <div className="bg-[#0f172a] p-10 rounded-[3rem] border border-blue-500/30 text-center">
+                                                <p className="text-lg font-bold italic text-white mb-8">{activeProc.phases[step].help}</p>
+                                                <button onClick={() => {activeProc.phases[step].showHelp = false; advanceStep();}} className="bg-blue-600 py-4 px-10 rounded-2xl font-black uppercase text-xs shadow-xl">Avançar</button>
                                             </div>
                                         </div>
                                     )}
@@ -456,16 +450,14 @@
                                     )}
 
                                     <div ref={wrapperRef} onClick={handleImgClick} id="imageWrapper">
-                                        <div className="img-tag-badge">FILE: {activeProc.img}.jpg</div>
+                                        <div className="img-tag-badge">FILE: {activeProc.phases ? activeProc.phases[step].img : activeProc.img}.jpg</div>
                                         <img 
-                                            src={manualImages[activeProc.img] || `./${activeProc.img}.jpg`} 
+                                            src={manualImages[activeProc.phases ? activeProc.phases[step].img : activeProc.img] || `./${activeProc.phases ? activeProc.phases[step].img : activeProc.img}.jpg`} 
                                             id="mainImg" 
                                             className={`rounded-2xl shadow-2xl border border-white/10 transition-all duration-1000 ${stage === 4 ? 'opacity-20 blur-xl grayscale scale-95' : ''}`} 
                                             onError={(e) => { 
-                                                if (!manualImages[activeProc.img]) {
-                                                    setShowDev(true);
-                                                    e.target.src='https://placehold.co/1280x720/020617/1e293b?text=ERRO:+Arquivo+Nao+Encontrado+no+GitHub'; 
-                                                }
+                                                const imgKey = activeProc.phases ? activeProc.phases[step].img : activeProc.img;
+                                                if (!manualImages[imgKey]) { setShowDev(true); e.target.src='https://placehold.co/1280x720/020617/1e293b?text=ERRO:+Imagem+nao+encontrada+no+GitHub'; }
                                             }} 
                                         />
                                         
@@ -482,7 +474,7 @@
                                     </div>
                                 </main>
 
-                                {/* SIDEBAR SIC/PF (ABNORMAL) */}
+                                {/* SIDEBAR PF (ABNORMAL) */}
                                 {view === 'abnormal_sim' && (
                                     <aside className={`w-80 bg-[#0f172a] border-l border-slate-800 p-6 overflow-y-auto transition-all duration-500 ${(activeProc.phases[step].role === 'PM' && activeProc.phases[step].type !== 'reasoning') ? 'opacity-10 blur-sm pointer-events-none' : 'opacity-100'}`}>
                                         <h3 className="text-[10px] font-black text-blue-500 uppercase italic mb-6 border-r-2 border-blue-500 pr-3 text-right">COPILOTO + PF</h3>
@@ -514,15 +506,16 @@
                         <div className="fixed inset-0 z-[2000] bg-slate-950/98 backdrop-blur-3xl flex items-center justify-center p-6 animate-in zoom-in duration-300">
                             <div className="bg-slate-900 border border-white/10 w-full max-w-xl rounded-[40px] p-10 shadow-2xl relative text-center">
                                 <button onClick={() => setShowDev(false)} className="absolute top-8 right-8 text-slate-500 font-black text-xs hover:text-white uppercase tracking-widest font-black transition-colors">Close [X]</button>
-                                <h2 className="text-2xl font-black italic uppercase text-emerald-400 mb-2 tracking-tighter leading-none">Central de Calibração v92</h2>
+                                <h2 className="text-2xl font-black italic uppercase text-emerald-400 mb-2 tracking-tighter leading-none">Central de Calibração v93</h2>
                                 <p className="text-red-500 text-[10px] font-black uppercase mb-8 animate-pulse italic">⚠️ Imagem ausente no repositório. Faça o upload manual abaixo.</p>
                                 <div className="grid grid-cols-2 gap-6 mb-8 text-left">
                                     <button onClick={() => document.getElementById('upImg').click()} className="bg-slate-800 p-6 rounded-3xl text-[10px] font-black uppercase hover:bg-blue-600 transition-all flex flex-col items-center gap-3 italic shadow-xl">Subir Arquivo Local</button>
                                     <input type="file" id="upImg" className="hidden" onChange={(e) => {
                                         const r = new FileReader();
                                         r.onload = (ev) => {
-                                            setManualImages({...manualImages, [activeProc.img]: ev.target.result});
-                                            alert(`Sucesso! Imagem para ${activeProc.img}.jpg carregada.`);
+                                            const imgKey = activeProc.phases ? activeProc.phases[step].img : activeProc.img;
+                                            setManualImages({...manualImages, [imgKey]: ev.target.result});
+                                            alert(`Sucesso! Imagem para ${imgKey}.jpg carregada.`);
                                         };
                                         r.readAsDataURL(e.target.files[0]);
                                     }} />
