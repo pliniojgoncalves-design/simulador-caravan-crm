@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Caravan PRO v200 - Production Ready</title>
+    <title>Caravan PRO v204 - Ultra Feedback</title>
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -14,31 +14,28 @@
         .custom-scroll::-webkit-scrollbar { width: 3px; }
         .custom-scroll::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
         
-        .fade-in { animation: fadeIn 0.4s ease-out forwards; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .fade-in { animation: fadeIn 0.3s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Hotspot Tutorial */
+        /* Alvo pulsante mais visível */
         .hotspot-target {
-            position: absolute; width: 44px; height: 44px;
-            background: rgba(59, 130, 246, 0.3); border: 2px solid #3b82f6;
+            position: absolute; width: 50px; height: 50px;
+            background: rgba(59, 130, 246, 0.4); border: 3px solid #3b82f6;
             border-radius: 50%; transform: translate(-50%, -50%);
-            pointer-events: none; animation: pulse 2s infinite;
-            z-index: 50;
+            pointer-events: none; animation: pulse-intense 1.5s infinite;
+            z-index: 100;
         }
-        @keyframes pulse { 0% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; } 50% { transform: translate(-50%, -50%) scale(1.4); opacity: 0.2; } 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; } }
-        
-        /* Feedback Visual de Clique */
-        .click-feedback {
-            position: absolute; width: 80px; height: 80px;
-            background: rgba(16, 185, 129, 0.4); border-radius: 50%;
-            transform: translate(-50%, -50%); pointer-events: none;
-            animation: ripple 0.6s ease-out forwards; z-index: 60;
-        }
-        @keyframes ripple { from { transform: translate(-50%, -50%) scale(0); opacity: 1; } to { transform: translate(-50%, -50%) scale(1.5); opacity: 0; } }
+        @keyframes pulse-intense { 0% { transform: translate(-50%, -50%) scale(1); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); } 70% { transform: translate(-50%, -50%) scale(1.3); box-shadow: 0 0 0 15px rgba(59, 130, 246, 0); } 100% { transform: translate(-50%, -50%) scale(1); } }
 
-        /* Interactive Wrapper: Precisão para Tablets e Desktop */
-        .interactive-wrapper { position: relative; display: inline-block; cursor: crosshair; }
-        .main-img-view { display: block; max-width: 100%; max-height: calc(100vh - 140px); object-fit: contain; border-radius: 0.5rem; transition: opacity 0.5s ease; }
+        /* Efeito de flash ao mudar de passo */
+        .flash-success { animation: flash 0.4s ease-out; }
+        @keyframes flash { 0% { opacity: 1; filter: brightness(1); } 50% { filter: brightness(1.5); } 100% { filter: brightness(1); } }
+
+        .interactive-wrapper { position: relative; display: inline-block; cursor: crosshair; line-height: 0; }
+        .main-img-view { display: block; max-width: 100%; max-height: calc(100vh - 160px); object-fit: contain; border-radius: 0.5rem; transition: filter 0.3s; }
+        
+        .step-badge { animation: bounce 0.5s ease-in-out; }
+        @keyframes bounce { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
     </style>
 </head>
 <body>
@@ -47,20 +44,18 @@
     <script type="text/babel">
         const { useState, useMemo, useRef, useEffect } = React;
 
-        // --- MFE DATA: BASE DE DADOS COMPLETA (21 ITENS) ---
         const MISSION_DATA = {
             normal: [
                 {
                     title: "Inspeção Interna do Cockpit",
-                    id: "inspecao_interna_v200",
-                    img: "normal-cockpit",
+                    img: "normal-cockpit", 
                     items: [
                         { id: "it_1", label: "CONTROL LOCK", status: "REMOVE", role: "Copiloto", coords: { x: 38.6, y: 61.8 } },
                         { id: "it_2", label: "YOKE", status: "FULL AFTERWARD", role: "Copiloto", coords: { x: 38.6, y: 61.8 } },
-                        { id: "it_3", label: "ALL SWITCHES (LEFT)", status: "OFF", role: "Copiloto", coords: { x: 33.5, y: 30.8 } },
-                        { id: "it_4", label: "ALL SWITCHES (RIGHT)", status: "OFF", role: "Copiloto", coords: { x: 19.6, y: 74.5 } },
-                        { id: "it_5", label: "CIRCUIT BREAKERS (LEFT)", status: "IN", role: "Copiloto", coords: { x: 34.2, y: 44.6 } },
-                        { id: "it_6", label: "CIRCUIT BREAKERS (RIGHT)", status: "IN", role: "Copiloto", coords: { x: 24.6, y: 76.1 } },
+                        { id: "it_3", label: "ALL SWITCHES", status: "OFF", role: "Copiloto", coords: { x: 33.5, y: 30.8 } },
+                        { id: "it_4", label: "ALL SWITCHES", status: "OFF", role: "Copiloto", coords: { x: 19.6, y: 74.5 } },
+                        { id: "it_5", label: "CIRCUIT BREAKERS", status: "IN", role: "Copiloto", coords: { x: 34.2, y: 44.6 } },
+                        { id: "it_6", label: "CIRCUIT BREAKERS", status: "IN", role: "Copiloto", coords: { x: 24.6, y: 76.1 } },
                         { id: "it_7", label: "ALT STATIC AIR", status: "OFF", role: "Copiloto", coords: { x: 31.2, y: 50.9 } },
                         { id: "it_8", label: "INERTIAL SEPARATOR", status: "NORMAL", role: "Copiloto", coords: { x: 48.7, y: 45.6 } },
                         { id: "it_9", label: "TRIMS - ELEVATOR", status: "SET", role: "Copiloto", coords: { x: 48.6, y: 60.7 } },
@@ -69,105 +64,86 @@
                         { id: "it_12", label: "FUEL SHUTOFF", status: "PUSH IN", role: "Copiloto", coords: { x: 56.3, y: 73.3 } },
                         { id: "it_13", label: "CABIN HEAT FIREWALL", status: "PUSH IN", role: "Copiloto", coords: { x: 55.3, y: 86.9 } },
                         { id: "it_14", label: "EMERGENCY PWR LEVER", status: "NORMAL", role: "Copiloto", coords: { x: 51.1, y: 64.6 } },
-                        { id: "it_15", label: "PROP. CONTROL LEVER", status: "FULL FORWARD", role: "Copiloto", coords: { x: 53.0, y: 61.1 } },
+                        { id: "it_15", label: "PROP. CONTROL LEVER", status: "FULL FORWARD", role: "Copiloto", coords: { x: 53, y: 61.1 } },
                         { id: "it_16", label: "AIR CONDITIONING", status: "OFF", role: "Copiloto", coords: { x: 51.2, y: 50.4 } },
                         { id: "it_17", label: "BLEED AIR HEAT", status: "OFF", role: "Copiloto", coords: { x: 57.2, y: 50.1 } },
-                        { id: "it_18", label: "FUEL TANK SELECTORS (L)", status: "1 ON", role: "Copiloto", coords: { x: 72.5, y: 88.0 } },
+                        { id: "it_18", label: "FUEL TANK SELECTORS (L)", status: "1 ON", role: "Copiloto", coords: { x: 72.5, y: 88 } },
                         { id: "it_19", label: "FUEL TANK SELECTORS (R)", status: "1 OFF", role: "Copiloto", coords: { x: 74.7, y: 88.4 } },
                         { id: "it_20", label: "VENTILATION", status: "OFF", role: "Copiloto", coords: { x: 73.5, y: 81.5 } },
-                        { id: "it_21", label: "STBY FLAP MOTOR", status: "GUARDED NORM", role: "Copiloto", coords: { x: 73.5, y: 72.0 } }
+                        { id: "it_21", label: "STBY FLAP MOTOR", status: "GUARDED NORM", role: "Copiloto", coords: { x: 73.5, y: 72 } }
                     ]
                 }
             ]
         };
 
-        // --- MFE COMPONENT: AVATAR HUD ---
-        const PilotAvatar = ({ side, active, stripes }) => (
-            <div className={`flex flex-col items-center gap-1 transition-all duration-700 ${active ? 'opacity-100 scale-100' : 'opacity-10 grayscale'}`}>
-                <div className={`w-10 h-10 md:w-12 md:h-12 rounded-lg border flex flex-col items-center justify-center relative overflow-hidden ${active ? 'border-blue-500 bg-blue-500/20 shadow-[0_0_15px_#3b82f6]' : 'bg-slate-800'}`}>
-                    <svg viewBox="0 0 100 100" className="w-6 h-6 text-white opacity-60">
+        const PilotAvatar = ({ side, active, stripes, label }) => (
+            <div className={`flex flex-col items-center gap-1 transition-all duration-700 ${active ? 'opacity-100 scale-110' : 'opacity-10 grayscale'}`}>
+                <div className={`w-14 h-14 rounded-xl border-2 flex items-center justify-center relative overflow-hidden ${active ? 'border-blue-500 bg-blue-500/20 shadow-[0_0_20px_#3b82f6]' : 'bg-slate-800'}`}>
+                    <svg viewBox="0 0 100 100" className="w-8 h-8 text-white opacity-80">
                         <circle cx="50" cy="35" r="15" fill="currentColor" />
                         <path d="M20 85 Q20 55 50 55 Q80 55 80 85" fill="currentColor" />
                     </svg>
-                    <div className="absolute bottom-0 w-full h-2 bg-black/90 flex flex-col justify-center gap-0.5 px-1.5">
-                        {[...Array(stripes)].map((_, i) => <div key={i} className="w-full h-[0.5px] bg-yellow-500"></div>)}
+                    <div className="absolute bottom-0 w-full h-3 bg-black/80 flex flex-col justify-center gap-0.5 px-2">
+                        {[...Array(stripes)].map((_, i) => <div key={i} className="w-full h-[1.5px] bg-yellow-500"></div>)}
                     </div>
                 </div>
-                <span className="text-[7px] font-black uppercase text-white italic tracking-tighter">{side}</span>
+                <span className="text-[9px] font-black uppercase text-white italic">{label}</span>
             </div>
         );
 
-        // --- MFE COMPONENT: SIDEBAR SLIM ---
-        const ActionSidebar = ({ pilotName, role, items, activeIdx, side }) => (
-            <aside className={`w-24 md:w-32 lg:w-36 h-full flex flex-col bg-slate-950/95 shrink-0 italic border-white/5 ${side === 'LEFT' ? 'border-r' : 'border-l'}`}>
-                <div className="p-2 border-b border-white/5 bg-blue-900/10 flex flex-col items-center text-center">
-                    <span className="text-[7px] md:text-[8px] font-black uppercase text-blue-300 tracking-tighter">{pilotName}</span>
-                    <span className="text-[6px] font-bold bg-blue-600 px-1 py-0.5 rounded mt-1 italic uppercase leading-none">{role}</span>
+        const ActionSidebar = ({ title, role, items, currentItemId, side }) => (
+            <aside className={`w-32 md:w-40 h-full flex flex-col bg-slate-950/95 shrink-0 italic border-white/5 ${side === 'LEFT' ? 'border-r' : 'border-l'}`}>
+                <div className="p-3 border-b border-white/5 bg-blue-900/10 flex flex-col items-center text-center">
+                    <span className="text-[8px] md:text-[10px] font-black uppercase text-blue-300 leading-none">{title}</span>
+                    <span className="text-[7px] font-bold bg-blue-600 px-1.5 py-0.5 rounded mt-1 italic uppercase">{role}</span>
                 </div>
-                <div className="flex-1 overflow-y-auto p-1.5 space-y-1 custom-scroll pb-20">
-                    {items.map((it, i) => (
-                        <div key={it.id} className={`p-1.5 md:p-2 rounded-lg border transition-all duration-500 ${items[activeIdx]?.id === it.id ? 'bg-blue-600 border-blue-400 scale-105 shadow-md' : 'opacity-5 grayscale border-white/5'}`}>
-                            <p className="text-[7px] md:text-[8px] font-black uppercase leading-tight">{it.label}</p>
-                            <p className="text-[5px] font-bold opacity-40 uppercase tracking-tighter">{it.status}</p>
+                <div className="flex-1 overflow-y-auto p-2 space-y-2 custom-scroll pb-20">
+                    {items.map((it) => (
+                        <div key={it.id} className={`p-3 rounded-lg border transition-all duration-300 ${currentItemId === it.id ? 'bg-blue-600 border-blue-400 scale-105 shadow-xl ring-2 ring-blue-400/50' : 'opacity-10 grayscale border-white/5'}`}>
+                            <p className="text-[9px] font-black uppercase leading-tight">{it.label}</p>
+                            <p className="text-[7px] font-bold opacity-60 uppercase">{it.status}</p>
                         </div>
                     ))}
                 </div>
             </aside>
         );
 
-        // --- MFE PAGE: HANGAR PRINCIPAL ---
-        const HangarPage = ({ onSelect }) => (
-            <main className="h-screen flex items-center justify-center p-10 fade-in bg-[#020617]">
-                <div className="text-center p-10 md:p-16 bg-slate-900/40 rounded-[3.5rem] border border-white/5 shadow-2xl">
-                    <h2 className="text-blue-500 font-black text-[10px] uppercase tracking-[0.5em] mb-4">Virtual Flight Training</h2>
-                    <h1 className="text-5xl md:text-6xl font-black italic uppercase mb-12 tracking-tighter italic">Caravan PRO</h1>
-                    <button onClick={() => onSelect('normal')} className="bg-blue-600 px-12 py-6 rounded-2xl font-black uppercase tracking-widest hover:bg-blue-500 transition-all shadow-xl italic">Checklist Normal</button>
-                </div>
-            </main>
-        );
-
-        // --- MFE PAGE: MATRIX CONFIG ---
-        const MatrixPage = ({ onConfirm }) => (
-            <main className="h-screen flex flex-col items-center justify-center p-10 fade-in bg-[#020617]">
-                <h3 className="text-3xl font-black text-white uppercase tracking-tighter mb-12 italic underline underline-offset-8 decoration-blue-600">Matriz de Tripulação</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-3xl italic text-center">
-                    <button onClick={() => onConfirm(false)} className="bg-slate-900 border border-white/10 p-10 rounded-[3rem] hover:border-blue-500 transition-all group flex flex-col items-center gap-6">
-                        <h4 className="text-xl font-black uppercase text-white leading-none italic">OPÇÃO 1</h4>
-                        <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest leading-relaxed">PILOTO: MONITORING (PM)<br/>COPILOTO: FLYING (PF)</p>
-                    </button>
-                    <button onClick={() => onConfirm(true)} className="bg-slate-900 border border-white/10 p-10 rounded-[3rem] hover:border-blue-500 transition-all group flex flex-col items-center gap-6 text-center italic">
-                        <h4 className="text-xl font-black uppercase text-white leading-none italic">OPÇÃO 2</h4>
-                        <p className="text-[10px] text-blue-400 font-black uppercase tracking-widest leading-relaxed">PILOTO: FLYING (PF)<br/>COPILOTO: MONITORING (PM)</p>
-                    </button>
-                </div>
-            </main>
-        );
-
-        // --- CORE APP: ORQUESTRADOR ---
         function App() {
             const [view, setView] = useState('hangar');
             const [pilotIsFlying, setPilotIsFlying] = useState(true);
             const [step, setStep] = useState(0);
             const [stage, setStage] = useState(1); 
             const [finished, setFinished] = useState(false);
-            const [lastClick, setLastClick] = useState(null);
+            const [flash, setFlash] = useState(false);
 
-            const activeMission = MISSION_DATA.normal[0];
-            const currentItem = activeMission.items[step];
+            const mission = MISSION_DATA.normal[0];
+            const currentItem = mission.items[step];
 
-            const p1Items = activeMission.items.filter(it => (it.role === 'PF' && pilotIsFlying) || (it.role === 'PM' && !pilotIsFlying) || it.role === 'Piloto' || it.role === 'Comandante');
-            const p2Items = activeMission.items.filter(it => (it.role === 'PF' && !pilotIsFlying) || (it.role === 'PM' && pilotIsFlying) || it.role === 'Copiloto' || it.role === 'Primeiro Oficial');
+            const p1Items = mission.items.filter(it => (it.role === 'PF' && pilotIsFlying) || (it.role === 'PM' && !pilotIsFlying) || it.role === 'Piloto');
+            const p2Items = mission.items.filter(it => (it.role === 'PF' && !pilotIsFlying) || (it.role === 'PM' && pilotIsFlying) || it.role === 'Copiloto');
 
-            const actingSide = useMemo(() => {
+            const activeSide = useMemo(() => {
                 if (!currentItem) return null;
-                const r = currentItem.role;
-                if (r === 'BOTH') return 'BOTH';
-                if (r === 'Piloto' || r === 'Comandante') return 'LEFT';
-                if (r === 'Copiloto' || r === 'Primeiro Oficial') return 'RIGHT';
-                if (r === 'PF') return pilotIsFlying ? 'LEFT' : 'RIGHT';
-                if (r === 'PM') return pilotIsFlying ? 'RIGHT' : 'LEFT';
+                if (currentItem.role === 'PF') return pilotIsFlying ? 'LEFT' : 'RIGHT';
+                if (currentItem.role === 'PM') return pilotIsFlying ? 'RIGHT' : 'LEFT';
                 return 'BOTH';
             }, [currentItem, pilotIsFlying]);
+
+            const nextStep = () => {
+                setFlash(true);
+                setTimeout(() => setFlash(false), 400);
+
+                if (step < mission.items.length - 1) {
+                    setStep(step + 1);
+                } else {
+                    if (stage < 3) {
+                        setStage(stage + 1);
+                        setStep(0);
+                    } else {
+                        setFinished(true);
+                    }
+                }
+            };
 
             const handleInteraction = (e) => {
                 if (!currentItem) return;
@@ -177,135 +153,106 @@
 
                 const dist = Math.sqrt(Math.pow(x - currentItem.coords.x, 2) + Math.pow(y - currentItem.coords.y, 2));
                 
-                // Tolerância otimizada para tablets (10.0)
-                if (dist < 10.0) {
-                    setLastClick({ x, y });
-                    setTimeout(() => setLastClick(null), 600);
-
-                    if (step < activeMission.items.length - 1) {
-                        setStep(step + 1);
-                    } else {
-                        if (stage < 3) {
-                            setStage(stage + 1);
-                            setStep(0);
-                        } else {
-                            setFinished(true);
-                        }
-                    }
+                if (dist < 10.0) { // Tolerância de clique
+                    nextStep();
                 }
             };
 
-            if (view === 'hangar') return <HangarPage onSelect={() => setView('matrix')} />;
-            if (view === 'matrix') return <MatrixPage onConfirm={(val) => { setPilotIsFlying(val); setView('sim'); }} />;
+            if (view === 'hangar') return (
+                <main className="h-screen flex items-center justify-center p-10 fade-in bg-[#020617]">
+                    <div className="text-center p-12 bg-slate-900/40 rounded-[4rem] border border-white/5 shadow-2xl">
+                        <h1 className="text-6xl font-black italic uppercase mb-12 tracking-tighter">Caravan PRO</h1>
+                        <button onClick={() => setView('matrix')} className="bg-blue-600 px-14 py-7 rounded-2xl font-black uppercase tracking-widest hover:bg-blue-500 transition-all shadow-2xl text-xl">Iniciar Cockpit</button>
+                    </div>
+                </main>
+            );
+
+            if (view === 'matrix') return (
+                <main className="h-screen flex flex-col items-center justify-center p-10 fade-in bg-[#020617]">
+                    <h2 className="text-4xl font-black uppercase text-white mb-16 italic">Configuração de Voo</h2>
+                    <div className="grid grid-cols-2 gap-10 w-full max-w-4xl text-center italic">
+                        <button onClick={() => { setPilotIsFlying(true); setView('sim'); }} className="bg-slate-900 border-2 border-white/5 p-12 rounded-[3rem] hover:border-blue-500 transition-all">
+                            <h4 className="text-2xl font-black uppercase text-blue-400 mb-4">P1: FLYING (PF)</h4>
+                            <p className="text-sm opacity-60 uppercase">P2: MONITORING (PM)</p>
+                        </button>
+                        <button onClick={() => { setPilotIsFlying(false); setView('sim'); }} className="bg-slate-900 border-2 border-white/5 p-12 rounded-[3rem] hover:border-blue-500 transition-all">
+                            <h4 className="text-2xl font-black uppercase text-blue-400 mb-4">P1: MONITORING (PM)</h4>
+                            <p className="text-sm opacity-60 uppercase">P2: FLYING (PF)</p>
+                        </button>
+                    </div>
+                </main>
+            );
 
             return (
-                <div className="h-screen flex flex-col bg-black overflow-hidden italic selection:bg-blue-500/30">
+                <div className="h-screen flex flex-col bg-black overflow-hidden italic">
                     
-                    {/* MFE: HEADER */}
-                    <header className="h-10 border-b border-white/5 flex items-center justify-between px-6 bg-[#001c3d]/95 backdrop-blur-md z-[100] shrink-0">
-                        <div className="flex items-center gap-4">
-                            <div className="bg-white px-2 py-0.5 rounded shadow-xl border border-white/20">
-                                <div className="text-[#001c3d] font-black text-sm uppercase italic leading-none text-center">Azul <br/><span className="font-light text-[9px] block -mt-1 leading-none">conecta</span></div>
-                            </div>
-                            <div className="flex gap-1.5 ml-2">
-                                {[1,2,3].map(s => <div key={s} className={`w-3 h-1 rounded-full transition-all duration-700 ${stage >= s ? 'bg-blue-500 shadow-[0_0_8px_#3b82f6]' : 'bg-slate-800'}`} />)}
+                    <header className="h-12 border-b border-white/10 flex items-center justify-between px-8 bg-[#001c3d] z-[100] shrink-0">
+                        <div className="flex items-center gap-6">
+                            <div className="bg-white px-2 py-1 rounded shadow-lg text-[#001c3d] font-black text-sm uppercase">Azul <span className="font-light">conecta</span></div>
+                            <div className="flex gap-2">
+                                {[1,2,3].map(s => <div key={s} className={`w-10 h-1.5 rounded-full transition-all duration-700 ${stage >= s ? 'bg-blue-500 shadow-[0_0_10px_#3b82f6]' : 'bg-slate-800'}`} />)}
                             </div>
                         </div>
-                        <button onClick={() => location.reload()} className="text-red-500 text-[9px] font-black uppercase tracking-widest italic hover:text-red-400">Abortar</button>
+                        <div className="flex items-center gap-4">
+                            <span className="text-[10px] font-black text-blue-400 uppercase tracking-[0.2em]">{stage === 1 ? 'TUTORIAL' : stage === 2 ? 'CHECKLIST' : 'MEMÓRIA'}</span>
+                            <button onClick={() => location.reload()} className="text-red-500 text-[10px] font-black uppercase hover:text-red-400">Abortar</button>
+                        </div>
                     </header>
 
                     <div className="flex-1 flex overflow-hidden relative">
-                        
-                        {/* MFE: LOG P1 (APENAS ESTÁGIOS 1 E 2) */}
                         {stage < 3 && (
-                            <ActionSidebar 
-                                pilotName="PILOTO (P1)" side="LEFT" 
-                                role={pilotIsFlying ? "PF" : "PM"} 
-                                items={p1Items} 
-                                activeIdx={p1Items.findIndex(i => i.id === currentItem.id)} 
-                            />
+                            <ActionSidebar title="PILOTO (P1)" side="LEFT" role={pilotIsFlying ? "PF" : "PM"} items={p1Items} currentItemId={currentItem.id} />
                         )}
 
-                        {/* MFE: CORE SIMULATOR VIEWPORT */}
-                        <main className="flex-1 flex flex-col bg-black shadow-inner overflow-hidden relative items-center">
-                            <div className="w-full h-8 bg-slate-900/60 border-b border-white/5 flex items-center justify-between px-6 shrink-0 z-10">
+                        <main className="flex-1 flex flex-col items-center relative overflow-hidden bg-[#05080f]">
+                            {/* CONTADOR DE PASSOS ULTRA VISÍVEL */}
+                            <div className="w-full h-10 bg-slate-900/50 flex items-center justify-between px-10 border-b border-white/5 z-20">
                                 <div className="flex items-center gap-3">
-                                    <div className={`px-2 py-0.5 rounded-full text-[8px] font-black uppercase italic shadow-lg ${stage === 3 ? 'bg-amber-600 animate-pulse' : 'bg-blue-600'}`}>
-                                        {stage === 1 ? 'NÍVEL 1: TUTORIAL' : stage === 2 ? 'NÍVEL 2: CHECKLIST' : 'NÍVEL 3: MEMÓRIA'}
-                                    </div>
-                                    <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">{activeMission.title}</span>
+                                    <span className="step-badge bg-blue-600 px-3 py-1 rounded-full text-[12px] font-black text-white italic">PASSO {String(step + 1).padStart(2, '0')} / {mission.items.length}</span>
+                                    <span className="text-[11px] font-black text-slate-400 uppercase tracking-widest">{mission.title}</span>
                                 </div>
-                                <span className={`text-[10px] font-black tracking-widest italic transition-all duration-500 ${stage === 3 ? 'opacity-0' : 'text-amber-500 opacity-100'}`}>
-                                    PRÓXIMO: {currentItem.label}
-                                </span>
+                                <div className="flex items-center gap-4">
+                                    <span className={`text-[12px] font-black tracking-widest text-amber-500 transition-opacity ${stage === 3 ? 'opacity-0' : 'opacity-100'}`}>AÇÃO: {currentItem.label}</span>
+                                    <button onClick={nextStep} className="bg-white/5 hover:bg-white/10 px-4 py-1 rounded-full text-[9px] font-black text-slate-400 uppercase transition-all">Pular Passo</button>
+                                </div>
                             </div>
 
-                            {/* CONTAINER DE IMAGEM COM ANCORAGEM FIXA */}
-                            <div className="flex-1 w-full flex items-center justify-center p-2 bg-[#05080f] overflow-hidden">
-                                <div className="interactive-wrapper" onClick={handleInteraction}>
+                            <div className="flex-1 w-full flex items-center justify-center p-4 overflow-hidden">
+                                <div className={`interactive-wrapper ${flash ? 'flash-success' : ''}`} onClick={handleInteraction}>
                                     <img 
-                                        src={`./${activeMission.img}.jpg`} 
+                                        src={`${mission.img}.jpg`} 
                                         className="main-img-view shadow-[0_0_100px_rgba(0,0,0,1)] border border-white/5" 
                                         onError={(e) => e.target.src="https://placehold.co/1280x720/111/333?text=UPLOAD+IMAGE+TO+GITHUB"} 
                                     />
-                                    
-                                    {/* Hotspot de Ajuda: Apenas no Estágio 1 */}
                                     {stage === 1 && (
-                                        <div 
-                                            className="hotspot-target" 
-                                            style={{ left: `${currentItem.coords.x}%`, top: `${currentItem.coords.y}%` }} 
-                                        />
-                                    )}
-
-                                    {/* Feedback de Clique Correto */}
-                                    {lastClick && (
-                                        <div className="click-feedback" style={{ left: `${lastClick.x}%`, top: `${lastClick.y}%` }} />
+                                        <div className="hotspot-target" style={{ left: `${currentItem.coords.x}%`, top: `${currentItem.coords.y}%` }} />
                                     )}
                                 </div>
                             </div>
 
-                            {/* MFE: TELEMETRY HUD (RODAPÉ) */}
-                            <footer className="w-full h-16 border-t border-white/5 flex items-center justify-between px-10 md:px-20 bg-[#001c3d]/90 backdrop-blur-xl shrink-0 shadow-[0_-10px_30px_rgba(0,0,0,0.8)] z-50">
-                                <PilotAvatar side="P1" stripes={4} active={actingSide === 'LEFT' || actingSide === 'BOTH'} />
-                                
-                                <div className="flex-1 max-w-xs mx-4 flex flex-col items-center gap-1.5 leading-none">
-                                    <div className="w-full h-0.5 bg-white/10 rounded-full overflow-hidden relative leading-none">
-                                        <div className="h-full bg-blue-500 transition-all duration-700 shadow-[0_0_10px_#3b82f6]" style={{ width: `${((step + 1) / activeMission.items.length) * 100}%` }} />
+                            <footer className="w-full h-20 border-t border-white/10 flex items-center justify-between px-10 md:px-32 bg-[#001c3d]/90 backdrop-blur-xl shrink-0 z-50">
+                                <PilotAvatar side="LEFT" stripes={4} label="PILOTO" active={activeSide === 'LEFT' || activeSide === 'BOTH'} />
+                                <div className="flex-1 max-w-md mx-10 flex flex-col items-center gap-2">
+                                    <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden relative">
+                                        <div className="h-full bg-blue-500 transition-all duration-700 shadow-[0_0_15px_#3b82f6]" style={{ width: `${((step + 1) / mission.items.length) * 100}%` }} />
                                     </div>
-                                    <div className="flex flex-col items-center gap-0.5">
-                                        <span className={`text-[8px] font-black text-blue-400 uppercase tracking-tighter italic transition-opacity duration-500 ${stage === 3 ? 'opacity-0' : 'opacity-100'}`}>
-                                            Ação: {currentItem.label}
-                                        </span>
-                                        <span className="text-[6px] font-black opacity-30 uppercase tracking-[0.2em] italic">Passo {step + 1} de {activeMission.items.length}</span>
-                                    </div>
+                                    <span className="text-[10px] font-black text-blue-400 uppercase tracking-[0.4em] animate-pulse">Integridade de Fluxo</span>
                                 </div>
-
-                                <PilotAvatar side="P2" stripes={3} active={actingSide === 'RIGHT' || actingSide === 'BOTH'} />
+                                <PilotAvatar side="RIGHT" stripes={3} label="COPILOTO" active={activeSide === 'RIGHT' || activeSide === 'BOTH'} />
                             </footer>
                         </main>
 
-                        {/* MFE: LOG P2 (APENAS ESTÁGIOS 1 E 2) */}
                         {stage < 3 && (
-                            <ActionSidebar 
-                                pilotName="COPILOTO (P2)" 
-                                side="RIGHT" 
-                                role={!pilotIsFlying ? "PF" : "PM"} 
-                                items={p2Items} 
-                                activeIdx={p2Items.findIndex(i => i.id === currentItem.id)} 
-                            />
+                            <ActionSidebar title="COPILOTO (P2)" side="RIGHT" role={!pilotIsFlying ? "PF" : "PM"} items={p2Items} currentItemId={currentItem.id} />
                         )}
                     </div>
 
-                    {/* MFE: COMPLETION MODAL */}
                     {finished && (
-                        <div className="fixed inset-0 z-[11000] bg-black/98 backdrop-blur-3xl flex items-center justify-center p-8 fade-in italic">
-                            <div className="bg-[#001c3d] border border-white/10 p-12 rounded-[4rem] w-full max-w-sm text-center shadow-2xl relative border-b-[15px] border-emerald-600">
-                                <div className="w-16 h-16 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-8 border-2 border-emerald-500 shadow-[0_0_20px_#10b981]">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                                </div>
-                                <h2 className="text-4xl font-black italic uppercase text-white mb-2 tracking-tighter italic leading-none">Check OK</h2>
-                                <p className="text-[10px] text-slate-400 uppercase tracking-widest mb-10 italic leading-relaxed text-center">Treino concluído com sucesso nos 3 estágios de proficiência Azul Conecta.</p>
-                                <button onClick={() => location.reload()} className="w-full bg-blue-600 hover:bg-blue-500 py-6 rounded-[2.5rem] font-black uppercase text-[11px] tracking-widest transition-all italic shadow-xl shadow-blue-900/30 leading-none">Novo Módulo</button>
+                        <div className="fixed inset-0 z-[11000] bg-black/98 backdrop-blur-3xl flex items-center justify-center p-8 fade-in italic text-center">
+                            <div className="bg-[#001c3d] border-2 border-white/10 p-16 rounded-[4rem] w-full max-w-sm shadow-2xl relative border-b-[15px] border-emerald-600">
+                                <h2 className="text-5xl font-black italic uppercase text-white mb-4 tracking-tighter">Check OK</h2>
+                                <p className="text-[11px] text-slate-400 uppercase tracking-widest mb-10 italic leading-relaxed">Proficiência técnica validada em todos os níveis.</p>
+                                <button onClick={() => location.reload()} className="w-full bg-blue-600 hover:bg-blue-500 py-6 rounded-2xl font-black uppercase text-[12px] tracking-widest transition-all italic shadow-2xl">Reiniciar Treino</button>
                             </div>
                         </div>
                     )}
