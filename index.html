@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Caravan PRO v220 - Professional Training</title>
+    <title>Caravan PRO v225 - Stable Build</title>
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -13,28 +13,39 @@
         body { font-family: 'Inter', sans-serif; background-color: #020617; color: white; margin: 0; overflow: hidden; height: 100vh; }
         .custom-scroll::-webkit-scrollbar { width: 3px; }
         .custom-scroll::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
-        
         .fade-in { animation: fadeIn 0.4s ease-out forwards; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Hotspot Tutorial (Nível 1) */
+        /* MIRA AZUL - CALIBRAÇÃO DE PRECISÃO */
         .hotspot-target {
-            position: absolute; width: 52px; height: 52px;
-            background: rgba(59, 130, 246, 0.4); border: 3px solid #3b82f6;
-            border-radius: 50%; transform: translate(-50%, -50%);
-            pointer-events: none; animation: pulse-target 1.5s infinite;
+            position: absolute; 
+            width: 48px; height: 48px;
+            background: rgba(59, 130, 246, 0.3); 
+            border: 3px solid #3b82f6;
+            border-radius: 50%; 
+            transform: translate(-50%, -50%); 
+            pointer-events: none; 
+            animation: pulse-target 1.5s infinite;
             z-index: 100;
         }
-        @keyframes pulse-target { 0% { scale: 1; opacity: 0.8; box-shadow: 0 0 0 0 rgba(59,130,246,0.7); } 70% { scale: 1.25; opacity: 0.4; box-shadow: 0 0 0 15px rgba(59,130,246,0); } 100% { scale: 1; opacity: 0.8; } }
+        @keyframes pulse-target { 
+            0% { scale: 1; box-shadow: 0 0 0 0 rgba(59,130,246,0.7); } 
+            70% { scale: 1.2; box-shadow: 0 0 0 10px rgba(59,130,246,0); } 
+            100% { scale: 1; } 
+        }
 
-        /* Feedback visual de clique correto (Efeito Flash) */
+        /* FEEDBACK DE ACERTO */
         .flash-success { animation: flash-green 0.4s ease-out; }
-        @keyframes flash-green { 0% { filter: brightness(1); } 50% { filter: brightness(1.4) saturate(1.5); } 100% { filter: brightness(1); } }
+        @keyframes flash-green { 
+            0% { filter: brightness(1) sepia(0); } 
+            50% { filter: brightness(1.4) sepia(0.5) hue-rotate(90deg); } 
+            100% { filter: brightness(1) sepia(0); } 
+        }
 
         .interactive-wrapper { position: relative; display: inline-block; cursor: crosshair; line-height: 0; }
         .main-img-view { display: block; max-width: 100%; max-height: calc(100vh - 160px); object-fit: contain; border-radius: 0.5rem; transition: filter 0.3s; }
         
-        .step-indicator { animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .step-badge { animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         @keyframes pop { 0% { transform: scale(0.8); } 100% { transform: scale(1); } }
     </style>
 </head>
@@ -44,7 +55,7 @@
     <script type="text/babel">
         const { useState, useMemo, useRef, useEffect } = React;
 
-        // --- DATABASE COMPLETA (21 ITENS) ---
+        // --- MFE DATA: DATABASE COMPLETA (21 ITENS) ---
         const MISSION_DATA = {
             normal: [
                 {
@@ -77,16 +88,16 @@
             ]
         };
 
-        // --- MFE COMPONENT: AVATAR ---
+        // --- MFE COMPONENT: AVATAR HUD ---
         const PilotAvatar = ({ side, active, stripes, label, roleLabel }) => (
             <div className={`flex flex-col items-center gap-1 transition-all duration-700 ${active ? 'opacity-100 scale-110' : 'opacity-10 grayscale'}`}>
-                <div className={`w-14 h-14 rounded-xl border-2 flex items-center justify-center relative overflow-hidden ${active ? 'border-blue-500 bg-blue-500/20 shadow-[0_0_20px_#3b82f6]' : 'bg-slate-800 border-white/5'}`}>
+                <div className={`w-14 h-14 rounded-xl border-2 flex items-center justify-center relative overflow-hidden ${active ? 'border-blue-500 bg-blue-500/20 shadow-[0_0_20px_#3b82f6]' : 'bg-slate-800'}`}>
                     <svg viewBox="0 0 100 100" className="w-8 h-8 text-white opacity-80">
                         <circle cx="50" cy="35" r="15" fill="currentColor" />
                         <path d="M20 85 Q20 55 50 55 Q80 55 80 85" fill="currentColor" />
                     </svg>
                     <div className="absolute bottom-0 w-full h-3 bg-black/80 flex flex-col justify-center gap-0.5 px-2">
-                        {[...Array(stripes)].map((_, i) => <div key={i} className="w-full h-[1px] bg-yellow-500"></div>)}
+                        {[...Array(stripes)].map((_, i) => <div key={i} className="w-full h-[1.5px] bg-yellow-500"></div>)}
                     </div>
                 </div>
                 <div className="text-center">
@@ -96,7 +107,7 @@
             </div>
         );
 
-        // --- MFE COMPONENT: SIDEBAR ---
+        // --- MFE COMPONENT: SIDEBAR SLIM ---
         const ActionSidebar = ({ title, role, items, currentItemId, side }) => (
             <aside className={`w-32 md:w-44 h-full flex flex-col bg-slate-950/98 shrink-0 italic border-white/5 ${side === 'LEFT' ? 'border-r' : 'border-l'}`}>
                 <div className="p-3 border-b border-white/5 bg-blue-900/10 flex flex-col items-center text-center">
@@ -116,7 +127,7 @@
 
         function App() {
             const [view, setView] = useState('hangar');
-            const [pilotIsFlying, setPilotIsFlying] = useState(true); // true = P1 is PF
+            const [pilotIsFlying, setPilotIsFlying] = useState(true); // true = Comandante is Flying
             const [step, setStep] = useState(0);
             const [stage, setStage] = useState(1); 
             const [finished, setFinished] = useState(false);
@@ -125,9 +136,8 @@
             const mission = MISSION_DATA.normal[0];
             const currentItem = mission.items[step];
 
-            // Configuração conforme pedido:
-            // Config 1 (pilotIsFlying = false): P1 (Comandante) = Monitoring | P2 (Copiloto) = Flying
-            // Config 2 (pilotIsFlying = true): P1 (Comandante) = Flying | P2 (Copiloto) = Monitoring
+            // Config 1: Comandante (P1) = Monitoring | Copiloto (P2) = Flying
+            // Config 2: Comandante (P1) = Flying | Copiloto (P2) = Monitoring
 
             const p1Items = mission.items.filter(it => 
                 (it.role === 'PF' && pilotIsFlying) || 
@@ -143,9 +153,6 @@
             const actingSide = useMemo(() => {
                 if (!currentItem) return null;
                 const r = currentItem.role;
-                if (r === 'BOTH') return 'BOTH';
-                if (r === 'Copiloto' || r === 'Primeiro Oficial') return 'RIGHT';
-                if (r === 'Piloto' || r === 'Comandante') return 'LEFT';
                 if (r === 'PF') return pilotIsFlying ? 'LEFT' : 'RIGHT';
                 if (r === 'PM') return pilotIsFlying ? 'RIGHT' : 'LEFT';
                 return 'BOTH';
@@ -175,7 +182,7 @@
 
                 const dist = Math.sqrt(Math.pow(x - currentItem.coords.x, 2) + Math.pow(y - currentItem.coords.y, 2));
                 
-                if (dist < 12.0) { // Tolerância aumentada para touch
+                if (dist < 12.0) { // Tolerância de Clique
                     nextStep();
                 }
             };
@@ -186,7 +193,7 @@
                         <div className="bg-white inline-block px-4 py-1 rounded shadow-xl mb-8">
                              <div className="text-[#001c3d] font-black text-xl tracking-tighter uppercase italic leading-none text-center">Azul <br/><span className="font-light not-italic leading-none text-xs block -mt-1">conecta</span></div>
                         </div>
-                        <h1 className="text-5xl font-black italic uppercase mb-12 tracking-tighter italic">Caravan PRO</h1>
+                        <h1 className="text-6xl font-black italic uppercase mb-12 tracking-tighter italic leading-none">Caravan PRO</h1>
                         <button onClick={() => setView('matrix')} className="bg-blue-600 px-14 py-7 rounded-2xl font-black uppercase tracking-widest hover:bg-blue-500 transition-all shadow-2xl text-xl italic">Start Training</button>
                     </div>
                 </main>
@@ -199,15 +206,15 @@
                         <button onClick={() => { setPilotIsFlying(false); setView('sim'); }} className="bg-slate-900 border-2 border-white/5 p-12 rounded-[3rem] hover:border-blue-500 transition-all group">
                             <h4 className="text-2xl font-black uppercase text-white mb-4 italic">CONFIGURAÇÃO 1</h4>
                             <div className="space-y-1">
-                                <p className="text-sm font-black text-slate-400 uppercase">P1: MONITORING (PM)</p>
-                                <p className="text-sm font-black text-blue-400 uppercase">P2: FLYING (PF)</p>
+                                <p className="text-sm font-black text-slate-400 uppercase leading-none">P1: MONITORING (PM)</p>
+                                <p className="text-sm font-black text-blue-400 uppercase leading-none mt-2">P2: FLYING (PF)</p>
                             </div>
                         </button>
                         <button onClick={() => { setPilotIsFlying(true); setView('sim'); }} className="bg-slate-900 border-2 border-white/5 p-12 rounded-[3rem] hover:border-blue-500 transition-all group">
                             <h4 className="text-2xl font-black uppercase text-white mb-4 italic">CONFIGURAÇÃO 2</h4>
                             <div className="space-y-1">
-                                <p className="text-sm font-black text-blue-400 uppercase">P1: FLYING (PF)</p>
-                                <p className="text-sm font-black text-slate-400 uppercase">P2: MONITORING (PM)</p>
+                                <p className="text-sm font-black text-blue-400 uppercase leading-none">P1: FLYING (PF)</p>
+                                <p className="text-sm font-black text-slate-400 uppercase leading-none mt-2">P2: MONITORING (PM)</p>
                             </div>
                         </button>
                     </div>
@@ -216,15 +223,14 @@
 
             return (
                 <div className="h-screen flex flex-col bg-black overflow-hidden italic selection:bg-blue-500/30">
-                    
-                    <header className="h-14 border-b border-white/10 flex items-center justify-between px-8 bg-[#001c3d] z-[100] shrink-0">
+                    <header className="h-12 border-b border-white/10 flex items-center justify-between px-8 bg-[#001c3d] z-[100] shrink-0">
                         <div className="flex items-center gap-6">
                             <div className="bg-white px-2 py-1 rounded shadow-lg text-[#001c3d] font-black text-sm uppercase leading-none text-center">Azul <br/><span className="font-light text-[9px] block -mt-0.5 leading-none">conecta</span></div>
                             <div className="flex gap-2">
-                                {[1,2,3].map(s => <div key={s} className={`w-10 h-1.5 rounded-full transition-all duration-700 ${stage >= s ? 'bg-blue-500 shadow-[0_0_10px_#3b82f6]' : 'bg-slate-800'}`} />)}
+                                {[1,2,3].map(s => <div key={s} className={`w-12 h-1.5 rounded-full transition-all duration-700 ${stage >= s ? 'bg-blue-500 shadow-[0_0_10px_#3b82f6]' : 'bg-slate-800'}`} />)}
                             </div>
                         </div>
-                        <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-4 leading-none">
                             <span className="text-[10px] font-black text-blue-300 uppercase tracking-widest">{stage === 1 ? 'TUTORIAL' : stage === 2 ? 'CHECKLIST' : 'MEMÓRIA'}</span>
                             <button onClick={() => location.reload()} className="text-red-500 text-[10px] font-black uppercase hover:text-red-400">Abortar</button>
                         </div>
@@ -240,10 +246,10 @@
                         )}
 
                         <main className="flex-1 flex flex-col items-center relative overflow-hidden bg-[#05080f]">
-                            {/* HUD DE ETAPA ATUAL - FIXO E VISÍVEL */}
+                            {/* HUD DE ETAPA ATUAL */}
                             <div className="w-full h-12 bg-slate-900/80 flex items-center justify-between px-10 border-b border-white/5 z-20">
                                 <div className="flex items-center gap-4">
-                                    <div className="step-indicator bg-blue-600 px-4 py-1.5 rounded-lg text-white font-black text-[14px]">ETAPA {String(step + 1).padStart(2, '0')} / {mission.items.length}</div>
+                                    <div className="step-badge bg-blue-600 px-4 py-1.5 rounded-lg text-white font-black text-[14px]">ETAPA {String(step + 1).padStart(2, '0')} / {mission.items.length}</div>
                                     <span className="text-[11px] font-bold text-slate-400 uppercase tracking-widest leading-none">{mission.title}</span>
                                 </div>
                                 <div className="flex items-center gap-6">
