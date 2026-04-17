@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="pt-PT">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Caravan PRO v204 - Ultra Feedback</title>
+    <title>Caravan PRO v220 - Professional Training</title>
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -14,28 +14,28 @@
         .custom-scroll::-webkit-scrollbar { width: 3px; }
         .custom-scroll::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
         
-        .fade-in { animation: fadeIn 0.3s ease-out forwards; }
+        .fade-in { animation: fadeIn 0.4s ease-out forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Alvo pulsante mais visível */
+        /* Hotspot Tutorial (Nível 1) */
         .hotspot-target {
-            position: absolute; width: 50px; height: 50px;
+            position: absolute; width: 52px; height: 52px;
             background: rgba(59, 130, 246, 0.4); border: 3px solid #3b82f6;
             border-radius: 50%; transform: translate(-50%, -50%);
-            pointer-events: none; animation: pulse-intense 1.5s infinite;
+            pointer-events: none; animation: pulse-target 1.5s infinite;
             z-index: 100;
         }
-        @keyframes pulse-intense { 0% { transform: translate(-50%, -50%) scale(1); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); } 70% { transform: translate(-50%, -50%) scale(1.3); box-shadow: 0 0 0 15px rgba(59, 130, 246, 0); } 100% { transform: translate(-50%, -50%) scale(1); } }
+        @keyframes pulse-target { 0% { scale: 1; opacity: 0.8; box-shadow: 0 0 0 0 rgba(59,130,246,0.7); } 70% { scale: 1.25; opacity: 0.4; box-shadow: 0 0 0 15px rgba(59,130,246,0); } 100% { scale: 1; opacity: 0.8; } }
 
-        /* Efeito de flash ao mudar de passo */
-        .flash-success { animation: flash 0.4s ease-out; }
-        @keyframes flash { 0% { opacity: 1; filter: brightness(1); } 50% { filter: brightness(1.5); } 100% { filter: brightness(1); } }
+        /* Feedback visual de clique correto (Efeito Flash) */
+        .flash-success { animation: flash-green 0.4s ease-out; }
+        @keyframes flash-green { 0% { filter: brightness(1); } 50% { filter: brightness(1.4) saturate(1.5); } 100% { filter: brightness(1); } }
 
         .interactive-wrapper { position: relative; display: inline-block; cursor: crosshair; line-height: 0; }
         .main-img-view { display: block; max-width: 100%; max-height: calc(100vh - 160px); object-fit: contain; border-radius: 0.5rem; transition: filter 0.3s; }
         
-        .step-badge { animation: bounce 0.5s ease-in-out; }
-        @keyframes bounce { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
+        .step-indicator { animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes pop { 0% { transform: scale(0.8); } 100% { transform: scale(1); } }
     </style>
 </head>
 <body>
@@ -44,6 +44,7 @@
     <script type="text/babel">
         const { useState, useMemo, useRef, useEffect } = React;
 
+        // --- DATABASE COMPLETA (21 ITENS) ---
         const MISSION_DATA = {
             normal: [
                 {
@@ -64,44 +65,49 @@
                         { id: "it_12", label: "FUEL SHUTOFF", status: "PUSH IN", role: "Copiloto", coords: { x: 56.3, y: 73.3 } },
                         { id: "it_13", label: "CABIN HEAT FIREWALL", status: "PUSH IN", role: "Copiloto", coords: { x: 55.3, y: 86.9 } },
                         { id: "it_14", label: "EMERGENCY PWR LEVER", status: "NORMAL", role: "Copiloto", coords: { x: 51.1, y: 64.6 } },
-                        { id: "it_15", label: "PROP. CONTROL LEVER", status: "FULL FORWARD", role: "Copiloto", coords: { x: 53, y: 61.1 } },
+                        { id: "it_15", label: "PROP. CONTROL LEVER", status: "FULL FORWARD", role: "Copiloto", coords: { x: 53.0, y: 61.1 } },
                         { id: "it_16", label: "AIR CONDITIONING", status: "OFF", role: "Copiloto", coords: { x: 51.2, y: 50.4 } },
                         { id: "it_17", label: "BLEED AIR HEAT", status: "OFF", role: "Copiloto", coords: { x: 57.2, y: 50.1 } },
-                        { id: "it_18", label: "FUEL TANK SELECTORS (L)", status: "1 ON", role: "Copiloto", coords: { x: 72.5, y: 88 } },
+                        { id: "it_18", label: "FUEL TANK SELECTORS (L)", status: "1 ON", role: "Copiloto", coords: { x: 72.5, y: 88.0 } },
                         { id: "it_19", label: "FUEL TANK SELECTORS (R)", status: "1 OFF", role: "Copiloto", coords: { x: 74.7, y: 88.4 } },
                         { id: "it_20", label: "VENTILATION", status: "OFF", role: "Copiloto", coords: { x: 73.5, y: 81.5 } },
-                        { id: "it_21", label: "STBY FLAP MOTOR", status: "GUARDED NORM", role: "Copiloto", coords: { x: 73.5, y: 72 } }
+                        { id: "it_21", label: "STBY FLAP MOTOR", status: "GUARDED NORM", role: "Copiloto", coords: { x: 73.5, y: 72.0 } }
                     ]
                 }
             ]
         };
 
-        const PilotAvatar = ({ side, active, stripes, label }) => (
+        // --- MFE COMPONENT: AVATAR ---
+        const PilotAvatar = ({ side, active, stripes, label, roleLabel }) => (
             <div className={`flex flex-col items-center gap-1 transition-all duration-700 ${active ? 'opacity-100 scale-110' : 'opacity-10 grayscale'}`}>
-                <div className={`w-14 h-14 rounded-xl border-2 flex items-center justify-center relative overflow-hidden ${active ? 'border-blue-500 bg-blue-500/20 shadow-[0_0_20px_#3b82f6]' : 'bg-slate-800'}`}>
+                <div className={`w-14 h-14 rounded-xl border-2 flex items-center justify-center relative overflow-hidden ${active ? 'border-blue-500 bg-blue-500/20 shadow-[0_0_20px_#3b82f6]' : 'bg-slate-800 border-white/5'}`}>
                     <svg viewBox="0 0 100 100" className="w-8 h-8 text-white opacity-80">
                         <circle cx="50" cy="35" r="15" fill="currentColor" />
                         <path d="M20 85 Q20 55 50 55 Q80 55 80 85" fill="currentColor" />
                     </svg>
                     <div className="absolute bottom-0 w-full h-3 bg-black/80 flex flex-col justify-center gap-0.5 px-2">
-                        {[...Array(stripes)].map((_, i) => <div key={i} className="w-full h-[1.5px] bg-yellow-500"></div>)}
+                        {[...Array(stripes)].map((_, i) => <div key={i} className="w-full h-[1px] bg-yellow-500"></div>)}
                     </div>
                 </div>
-                <span className="text-[9px] font-black uppercase text-white italic">{label}</span>
+                <div className="text-center">
+                    <span className="text-[9px] font-black uppercase text-white italic block leading-none">{label}</span>
+                    <span className="text-[7px] font-bold uppercase text-blue-400 mt-1 block leading-none">{roleLabel}</span>
+                </div>
             </div>
         );
 
+        // --- MFE COMPONENT: SIDEBAR ---
         const ActionSidebar = ({ title, role, items, currentItemId, side }) => (
-            <aside className={`w-32 md:w-40 h-full flex flex-col bg-slate-950/95 shrink-0 italic border-white/5 ${side === 'LEFT' ? 'border-r' : 'border-l'}`}>
+            <aside className={`w-32 md:w-44 h-full flex flex-col bg-slate-950/98 shrink-0 italic border-white/5 ${side === 'LEFT' ? 'border-r' : 'border-l'}`}>
                 <div className="p-3 border-b border-white/5 bg-blue-900/10 flex flex-col items-center text-center">
                     <span className="text-[8px] md:text-[10px] font-black uppercase text-blue-300 leading-none">{title}</span>
-                    <span className="text-[7px] font-bold bg-blue-600 px-1.5 py-0.5 rounded mt-1 italic uppercase">{role}</span>
+                    <span className="text-[7px] font-bold bg-blue-600 px-1.5 py-0.5 rounded mt-1 italic uppercase leading-none">{role}</span>
                 </div>
                 <div className="flex-1 overflow-y-auto p-2 space-y-2 custom-scroll pb-20">
                     {items.map((it) => (
                         <div key={it.id} className={`p-3 rounded-lg border transition-all duration-300 ${currentItemId === it.id ? 'bg-blue-600 border-blue-400 scale-105 shadow-xl ring-2 ring-blue-400/50' : 'opacity-10 grayscale border-white/5'}`}>
                             <p className="text-[9px] font-black uppercase leading-tight">{it.label}</p>
-                            <p className="text-[7px] font-bold opacity-60 uppercase">{it.status}</p>
+                            <p className="text-[7px] font-bold opacity-60 uppercase leading-none mt-1">{it.status}</p>
                         </div>
                     ))}
                 </div>
@@ -110,34 +116,50 @@
 
         function App() {
             const [view, setView] = useState('hangar');
-            const [pilotIsFlying, setPilotIsFlying] = useState(true);
+            const [pilotIsFlying, setPilotIsFlying] = useState(true); // true = P1 is PF
             const [step, setStep] = useState(0);
             const [stage, setStage] = useState(1); 
             const [finished, setFinished] = useState(false);
-            const [flash, setFlash] = useState(false);
+            const [successFlash, setSuccessFlash] = useState(false);
 
             const mission = MISSION_DATA.normal[0];
             const currentItem = mission.items[step];
 
-            const p1Items = mission.items.filter(it => (it.role === 'PF' && pilotIsFlying) || (it.role === 'PM' && !pilotIsFlying) || it.role === 'Piloto');
-            const p2Items = mission.items.filter(it => (it.role === 'PF' && !pilotIsFlying) || (it.role === 'PM' && pilotIsFlying) || it.role === 'Copiloto');
+            // Configuração conforme pedido:
+            // Config 1 (pilotIsFlying = false): P1 (Comandante) = Monitoring | P2 (Copiloto) = Flying
+            // Config 2 (pilotIsFlying = true): P1 (Comandante) = Flying | P2 (Copiloto) = Monitoring
 
-            const activeSide = useMemo(() => {
+            const p1Items = mission.items.filter(it => 
+                (it.role === 'PF' && pilotIsFlying) || 
+                (it.role === 'PM' && !pilotIsFlying) || 
+                it.role === 'Piloto' || it.role === 'Comandante'
+            );
+            const p2Items = mission.items.filter(it => 
+                (it.role === 'PF' && !pilotIsFlying) || 
+                (it.role === 'PM' && pilotIsFlying) || 
+                it.role === 'Copiloto' || it.role === 'Primeiro Oficial'
+            );
+
+            const actingSide = useMemo(() => {
                 if (!currentItem) return null;
-                if (currentItem.role === 'PF') return pilotIsFlying ? 'LEFT' : 'RIGHT';
-                if (currentItem.role === 'PM') return pilotIsFlying ? 'RIGHT' : 'LEFT';
+                const r = currentItem.role;
+                if (r === 'BOTH') return 'BOTH';
+                if (r === 'Copiloto' || r === 'Primeiro Oficial') return 'RIGHT';
+                if (r === 'Piloto' || r === 'Comandante') return 'LEFT';
+                if (r === 'PF') return pilotIsFlying ? 'LEFT' : 'RIGHT';
+                if (r === 'PM') return pilotIsFlying ? 'RIGHT' : 'LEFT';
                 return 'BOTH';
             }, [currentItem, pilotIsFlying]);
 
             const nextStep = () => {
-                setFlash(true);
-                setTimeout(() => setFlash(false), 400);
+                setSuccessFlash(true);
+                setTimeout(() => setSuccessFlash(false), 400);
 
                 if (step < mission.items.length - 1) {
-                    setStep(step + 1);
+                    setStep(prev => prev + 1);
                 } else {
                     if (stage < 3) {
-                        setStage(stage + 1);
+                        setStage(prev => prev + 1);
                         setStep(0);
                     } else {
                         setFinished(true);
@@ -153,76 +175,89 @@
 
                 const dist = Math.sqrt(Math.pow(x - currentItem.coords.x, 2) + Math.pow(y - currentItem.coords.y, 2));
                 
-                if (dist < 10.0) { // Tolerância de clique
+                if (dist < 12.0) { // Tolerância aumentada para touch
                     nextStep();
                 }
             };
 
             if (view === 'hangar') return (
-                <main className="h-screen flex items-center justify-center p-10 fade-in bg-[#020617]">
+                <main className="h-screen flex items-center justify-center p-10 bg-[#020617] fade-in">
                     <div className="text-center p-12 bg-slate-900/40 rounded-[4rem] border border-white/5 shadow-2xl">
-                        <h1 className="text-6xl font-black italic uppercase mb-12 tracking-tighter">Caravan PRO</h1>
-                        <button onClick={() => setView('matrix')} className="bg-blue-600 px-14 py-7 rounded-2xl font-black uppercase tracking-widest hover:bg-blue-500 transition-all shadow-2xl text-xl">Iniciar Cockpit</button>
+                        <div className="bg-white inline-block px-4 py-1 rounded shadow-xl mb-8">
+                             <div className="text-[#001c3d] font-black text-xl tracking-tighter uppercase italic leading-none text-center">Azul <br/><span className="font-light not-italic leading-none text-xs block -mt-1">conecta</span></div>
+                        </div>
+                        <h1 className="text-5xl font-black italic uppercase mb-12 tracking-tighter italic">Caravan PRO</h1>
+                        <button onClick={() => setView('matrix')} className="bg-blue-600 px-14 py-7 rounded-2xl font-black uppercase tracking-widest hover:bg-blue-500 transition-all shadow-2xl text-xl italic">Start Training</button>
                     </div>
                 </main>
             );
 
             if (view === 'matrix') return (
-                <main className="h-screen flex flex-col items-center justify-center p-10 fade-in bg-[#020617]">
-                    <h2 className="text-4xl font-black uppercase text-white mb-16 italic">Configuração de Voo</h2>
-                    <div className="grid grid-cols-2 gap-10 w-full max-w-4xl text-center italic">
-                        <button onClick={() => { setPilotIsFlying(true); setView('sim'); }} className="bg-slate-900 border-2 border-white/5 p-12 rounded-[3rem] hover:border-blue-500 transition-all">
-                            <h4 className="text-2xl font-black uppercase text-blue-400 mb-4">P1: FLYING (PF)</h4>
-                            <p className="text-sm opacity-60 uppercase">P2: MONITORING (PM)</p>
+                <main className="h-screen flex flex-col items-center justify-center p-10 bg-[#020617] fade-in italic">
+                    <h2 className="text-4xl font-black uppercase text-white mb-16 underline underline-offset-8 decoration-blue-500">Crew Matrix</h2>
+                    <div className="grid grid-cols-2 gap-10 w-full max-w-4xl text-center">
+                        <button onClick={() => { setPilotIsFlying(false); setView('sim'); }} className="bg-slate-900 border-2 border-white/5 p-12 rounded-[3rem] hover:border-blue-500 transition-all group">
+                            <h4 className="text-2xl font-black uppercase text-white mb-4 italic">CONFIGURAÇÃO 1</h4>
+                            <div className="space-y-1">
+                                <p className="text-sm font-black text-slate-400 uppercase">P1: MONITORING (PM)</p>
+                                <p className="text-sm font-black text-blue-400 uppercase">P2: FLYING (PF)</p>
+                            </div>
                         </button>
-                        <button onClick={() => { setPilotIsFlying(false); setView('sim'); }} className="bg-slate-900 border-2 border-white/5 p-12 rounded-[3rem] hover:border-blue-500 transition-all">
-                            <h4 className="text-2xl font-black uppercase text-blue-400 mb-4">P1: MONITORING (PM)</h4>
-                            <p className="text-sm opacity-60 uppercase">P2: FLYING (PF)</p>
+                        <button onClick={() => { setPilotIsFlying(true); setView('sim'); }} className="bg-slate-900 border-2 border-white/5 p-12 rounded-[3rem] hover:border-blue-500 transition-all group">
+                            <h4 className="text-2xl font-black uppercase text-white mb-4 italic">CONFIGURAÇÃO 2</h4>
+                            <div className="space-y-1">
+                                <p className="text-sm font-black text-blue-400 uppercase">P1: FLYING (PF)</p>
+                                <p className="text-sm font-black text-slate-400 uppercase">P2: MONITORING (PM)</p>
+                            </div>
                         </button>
                     </div>
                 </main>
             );
 
             return (
-                <div className="h-screen flex flex-col bg-black overflow-hidden italic">
+                <div className="h-screen flex flex-col bg-black overflow-hidden italic selection:bg-blue-500/30">
                     
-                    <header className="h-12 border-b border-white/10 flex items-center justify-between px-8 bg-[#001c3d] z-[100] shrink-0">
+                    <header className="h-14 border-b border-white/10 flex items-center justify-between px-8 bg-[#001c3d] z-[100] shrink-0">
                         <div className="flex items-center gap-6">
-                            <div className="bg-white px-2 py-1 rounded shadow-lg text-[#001c3d] font-black text-sm uppercase">Azul <span className="font-light">conecta</span></div>
+                            <div className="bg-white px-2 py-1 rounded shadow-lg text-[#001c3d] font-black text-sm uppercase leading-none text-center">Azul <br/><span className="font-light text-[9px] block -mt-0.5 leading-none">conecta</span></div>
                             <div className="flex gap-2">
                                 {[1,2,3].map(s => <div key={s} className={`w-10 h-1.5 rounded-full transition-all duration-700 ${stage >= s ? 'bg-blue-500 shadow-[0_0_10px_#3b82f6]' : 'bg-slate-800'}`} />)}
                             </div>
                         </div>
                         <div className="flex items-center gap-4">
-                            <span className="text-[10px] font-black text-blue-400 uppercase tracking-[0.2em]">{stage === 1 ? 'TUTORIAL' : stage === 2 ? 'CHECKLIST' : 'MEMÓRIA'}</span>
+                            <span className="text-[10px] font-black text-blue-300 uppercase tracking-widest">{stage === 1 ? 'TUTORIAL' : stage === 2 ? 'CHECKLIST' : 'MEMÓRIA'}</span>
                             <button onClick={() => location.reload()} className="text-red-500 text-[10px] font-black uppercase hover:text-red-400">Abortar</button>
                         </div>
                     </header>
 
                     <div className="flex-1 flex overflow-hidden relative">
                         {stage < 3 && (
-                            <ActionSidebar title="PILOTO (P1)" side="LEFT" role={pilotIsFlying ? "PF" : "PM"} items={p1Items} currentItemId={currentItem.id} />
+                            <ActionSidebar 
+                                title="PILOTO (P1)" side="LEFT" 
+                                role={pilotIsFlying ? "PF" : "PM"} 
+                                items={p1Items} currentItemId={currentItem.id} 
+                            />
                         )}
 
                         <main className="flex-1 flex flex-col items-center relative overflow-hidden bg-[#05080f]">
-                            {/* CONTADOR DE PASSOS ULTRA VISÍVEL */}
-                            <div className="w-full h-10 bg-slate-900/50 flex items-center justify-between px-10 border-b border-white/5 z-20">
-                                <div className="flex items-center gap-3">
-                                    <span className="step-badge bg-blue-600 px-3 py-1 rounded-full text-[12px] font-black text-white italic">PASSO {String(step + 1).padStart(2, '0')} / {mission.items.length}</span>
-                                    <span className="text-[11px] font-black text-slate-400 uppercase tracking-widest">{mission.title}</span>
-                                </div>
+                            {/* HUD DE ETAPA ATUAL - FIXO E VISÍVEL */}
+                            <div className="w-full h-12 bg-slate-900/80 flex items-center justify-between px-10 border-b border-white/5 z-20">
                                 <div className="flex items-center gap-4">
-                                    <span className={`text-[12px] font-black tracking-widest text-amber-500 transition-opacity ${stage === 3 ? 'opacity-0' : 'opacity-100'}`}>AÇÃO: {currentItem.label}</span>
-                                    <button onClick={nextStep} className="bg-white/5 hover:bg-white/10 px-4 py-1 rounded-full text-[9px] font-black text-slate-400 uppercase transition-all">Pular Passo</button>
+                                    <div className="step-indicator bg-blue-600 px-4 py-1.5 rounded-lg text-white font-black text-[14px]">ETAPA {String(step + 1).padStart(2, '0')} / {mission.items.length}</div>
+                                    <span className="text-[11px] font-bold text-slate-400 uppercase tracking-widest leading-none">{mission.title}</span>
+                                </div>
+                                <div className="flex items-center gap-6">
+                                    <span className={`text-[12px] font-black text-amber-500 tracking-[0.2em] transition-opacity duration-300 ${stage === 3 ? 'opacity-0' : 'opacity-100'}`}>AÇÃO: {currentItem.label}</span>
+                                    <button onClick={nextStep} className="text-[9px] font-black uppercase text-slate-500 hover:text-white border border-white/10 px-3 py-1 rounded-full transition-all">Pular</button>
                                 </div>
                             </div>
 
-                            <div className="flex-1 w-full flex items-center justify-center p-4 overflow-hidden">
-                                <div className={`interactive-wrapper ${flash ? 'flash-success' : ''}`} onClick={handleInteraction}>
+                            <div className="flex-1 w-full flex items-center justify-center p-4 overflow-hidden relative">
+                                <div className={`interactive-wrapper ${successFlash ? 'flash-success' : ''}`} onClick={handleInteraction}>
                                     <img 
                                         src={`${mission.img}.jpg`} 
-                                        className="main-img-view shadow-[0_0_100px_rgba(0,0,0,1)] border border-white/5" 
-                                        onError={(e) => e.target.src="https://placehold.co/1280x720/111/333?text=UPLOAD+IMAGE+TO+GITHUB"} 
+                                        className="main-img-view shadow-[0_0_100px_rgba(0,0,0,1)] border border-white/10" 
+                                        onError={(e) => e.target.src="https://placehold.co/1280x720/111/333?text=UPLOAD+IMAGE+GITHUB"} 
                                     />
                                     {stage === 1 && (
                                         <div className="hotspot-target" style={{ left: `${currentItem.coords.x}%`, top: `${currentItem.coords.y}%` }} />
@@ -230,29 +265,44 @@
                                 </div>
                             </div>
 
-                            <footer className="w-full h-20 border-t border-white/10 flex items-center justify-between px-10 md:px-32 bg-[#001c3d]/90 backdrop-blur-xl shrink-0 z-50">
-                                <PilotAvatar side="LEFT" stripes={4} label="PILOTO" active={activeSide === 'LEFT' || activeSide === 'BOTH'} />
+                            <footer className="w-full h-24 border-t border-white/10 flex items-center justify-between px-10 md:px-32 bg-[#001c3d]/90 backdrop-blur-xl shrink-0 z-50">
+                                <PilotAvatar 
+                                    side="LEFT" stripes={4} label="PILOTO (P1)" 
+                                    roleLabel={pilotIsFlying ? "FLYING (PF)" : "MONITORING (PM)"}
+                                    active={actingSide === 'LEFT' || actingSide === 'BOTH'} 
+                                />
                                 <div className="flex-1 max-w-md mx-10 flex flex-col items-center gap-2">
                                     <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden relative">
                                         <div className="h-full bg-blue-500 transition-all duration-700 shadow-[0_0_15px_#3b82f6]" style={{ width: `${((step + 1) / mission.items.length) * 100}%` }} />
                                     </div>
-                                    <span className="text-[10px] font-black text-blue-400 uppercase tracking-[0.4em] animate-pulse">Integridade de Fluxo</span>
+                                    <span className="text-[10px] font-black text-blue-400 uppercase tracking-[0.4em] animate-pulse italic leading-none">Cessna 208B Grand Caravan</span>
                                 </div>
-                                <PilotAvatar side="RIGHT" stripes={3} label="COPILOTO" active={activeSide === 'RIGHT' || activeSide === 'BOTH'} />
+                                <PilotAvatar 
+                                    side="RIGHT" stripes={3} label="COPILOTO (P2)" 
+                                    roleLabel={!pilotIsFlying ? "FLYING (PF)" : "MONITORING (PM)"}
+                                    active={actingSide === 'RIGHT' || actingSide === 'BOTH'} 
+                                />
                             </footer>
                         </main>
 
                         {stage < 3 && (
-                            <ActionSidebar title="COPILOTO (P2)" side="RIGHT" role={!pilotIsFlying ? "PF" : "PM"} items={p2Items} currentItemId={currentItem.id} />
+                            <ActionSidebar 
+                                title="COPILOTO (P2)" side="RIGHT" 
+                                role={!pilotIsFlying ? "PF" : "PM"} 
+                                items={p2Items} currentItemId={currentItem.id} 
+                            />
                         )}
                     </div>
 
                     {finished && (
-                        <div className="fixed inset-0 z-[11000] bg-black/98 backdrop-blur-3xl flex items-center justify-center p-8 fade-in italic text-center">
-                            <div className="bg-[#001c3d] border-2 border-white/10 p-16 rounded-[4rem] w-full max-w-sm shadow-2xl relative border-b-[15px] border-emerald-600">
-                                <h2 className="text-5xl font-black italic uppercase text-white mb-4 tracking-tighter">Check OK</h2>
-                                <p className="text-[11px] text-slate-400 uppercase tracking-widest mb-10 italic leading-relaxed">Proficiência técnica validada em todos os níveis.</p>
-                                <button onClick={() => location.reload()} className="w-full bg-blue-600 hover:bg-blue-500 py-6 rounded-2xl font-black uppercase text-[12px] tracking-widest transition-all italic shadow-2xl">Reiniciar Treino</button>
+                        <div className="fixed inset-0 z-[11000] bg-black/98 backdrop-blur-3xl flex items-center justify-center p-8 fade-in italic text-center leading-none">
+                            <div className="bg-[#001c3d] border-2 border-white/10 p-20 rounded-[4rem] w-full max-w-md shadow-2xl relative border-b-[15px] border-emerald-600">
+                                <div className="w-20 h-20 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-8 border-2 border-emerald-500 shadow-[0_0_20px_#10b981]">
+                                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                </div>
+                                <h2 className="text-5xl font-black italic uppercase text-white mb-4 tracking-tighter italic">Treino OK</h2>
+                                <p className="text-[11px] text-slate-400 uppercase tracking-widest mb-10 italic leading-relaxed">Proficiência técnica validada nos 3 estágios operacionais.</p>
+                                <button onClick={() => location.reload()} className="w-full bg-blue-600 hover:bg-blue-500 py-6 rounded-2xl font-black uppercase text-[12px] tracking-widest transition-all italic shadow-2xl">Reiniciar Ciclo</button>
                             </div>
                         </div>
                     )}
